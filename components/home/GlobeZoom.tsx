@@ -83,7 +83,7 @@ export function GlobeZoom() {
   const [mapOn, setMapOn] = useState(false);
   const [hud, setHud] = useState<Hud>(null);
   const [stageIndex, setStageIndex] = useState(-1);
-  const [mapZoom, setMapZoom] = useState(ARRIVAL[0].zoom);
+  const [mapZoom, setMapZoom] = useState<number>(ARRIVAL[0].zoom);
 
   useEffect(() => {
     const el = containerRef.current;
