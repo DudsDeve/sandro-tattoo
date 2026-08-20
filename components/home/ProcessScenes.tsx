@@ -20,14 +20,15 @@ export function ProcessScenes() {
     () => {
       if (reduced) return;
       const scenes = gsap.utils.toArray<HTMLElement>("[data-scene]");
+      const canPin = window.matchMedia("(min-width: 768px)").matches;
       scenes.forEach((scene) => {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: scene,
-            start: "top top",
-            end: "+=90%",
-            pin: true,
-            scrub: 1,
+            start: canPin ? "top top" : "top 75%",
+            end: canPin ? "+=90%" : "bottom 55%",
+            pin: canPin,
+            scrub: canPin ? 1 : false,
           },
         });
         tl.fromTo(scene.querySelector("[data-num]"), { opacity: 0, y: 40 }, { opacity: 1, y: 0 })
@@ -45,7 +46,7 @@ export function ProcessScenes() {
         <section
           key={step.id}
           data-scene
-          className="relative flex min-h-[100svh] flex-col justify-center px-5 md:px-16"
+          className="relative flex min-h-[100svh] flex-col justify-center px-4 py-24 sm:px-5 md:px-16"
           style={{ background: i % 2 === 0 ? "#000" : "#0D0F0A" }}
         >
           <p data-num className="label-mono">

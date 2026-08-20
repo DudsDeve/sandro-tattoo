@@ -34,7 +34,7 @@ export function CtaLink({
 }) {
   return (
     <CursorLink href={href} className={cn("inline-block", className)}>
-      <MagneticButton as="span" variant={variant}>
+      <MagneticButton as="span" variant={variant} className="w-full">
         {children}
       </MagneticButton>
     </CursorLink>

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default async function ArtistasPage() {
   const list = await getArtists();
   return (
-    <div className="px-5 pb-28 pt-32 md:px-12">
+    <div className="px-4 pb-28 pt-28 sm:px-5 md:px-12 md:pt-32">
       <p className="label-mono">Residentes</p>
       <h1 className="display-section mt-4 max-w-4xl">Mãos diferentes. Um mesmo critério: a peça precisa durar.</h1>
       <ArtistsGrid artists={list} />

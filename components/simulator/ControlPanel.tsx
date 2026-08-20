@@ -59,7 +59,7 @@ export function ControlPanel({
           className="mt-1 w-full"
         />
       </label>
-      <div className="flex gap-3 text-sm">
+      <div className="flex flex-wrap gap-3 text-sm">
         <button type="button" onClick={onFlip} className="border border-line px-3 py-2">
           {flip ? "Desvirar" : "Espelhar"}
         </button>

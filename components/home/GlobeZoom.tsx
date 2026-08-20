@@ -418,7 +418,7 @@ export function GlobeZoom() {
   const lngHem = LNG >= 0 ? "E" : "W";
 
   return (
-    <section id="localizar" className="globe-locate relative h-[100svh] min-h-[560px] overflow-hidden bg-black">
+    <section id="localizar" className="globe-locate relative h-[100svh] min-h-[520px] overflow-hidden bg-black">
       <div ref={containerRef} className="absolute inset-0" />
       <div
         className="globe-map absolute inset-0 z-[4] bg-black transition-opacity duration-700"
@@ -441,9 +441,9 @@ export function GlobeZoom() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-[35%] bg-gradient-to-b from-black/85 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[35%] bg-gradient-to-t from-black/85 to-transparent" />
 
-      <div className="pointer-events-none absolute left-1/2 top-[7%] z-[6] -translate-x-1/2 text-center">
+      <div className="pointer-events-none absolute left-1/2 top-[max(4.5rem,calc(env(safe-area-inset-top)+2.5rem))] z-[6] w-[min(92vw,640px)] -translate-x-1/2 px-3 text-center">
         <span className="label-mono text-[0.65rem]">Estúdio de tatuagem</span>
-        <h2 className="font-display mt-2 text-[clamp(1.4rem,3vw,2.4rem)] tracking-[0.18em] text-ink">
+        <h2 className="font-display mt-2 text-[clamp(1.15rem,4.6vw,2.4rem)] tracking-[0.1em] text-ink sm:tracking-[0.18em]">
           ENCONTRE-NOS
         </h2>
       </div>
@@ -456,12 +456,12 @@ export function GlobeZoom() {
       )}
 
       <div
-        className="absolute bottom-[11%] left-1/2 z-[6] -translate-x-1/2 transition-opacity duration-500"
+        className="absolute bottom-[max(5.5rem,calc(env(safe-area-inset-bottom)+4.25rem))] left-1/2 z-[6] w-[min(calc(100%-2rem),22rem)] -translate-x-1/2 transition-opacity duration-500 md:bottom-[11%] md:w-auto"
         style={{ opacity: zoomed || loading ? 0 : 1, pointerEvents: zoomed || loading ? "none" : "auto" }}
       >
         <button
           type="button"
-          className="globe-cta flex items-center gap-2.5 border border-line-accent/50 bg-bg-accent/10 px-7 py-3.5 text-[0.72rem] font-medium tracking-[0.22em] text-ink backdrop-blur-md"
+          className="globe-cta flex w-full items-center justify-center gap-2 border border-line-accent/50 bg-bg-accent/10 px-4 py-3 text-[0.62rem] font-medium tracking-[0.12em] text-ink backdrop-blur-md sm:gap-2.5 sm:px-7 sm:py-3.5 sm:text-[0.72rem] sm:tracking-[0.22em]"
           onClick={handleZoomIn}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B9A6B" strokeWidth="1.5">
@@ -474,7 +474,7 @@ export function GlobeZoom() {
       </div>
 
       {hud && zoomed && !showCard && (
-        <div className="pointer-events-none absolute left-1/2 top-[22%] z-[7] w-[min(92vw,640px)] -translate-x-1/2 text-center">
+        <div className="pointer-events-none absolute left-1/2 top-[28%] z-[7] w-[min(92vw,640px)] -translate-x-1/2 px-3 text-center md:top-[22%]">
           <p className="label-mono">{hud.kicker}</p>
           <p className="font-display mt-2 text-3xl text-ink md:text-5xl">{hud.label}</p>
           {stageIndex >= 0 && (
@@ -492,17 +492,16 @@ export function GlobeZoom() {
       )}
 
       <div
-        className="pointer-events-none absolute bottom-[7%] left-1/2 z-[6] -translate-x-1/2 font-mono text-[0.68rem] tracking-[0.25em] text-bg-accent"
+        className="pointer-events-none absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-[6] hidden -translate-x-1/2 font-mono text-[0.68rem] tracking-[0.25em] text-bg-accent sm:block md:bottom-[7%]"
         style={{ opacity: zoomed ? 1 : 0, transition: "opacity 0.8s ease 0.4s" }}
       >
         {Math.abs(LAT).toFixed(0)}°{latHem} · {Math.abs(LNG).toFixed(0)}°{lngHem}
       </div>
 
       <aside
-        className="absolute right-[4%] top-1/2 z-[8] flex max-w-[320px] border border-line-accent/20 bg-black/88 backdrop-blur-xl transition-all duration-700"
+        className="absolute inset-x-4 bottom-[max(5.75rem,calc(env(safe-area-inset-bottom)+4.5rem))] z-[8] flex max-h-[min(58svh,26rem)] max-w-none overflow-y-auto border border-line-accent/20 bg-black/90 backdrop-blur-xl transition-all duration-700 md:inset-x-auto md:bottom-auto md:right-[4%] md:top-1/2 md:max-h-none md:max-w-[320px] md:-translate-y-1/2 md:overflow-visible"
         style={{
           opacity: showCard ? 1 : 0,
-          transform: showCard ? "translateY(-50%) translateX(0)" : "translateY(-50%) translateX(30px)",
           pointerEvents: showCard ? "auto" : "none",
         }}
       >

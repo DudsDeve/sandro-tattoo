@@ -19,7 +19,7 @@ const labels = {
 export default async function BlogPage() {
   const posts = await getPosts();
   return (
-    <div className="px-5 pb-28 pt-32 md:px-12">
+    <div className="px-4 pb-28 pt-28 sm:px-5 md:px-12 md:pt-32">
       <p className="label-mono">Arquivo</p>
       <h1 className="display-section mt-4 mb-16">Leitura para quem leva a pele a sério.</h1>
       <div className="grid gap-8 md:grid-cols-2">

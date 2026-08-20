@@ -59,7 +59,7 @@ export function QuizContainer() {
   };
 
   return (
-    <div className="flex min-h-[100svh] flex-col bg-black px-5 pt-28 md:px-12">
+    <div className="flex min-h-[100svh] flex-col bg-black px-4 pt-24 sm:px-5 md:px-12 md:pt-28">
       {state.phase === "ask" && (
         <QuizProgress current={state.index} total={quizQuestions.length} />
       )}

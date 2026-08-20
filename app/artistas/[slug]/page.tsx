@@ -24,7 +24,7 @@ export default async function ArtistPage({ params }: { params: Promise<{ slug: s
 
   return (
     <div className="pb-28 pt-28">
-      <div className="grid items-end gap-10 px-5 md:grid-cols-2 md:px-12">
+      <div className="grid items-end gap-10 px-4 sm:px-5 md:grid-cols-2 md:px-12">
         <div className="relative aspect-[3/4] overflow-hidden">
           <Image src={artist.image} alt={artist.name} fill className="object-cover" priority sizes="50vw" />
         </div>

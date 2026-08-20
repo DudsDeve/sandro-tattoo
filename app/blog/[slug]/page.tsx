@@ -24,13 +24,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const related = (await getPosts()).filter((p) => p.slug !== post.slug).slice(0, 2);
 
   return (
-    <article className="px-5 pb-28 pt-28 md:px-12">
+    <article className="px-4 pb-28 pt-28 sm:px-5 md:px-12">
       <ReadingProgress />
       <p className="label-mono">
         {formatDate(post.date)} · {post.readTime}
       </p>
       <h1 className="display-section mt-4 max-w-4xl">{post.title}</h1>
-      <div className="relative my-12 aspect-[16/8] max-w-5xl overflow-hidden">
+      <div className="relative my-12 aspect-[16/10] max-w-5xl overflow-hidden sm:aspect-[16/8]">
         <Image src={post.cover} alt="" fill className="object-cover" priority />
       </div>
       <div className="max-w-2xl space-y-6 text-lg text-ink-secondary">

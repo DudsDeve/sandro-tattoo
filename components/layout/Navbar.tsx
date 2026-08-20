@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { LogoMark } from "@/components/ui/LogoMark";
 import { CtaLink, CursorLink } from "@/components/ui/CursorLink";
@@ -8,6 +9,7 @@ import { NAV_LINKS, STUDIO } from "@/lib/data/studio";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -17,6 +19,10 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -32,14 +38,14 @@ export function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 2.1 }}
         className={cn(
-          "fixed inset-x-0 top-0 z-40 border-b border-transparent transition-colors duration-500",
+          "fixed inset-x-0 top-0 z-40 border-b border-transparent pt-[env(safe-area-inset-top)] transition-colors duration-500",
           scrolled && "border-line bg-black/80 backdrop-blur-[12px]",
         )}
       >
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 md:px-8">
-          <CursorLink href="/" className="flex items-center gap-3">
-            <LogoMark compact={scrolled} className="h-10 w-10 text-ink" />
-            <span className="font-display text-lg tracking-tight">
+        <div className="mx-auto flex h-[64px] max-w-7xl items-center justify-between px-4 sm:h-[72px] sm:px-5 md:px-8">
+          <CursorLink href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <LogoMark compact={scrolled} className="h-9 w-9 shrink-0 text-ink sm:h-10 sm:w-10" />
+            <span className="font-display truncate text-base tracking-tight sm:text-lg">
               {scrolled ? "S" : STUDIO.name}
             </span>
           </CursorLink>
@@ -56,14 +62,14 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3">
             <div className="hidden md:block">
               <CtaLink href="/agendar" variant="outline">
                 Agendar Sessão
               </CtaLink>
             </div>
             <button
-              className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
+              className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 lg:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? "Fechar menu" : "Abrir menu"}
             >
@@ -88,7 +94,7 @@ export function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-30 flex flex-col justify-end bg-black px-8 pb-16 pt-28 lg:hidden"
+            className="fixed inset-0 z-30 flex flex-col justify-end overflow-y-auto bg-black px-6 pb-[max(4rem,env(safe-area-inset-bottom))] pt-28 lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -101,7 +107,7 @@ export function Navbar() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.08 * i, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <CursorLink href={link.href} className="font-display text-5xl">
+                  <CursorLink href={link.href} className="font-display text-[clamp(2rem,10vw,3.5rem)] leading-none">
                     <span onClick={() => setOpen(false)}>{link.label}</span>
                   </CursorLink>
                 </motion.div>

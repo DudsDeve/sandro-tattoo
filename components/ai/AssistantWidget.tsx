@@ -16,7 +16,7 @@ export function AssistantWidget() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Abrir assistente"
-        className="fixed bottom-24 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-line-accent bg-bg-tertiary text-ink"
+        className="fixed bottom-[max(4.75rem,calc(env(safe-area-inset-bottom)+3.5rem))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex h-12 w-12 items-center justify-center rounded-full border border-line-accent bg-bg-tertiary text-ink sm:bottom-24 sm:right-5 sm:h-14 sm:w-14"
       >
         <span className="absolute inset-0 animate-[pulse-ring_2.4s_ease-out_infinite] rounded-full border border-moss/40" />
         <MessageSquare size={20} />
@@ -28,7 +28,7 @@ export function AssistantWidget() {
             initial={{ x: 40, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 40, opacity: 0 }}
-            className="fixed bottom-0 right-0 z-[60] flex h-[100svh] w-full flex-col border-l border-line bg-black/95 p-5 backdrop-blur-xl md:h-[min(88vh,760px)] md:w-[440px] md:bottom-5 md:right-5 md:border"
+            className="fixed inset-0 z-[60] flex h-[100svh] w-full flex-col border-line bg-black/95 p-4 pt-[max(1.25rem,env(safe-area-inset-top))] backdrop-blur-xl sm:p-5 md:inset-auto md:bottom-5 md:right-5 md:h-[min(88vh,760px)] md:w-[min(440px,calc(100vw-2.5rem))] md:border"
           >
             <div className="mb-4 flex items-center justify-between">
               <div className="flex gap-2">

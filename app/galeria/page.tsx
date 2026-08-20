@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function GaleriaPage() {
   const works = await getGallery();
   return (
-    <div className="px-5 pb-24 pt-32 md:px-12">
+    <div className="px-4 pb-24 pt-28 sm:px-5 md:px-12 md:pt-32">
       <p className="label-mono">Portfólio</p>
       <h1 className="display-section mt-4 mb-12">Arquivo vivo.</h1>
       <Suspense>

@@ -23,8 +23,8 @@ export function TattooSimulator() {
   const exportRef = useRef<(() => Promise<Blob | null>) | null>(null);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <div className="min-h-[70vh] border border-line bg-bg-secondary">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+      <div className="min-h-[50vh] border border-line bg-bg-secondary sm:min-h-[70vh]">
         {!body ? (
           <BodyUpload onFile={setBody} />
         ) : (

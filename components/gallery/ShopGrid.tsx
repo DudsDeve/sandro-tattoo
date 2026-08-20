@@ -52,7 +52,7 @@ export function ShopGrid({ products }: { products: Product[] }) {
             onClick={() => setActive(null)}
           >
             <motion.div
-              className="grid w-full max-w-3xl gap-6 border border-line bg-bg-tertiary p-6 md:grid-cols-2"
+              className="grid max-h-[90svh] w-full max-w-3xl gap-6 overflow-y-auto border border-line bg-bg-tertiary p-5 md:grid-cols-2 md:p-6"
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               onClick={(e) => e.stopPropagation()}
@@ -61,7 +61,7 @@ export function ShopGrid({ products }: { products: Product[] }) {
                 <Image src={active.image} alt={active.name} fill className="object-cover" />
               </div>
               <div>
-                <h2 className="font-display text-4xl">{active.name}</h2>
+                <h2 className="font-display text-3xl sm:text-4xl">{active.name}</h2>
                 <p className="mt-2 text-moss">{formatBRL(active.price)}</p>
                 <p className="mt-4 text-sm text-ink-secondary">{active.description}</p>
                 {active.sizes && (

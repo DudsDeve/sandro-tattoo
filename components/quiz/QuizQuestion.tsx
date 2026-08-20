@@ -20,7 +20,7 @@ export function QuizQuestionView({
     >
       <h1 className="display-section max-w-4xl">{question.prompt}</h1>
       {question.hint && <p className="mt-3 text-ink-secondary">{question.hint}</p>}
-      <div className={`mt-12 grid gap-4 ${question.options.length > 3 ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
+      <div className={`mt-12 grid gap-4 sm:grid-cols-2 ${question.options.length > 3 ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
         {question.options.map((opt) =>
           question.type === "image" && opt.image ? (
             <button
@@ -29,7 +29,7 @@ export function QuizQuestionView({
               className="group relative aspect-[3/4] overflow-hidden border border-transparent hover:border-line-accent"
             >
               <Image src={opt.image} alt={opt.label} fill className="object-cover transition duration-500 group-hover:scale-105" />
-              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black p-4 font-display text-2xl">
+              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black p-3 font-display text-xl sm:p-4 sm:text-2xl">
                 {opt.label}
               </span>
             </button>

@@ -3,7 +3,7 @@ import { ParallaxImage } from "@/components/ui/ParallaxImage";
 
 export function CTASection() {
   return (
-    <section className="relative h-[90svh] min-h-[560px]">
+    <section className="relative h-[90svh] min-h-[480px] sm:min-h-[560px]">
       <ParallaxImage
         src="https://images.unsplash.com/photo-1590246814883-57c511e02123?auto=format&fit=crop&w=2000&q=80"
         alt="Interior do estúdio"
@@ -16,9 +16,9 @@ export function CTASection() {
         <p className="mt-6 max-w-lg text-ink-secondary">
           Consulta, desenho e sessão — no mesmo lugar. Ou comece pelo quiz se ainda não sabe o artista.
         </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <CtaLink href="/agendar">Agendar Sessão</CtaLink>
-          <CtaLink href="/quiz" variant="outline">
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
+          <CtaLink href="/agendar" className="w-full sm:w-auto">Agendar Sessão</CtaLink>
+          <CtaLink href="/quiz" variant="outline" className="w-full sm:w-auto">
             Falar com a gente
           </CtaLink>
         </div>

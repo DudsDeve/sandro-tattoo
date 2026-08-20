@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AgendarPage() {
   return (
-    <div className="px-5 pb-28 pt-32 md:px-12">
+    <div className="px-4 pb-28 pt-28 sm:px-5 md:px-12 md:pt-32">
       <p className="label-mono">Agendamento</p>
       <h1 className="display-section mt-4 mb-16">Seis passos. Zero catálogo.</h1>
       <Suspense>

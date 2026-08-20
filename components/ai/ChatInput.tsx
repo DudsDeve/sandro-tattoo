@@ -14,7 +14,7 @@ export function ChatInput({
 
   return (
     <form
-      className="mt-4 flex gap-2 border-t border-line pt-4"
+      className="mt-4 flex flex-col gap-2 border-t border-line pt-4 sm:flex-row"
       onSubmit={(e) => {
         e.preventDefault();
         const text = value.trim();
@@ -30,7 +30,7 @@ export function ChatInput({
         placeholder="Escreva sua ideia…"
         className="flex-1 px-3 py-3"
       />
-      <MagneticButton type="submit">Enviar</MagneticButton>
+      <MagneticButton type="submit" className="w-full sm:w-auto">Enviar</MagneticButton>
     </form>
   );
 }

@@ -25,8 +25,8 @@ function Row({ reverse = false }: { reverse?: boolean }) {
 export function TestimonialsMarquee() {
   return (
     <section className="bg-bg-primary py-24">
-      <p className="label-mono mb-3 px-5 md:px-12">Depoimentos</p>
-      <h2 className="display-section mb-12 px-5 md:px-12">Pele que volta. E indica.</h2>
+      <p className="label-mono mb-3 px-4 md:px-12">Depoimentos</p>
+      <h2 className="display-section mb-12 px-4 md:px-12">Pele que volta. E indica.</h2>
       <div className="flex flex-col gap-4">
         <Row />
         <Row reverse />

@@ -31,9 +31,9 @@ export function QuizResult({
             <AnimatedCounter to={top.percent} suffix="%" /> match
           </p>
           <p className="mt-6 text-ink-secondary">{explanation}</p>
-          <div className="mt-6 flex gap-2">
+          <div className="mt-6 flex gap-2 overflow-x-auto">
             {top.artist.works.slice(0, 4).map((w) => (
-              <div key={w} className="relative h-20 w-20 overflow-hidden">
+              <div key={w} className="relative h-16 w-16 shrink-0 overflow-hidden sm:h-20 sm:w-20">
                 <Image src={w} alt="" fill className="object-cover" />
               </div>
             ))}

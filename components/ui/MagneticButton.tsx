@@ -30,7 +30,7 @@ export function MagneticButton({
   };
 
   const classes = cn(
-    "relative inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-medium tracking-wide transition-colors duration-300",
+    "relative inline-flex min-h-11 items-center justify-center gap-2 px-5 py-3 text-sm font-medium tracking-wide transition-colors duration-300 sm:px-7 sm:py-3.5",
     styles[variant],
     className,
   );

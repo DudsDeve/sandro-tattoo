@@ -27,7 +27,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section ref={root} className="relative h-[100svh] min-h-[640px] overflow-hidden">
+    <section ref={root} className="relative h-[100svh] min-h-[560px] overflow-hidden">
       <div className="absolute inset-0 scale-110 will-change-transform" data-hero-media>
         <video
           className="h-full w-full object-cover opacity-50"
@@ -49,7 +49,7 @@ export function HeroSection() {
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-      <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-24 pt-32 md:px-12">
+      <div className="relative z-10 flex h-full flex-col justify-end px-4 pb-28 pt-28 sm:px-5 sm:pb-24 sm:pt-32 md:px-12">
         <p className="label-mono mb-6">{STUDIO.address.city} · EST. 2012</p>
         <h1 className="display-hero max-w-[12ch]">
           {"ARTE GRAVADA NA PELE".split(" ").map((word) => (
@@ -63,9 +63,9 @@ export function HeroSection() {
         <p data-hero-sub className="mt-6 max-w-xl text-ink-secondary opacity-0">
           Um estúdio autoral. Cinco artistas. Peças que envelhecem com você — do primeiro traço à cicatriz bonita.
         </p>
-        <div data-hero-sub className="mt-10 flex flex-wrap gap-4 opacity-0">
-          <CtaLink href="/quiz">Descubra seu estilo</CtaLink>
-          <CtaLink href="/agendar" variant="outline">
+        <div data-hero-sub className="mt-8 flex w-full max-w-xl flex-col gap-3 opacity-0 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
+          <CtaLink href="/quiz" className="w-full sm:w-auto">Descubra seu estilo</CtaLink>
+          <CtaLink href="/agendar" variant="outline" className="w-full sm:w-auto">
             Agendar sessão
           </CtaLink>
         </div>

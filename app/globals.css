@@ -53,13 +53,16 @@ body {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   cursor: default;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 body {
   font-family: var(--font-dm), ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(0.95rem, 1.1vw, 1.125rem);
   line-height: 1.7;
-  overflow-x: hidden;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 html {
@@ -141,17 +144,19 @@ button,
 .display-hero {
   font-family: var(--font-playfair), ui-serif, Georgia, serif;
   font-weight: 800;
-  font-size: clamp(3rem, 8vw, 8rem);
-  line-height: 0.88;
+  font-size: clamp(2.35rem, 11vw, 8rem);
+  line-height: 0.9;
   letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 .display-section {
   font-family: var(--font-playfair), ui-serif, Georgia, serif;
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 4.5rem);
-  line-height: 0.95;
+  font-size: clamp(1.85rem, 6.4vw, 4.5rem);
+  line-height: 0.98;
   letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
 }
 
 .label-mono {
@@ -192,18 +197,55 @@ button,
   }
 }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.snap-x-row {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.snap-x-row::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-x-row > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .marquee-track {
+    animation-duration: 68s;
+  }
 }
 
 input,
 textarea,
 select {
   font: inherit;
+  font-size: 16px;
   color: inherit;
   background: var(--color-bg-tertiary);
   border: 1px solid var(--color-border);
   border-radius: 2px;
+}
+
+@media (min-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: inherit;
+  }
 }
 
 input:focus,

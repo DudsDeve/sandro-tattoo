@@ -28,12 +28,12 @@ export function GalleryExperience({ works }: { works: TattooWork[] }) {
 
   return (
     <div>
-      <div className="mb-10 flex flex-wrap gap-2">
+      <div className="mb-10 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {chips.map((chip) => (
           <button
             key={chip.slug}
             onClick={() => setFilter(chip.slug)}
-            className={`label-mono border px-4 py-2 ${
+            className={`label-mono shrink-0 border px-4 py-2 ${
               filter === chip.slug ? "border-line-accent bg-bg-accent text-ink" : "border-line text-ink-secondary"
             }`}
           >
@@ -41,9 +41,7 @@ export function GalleryExperience({ works }: { works: TattooWork[] }) {
           </button>
         ))}
       </div>
-      <motion.div
-        className="flex cursor-grab gap-4 overflow-x-auto pb-8"
-      >
+      <motion.div className="snap-x-row pb-8">
         <AnimatePresence mode="popLayout">
           {filtered.map((work, i) => (
             <motion.button
@@ -52,11 +50,11 @@ export function GalleryExperience({ works }: { works: TattooWork[] }) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="group relative h-[70vh] w-[min(70vw,420px)] shrink-0 overflow-hidden"
+              className="group relative h-[min(62vh,32rem)] w-[min(78vw,22rem)] shrink-0 overflow-hidden sm:h-[70vh] sm:w-[min(70vw,420px)]"
               onClick={() => setIndex(i)}
             >
               <Image src={work.image} alt={work.title} fill className="object-cover" sizes="420px" />
-              <div className="absolute inset-0 flex flex-col justify-end bg-black/0 p-6 opacity-0 transition group-hover:bg-black/55 group-hover:opacity-100">
+              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/75 via-black/20 to-transparent p-4 opacity-100 sm:p-6 md:bg-black/0 md:opacity-0 md:transition md:group-hover:bg-black/55 md:group-hover:opacity-100">
                 <p className="font-display text-2xl">{work.artistName}</p>
                 <p className="label-mono mt-1">
                   {work.style} · ~{work.hours}h · {work.bodyPart}

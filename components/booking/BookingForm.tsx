@@ -86,7 +86,7 @@ export function BookingForm() {
         <p className="mx-auto mt-4 max-w-md text-ink-secondary">
           Vamos retornar em até 1 dia útil para fechar depósito e briefing. Guarde o resumo — e se quiser, simule o design enquanto espera.
         </p>
-        <div className="mt-10 flex justify-center gap-4">
+        <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
           <CtaLink href="/simular">Simular na pele</CtaLink>
           <CtaLink href="/" variant="outline">
             Voltar
@@ -98,7 +98,11 @@ export function BookingForm() {
 
   return (
     <form onSubmit={submit} className="mx-auto max-w-3xl">
-      <div className="mb-12 flex gap-2">
+      <div className="mb-8 md:mb-12">
+        <p className="label-mono mb-3 md:hidden">
+          {step + 1}/{STEPS.length} · {STEPS[step]}
+        </p>
+        <div className="flex gap-2">
         {STEPS.map((label, i) => (
           <div key={label} className="flex-1">
             <div className="h-[2px] bg-line">
@@ -112,6 +116,7 @@ export function BookingForm() {
             </p>
           </div>
         ))}
+        </div>
       </div>
 
       <AnimatePresence mode="wait">
@@ -124,7 +129,7 @@ export function BookingForm() {
         >
           {step === 0 && (
             <div>
-              <h2 className="font-display text-4xl">Com quem você quer tatuar?</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">Com quem você quer tatuar?</h2>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 {artists.map((a) => (
                   <button
@@ -154,7 +159,7 @@ export function BookingForm() {
 
           {step === 1 && (
             <div>
-              <h2 className="font-display text-4xl">Descreva a ideia</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">Descreva a ideia</h2>
               <textarea
                 rows={6}
                 className="mt-6 w-full p-4"
@@ -180,14 +185,14 @@ export function BookingForm() {
 
           {step === 2 && (
             <div className="grid gap-6">
-              <h2 className="font-display text-4xl">Onde e em que escala?</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">Onde e em que escala?</h2>
               <input placeholder="Local do corpo" className="w-full p-4" {...form.register("bodyPart")} />
               <select className="w-full p-4" {...form.register("size")}>
                 <option value="pequena">Pequena</option>
                 <option value="media">Média</option>
                 <option value="grande">Grande / projeto</option>
               </select>
-              <fieldset className="flex gap-4">
+              <fieldset className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                 <label className="flex items-center gap-2 text-sm">
                   <input type="radio" value="sim" {...form.register("firstTattoo")} /> Primeira tattoo
                 </label>
@@ -200,7 +205,7 @@ export function BookingForm() {
 
           {step === 3 && (
             <div className="grid gap-4">
-              <h2 className="font-display text-4xl">Quem é você</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">Quem é você</h2>
               <input placeholder="Nome" className="w-full p-4" {...form.register("name")} />
               <input placeholder="E-mail" className="w-full p-4" {...form.register("email")} />
               <input placeholder="Telefone / WhatsApp" className="w-full p-4" {...form.register("phone")} />
@@ -210,7 +215,7 @@ export function BookingForm() {
 
           {step === 4 && (
             <div>
-              <h2 className="font-display text-4xl">Escolha um horário</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">Escolha um horário</h2>
               <p className="mt-2 text-sm text-ink-secondary">
                 Prévia de disponibilidade. Cal.com entra quando o token estiver no ambiente.
               </p>
@@ -234,7 +239,7 @@ export function BookingForm() {
 
           {step === 5 && (
             <div>
-              <h2 className="font-display text-4xl">Resumo</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">Resumo</h2>
               <ul className="mt-6 space-y-2 text-ink-secondary">
                 <li>Artista: {artist?.name ?? values.artist}</li>
                 <li>Ideia: {values.idea}</li>
@@ -251,7 +256,7 @@ export function BookingForm() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="mt-10 flex justify-between">
+      <div className="mt-10 flex items-center justify-between gap-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <button
           type="button"
           className="text-sm text-ink-secondary"

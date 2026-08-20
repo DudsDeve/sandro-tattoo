@@ -14,7 +14,7 @@ export function DesignPicker({
   return (
     <div>
       <p className="label-mono mb-3">Designs do estúdio</p>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
         {flashDesigns.map((d) => (
           <button
             key={d.id}

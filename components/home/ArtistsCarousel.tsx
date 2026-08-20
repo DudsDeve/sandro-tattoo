@@ -1,32 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { CursorLink, CtaLink } from "@/components/ui/CursorLink";
 import { artists } from "@/lib/data/content";
 
 export function ArtistsCarousel() {
   return (
-    <section className="bg-bg-secondary py-28">
-      <div className="mb-10 flex items-end justify-between px-5 md:px-12">
-        <div>
+    <section className="bg-bg-secondary py-20 md:py-28">
+      <div className="mb-10 flex items-end justify-between gap-4 px-4 sm:px-5 md:px-12">
+        <div className="min-w-0">
           <p className="label-mono mb-3">Artistas</p>
           <h2 className="display-section">Quem segura a agulha.</h2>
         </div>
-        <CtaLink href="/artistas" variant="outline" className="hidden md:inline-block">
+        <CtaLink href="/artistas" variant="outline" className="hidden shrink-0 md:inline-block">
           Ver todos
         </CtaLink>
       </div>
-      <motion.div
-        className="flex cursor-grab gap-6 overflow-x-auto px-5 pb-6 md:px-12"
-        drag="x"
-        dragConstraints={{ left: -900, right: 0 }}
-      >
+      <div className="snap-x-row px-4 pb-6 sm:px-5 md:px-12">
         {artists.map((artist) => (
           <CursorLink
             key={artist.slug}
             href={`/artistas/${artist.slug}`}
-            className="group w-[78vw] shrink-0 md:w-[420px]"
+            className="group w-[min(78vw,22rem)] md:w-[420px]"
           >
             <div className="relative aspect-[3/4] overflow-hidden">
               <Image
@@ -34,15 +29,15 @@ export function ArtistsCarousel() {
                 alt={artist.name}
                 fill
                 className="object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                sizes="420px"
+                sizes="(max-width: 768px) 78vw, 420px"
               />
             </div>
             <div className="mt-4">
-              <h3 className="font-display text-3xl">{artist.name}</h3>
+              <h3 className="font-display text-2xl sm:text-3xl">{artist.name}</h3>
               <p className="label-mono mt-1">{artist.specialty}</p>
               <div className="mt-4 flex gap-2">
                 {artist.works.slice(0, 3).map((src) => (
-                  <div key={src} className="relative h-16 w-16 overflow-hidden">
+                  <div key={src} className="relative h-14 w-14 overflow-hidden sm:h-16 sm:w-16">
                     <Image src={src} alt="" fill className="object-cover" sizes="64px" />
                   </div>
                 ))}
@@ -50,7 +45,12 @@ export function ArtistsCarousel() {
             </div>
           </CursorLink>
         ))}
-      </motion.div>
+      </div>
+      <div className="mt-2 px-4 md:hidden">
+        <CtaLink href="/artistas" variant="outline" className="w-full">
+          Ver todos
+        </CtaLink>
+      </div>
     </section>
   );
 }

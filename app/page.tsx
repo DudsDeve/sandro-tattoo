@@ -1,7 +1,6 @@
 import { AboutSection } from "@/components/home/AboutSection";
 import { ArtistsCarousel } from "@/components/home/ArtistsCarousel";
 import { CTASection } from "@/components/home/CTASection";
-import { GlobeZoom } from "@/components/home/GlobeZoom";
 import { HeroSection } from "@/components/home/HeroSection";
 import { SpecialtiesSection } from "@/components/home/SpecialtiesSection";
 import { TestimonialsMarquee } from "@/components/home/TestimonialsMarquee";
@@ -30,7 +29,6 @@ export default function HomePage() {
       <SpecialtiesSection />
       <ArtistsCarousel />
       <TestimonialsMarquee />
-      <GlobeZoom />
       <CTASection />
     </>
   );

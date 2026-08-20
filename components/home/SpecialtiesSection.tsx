@@ -7,10 +7,10 @@ import { specialties } from "@/lib/data/content";
 
 export function SpecialtiesSection() {
   return (
-    <section className="bg-bg-primary px-5 py-28 md:px-12">
+    <section className="bg-bg-primary px-4 py-20 sm:px-5 md:px-12 md:py-28">
       <p className="label-mono mb-4">Especialidades</p>
       <h2 className="display-section mb-14 max-w-3xl">Linguagens que a gente fala de verdade.</h2>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {specialties.map((s, i) => (
           <motion.div
             key={s.slug}
@@ -29,7 +29,7 @@ export function SpecialtiesSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent transition group-hover:bg-bg-accent/25" />
               <div className="absolute inset-x-0 bottom-0 p-6">
-                <h3 className="font-display text-3xl">{s.name}</h3>
+                <h3 className="font-display text-2xl sm:text-3xl">{s.name}</h3>
                 <p className="mt-2 text-sm text-ink-secondary">{s.description}</p>
               </div>
             </Link>
