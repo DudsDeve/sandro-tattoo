@@ -1,0 +1,63 @@
+.globe-scan {
+  animation: globe-scan 2.5s ease-in-out infinite;
+}
+
+.globe-pulse {
+  animation: globe-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes globe-scan {
+  0% {
+    top: 20%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 80%;
+    opacity: 0;
+  }
+}
+
+@keyframes globe-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+.globe-locate button.globe-cta:hover,
+.globe-locate button.globe-card-primary:hover {
+  border-color: #8b9a6b;
+  background: rgba(76, 86, 52, 0.18);
+}
+
+.globe-map .leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.55);
+  color: #5c5955;
+  font-size: 9px;
+}
+
+.globe-map .leaflet-control-attribution a {
+  color: #8b9a6b;
+}
+
+.globe-map .leaflet-container {
+  background: #050505;
+  font-family: inherit;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #050505;
+}
