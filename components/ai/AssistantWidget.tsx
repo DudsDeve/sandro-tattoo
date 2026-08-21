@@ -5,9 +5,11 @@ import { MessageSquare, X } from "lucide-react";
 import { useState } from "react";
 import { AssistantChat } from "@/components/ai/AssistantChat";
 import { ConceptChat } from "@/components/ai/ConceptChat";
+import { useT } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
 export function AssistantWidget() {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<"faq" | "conceito">("faq");
 
@@ -15,7 +17,7 @@ export function AssistantWidget() {
     <>
       <button
         onClick={() => setOpen(true)}
-        aria-label="Abrir assistente"
+        aria-label={t.ai.open}
         className="fixed bottom-[max(4.75rem,calc(env(safe-area-inset-bottom)+3.5rem))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex h-12 w-12 items-center justify-center rounded-full border border-line-accent bg-bg-tertiary text-ink sm:bottom-24 sm:right-5 sm:h-14 sm:w-14"
       >
         <span className="absolute inset-0 animate-[pulse-ring_2.4s_ease-out_infinite] rounded-full border border-moss/40" />
@@ -32,20 +34,20 @@ export function AssistantWidget() {
           >
             <div className="mb-4 flex items-center justify-between">
               <div className="flex gap-2">
-                {(["faq", "conceito"] as const).map((t) => (
+                {(["faq", "conceito"] as const).map((key) => (
                   <button
-                    key={t}
-                    onClick={() => setTab(t)}
+                    key={key}
+                    onClick={() => setTab(key)}
                     className={cn(
                       "label-mono px-3 py-1",
-                      tab === t ? "bg-bg-accent text-ink" : "text-ink-secondary",
+                      tab === key ? "bg-bg-accent text-ink" : "text-ink-secondary",
                     )}
                   >
-                    {t === "faq" ? "Dúvidas" : "Conceito"}
+                    {key === "faq" ? t.ai.faq : t.ai.concept}
                   </button>
                 ))}
               </div>
-              <button onClick={() => setOpen(false)} aria-label="Fechar">
+              <button onClick={() => setOpen(false)} aria-label={t.ai.close}>
                 <X size={18} />
               </button>
             </div>

@@ -3,9 +3,11 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { CursorLink } from "@/components/ui/CursorLink";
+import { useT } from "@/lib/i18n/LanguageProvider";
 import type { Artist } from "@/lib/types";
 
 export function ArtistsGrid({ artists }: { artists: Artist[] }) {
+  const t = useT();
   return (
     <div className="mt-16 columns-1 gap-6 md:columns-2 lg:columns-3">
       {artists.map((artist, i) => (
@@ -37,7 +39,9 @@ export function ArtistsGrid({ artists }: { artists: Artist[] }) {
               </div>
             </div>
             <h2 className="font-display mt-4 text-3xl">{artist.name}</h2>
-            <p className="label-mono mt-1">{artist.specialty} · {artist.years} anos</p>
+            <p className="label-mono mt-1">
+              {artist.specialty} · {artist.years} {t.common.years}
+            </p>
             <p className="mt-2 text-sm text-ink-secondary">@{artist.instagram}</p>
           </CursorLink>
         </motion.article>

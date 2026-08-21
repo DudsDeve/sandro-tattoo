@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CMS uploads locais
+/public/uploads
+
+# Estado do cron do blog (local / runtime)
+/content/blog-cron.json

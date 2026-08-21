@@ -12,18 +12,13 @@ import {
   normAngle,
 } from "@/lib/globe-geo";
 import { RegionMap } from "@/components/home/RegionMap";
+import { useT } from "@/lib/i18n/LanguageProvider";
 import "./globe.css";
 
 const GREEN = 0x4c5634;
 const GREEN_LIGHT = 0x8b9a6b;
 const LAT = STUDIO.address.geo.lat;
 const LNG = STUDIO.address.geo.lng;
-
-const ARRIVAL = [
-  { zoom: 6, duration: 1600, kicker: "PAÍS", label: "Irlanda" },
-  { zoom: 11, duration: 1700, kicker: "CIDADE", label: "Dublin" },
-  { zoom: 14, duration: 1800, kicker: "REGIÃO", label: "Área aproximada" },
-] as const;
 
 type ThreeBag = {
   scene: THREE.Scene;
@@ -57,6 +52,13 @@ type AnimState = {
 type Hud = { kicker: string; label: string } | null;
 
 export function GlobeZoom() {
+  const i18n = useT();
+  const ARRIVAL = [
+    { zoom: 6, duration: 1600, kicker: i18n.globe.country, label: i18n.globe.ireland },
+    { zoom: 11, duration: 1700, kicker: i18n.globe.city, label: i18n.globe.dublin },
+    { zoom: 14, duration: 1800, kicker: i18n.globe.region, label: i18n.globe.approxArea },
+  ] as const;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const threeRef = useRef<ThreeBag | null>(null);
   const flyToken = useRef(0);
@@ -83,7 +85,7 @@ export function GlobeZoom() {
   const [mapOn, setMapOn] = useState(false);
   const [hud, setHud] = useState<Hud>(null);
   const [stageIndex, setStageIndex] = useState(-1);
-  const [mapZoom, setMapZoom] = useState<number>(ARRIVAL[0].zoom);
+  const [mapZoom, setMapZoom] = useState<number>(6);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -352,12 +354,17 @@ export function GlobeZoom() {
 
   const flyToStreet = useCallback(async () => {
     const token = ++flyToken.current;
+    const stages = [
+      { zoom: 6, duration: 1600, kicker: i18n.globe.country, label: i18n.globe.ireland },
+      { zoom: 11, duration: 1700, kicker: i18n.globe.city, label: i18n.globe.dublin },
+      { zoom: 14, duration: 1800, kicker: i18n.globe.region, label: i18n.globe.approxArea },
+    ];
     setMapOn(true);
-    setMapZoom(ARRIVAL[0].zoom);
+    setMapZoom(stages[0].zoom);
 
-    for (let i = 0; i < ARRIVAL.length; i++) {
+    for (let i = 0; i < stages.length; i++) {
       if (token !== flyToken.current) return;
-      const stage = ARRIVAL[i];
+      const stage = stages[i];
       setStageIndex(i);
       setHud({ kicker: stage.kicker, label: stage.label });
       setMapZoom(stage.zoom);
@@ -365,51 +372,51 @@ export function GlobeZoom() {
     }
 
     if (token === flyToken.current) setShowCard(true);
-  }, []);
+  }, [i18n]);
 
   const handleZoomIn = useCallback(() => {
     const st = anim.current;
-    const t = threeRef.current;
-    if (!t || st.animating) return;
+    const three = threeRef.current;
+    if (!three || st.animating) return;
 
     st.direction = "in";
     st.progress = 0;
     st.animating = true;
-    st.startRotY = t.globe.rotation.y;
-    st.startRotX = t.globe.rotation.x;
-    st.startCamZ = t.camera.position.z;
-    st.startCamY = t.camera.position.y;
-    st.targetRotY = normAngle(t.globe.rotation.y, st.baseTargetRotY);
+    st.startRotY = three.globe.rotation.y;
+    st.startRotX = three.globe.rotation.x;
+    st.startCamZ = three.camera.position.z;
+    st.startCamY = three.camera.position.y;
+    st.targetRotY = normAngle(three.globe.rotation.y, st.baseTargetRotY);
     st.targetRotX = st.baseTargetRotX;
 
     setZoomed(true);
-    setHud({ kicker: "ÓRBITA", label: "Aproximando da Irlanda" });
+    setHud({ kicker: i18n.globe.orbit, label: i18n.globe.approaching });
     window.setTimeout(() => {
-      setHud({ kicker: "PAÍS", label: "Irlanda" });
+      setHud({ kicker: i18n.globe.country, label: i18n.globe.ireland });
       void flyToStreet();
     }, 2400);
-  }, [flyToStreet]);
+  }, [flyToStreet, i18n]);
 
   const handleZoomOut = useCallback(() => {
     flyToken.current += 1;
     const st = anim.current;
-    const t = threeRef.current;
-    if (!t || st.animating) return;
+    const three = threeRef.current;
+    if (!three || st.animating) return;
 
     setShowCard(false);
     setMapOn(false);
     setHud(null);
     setStageIndex(-1);
-    setMapZoom(ARRIVAL[0].zoom);
+    setMapZoom(6);
 
     st.direction = "out";
     st.progress = 0;
     st.animating = true;
-    st.startRotY = t.globe.rotation.y;
-    st.startRotX = t.globe.rotation.x;
-    st.startCamZ = t.camera.position.z;
-    st.startCamY = t.camera.position.y;
-    st.resetRotY = t.globe.rotation.y + 0.5;
+    st.startRotY = three.globe.rotation.y;
+    st.startRotX = three.globe.rotation.x;
+    st.startCamZ = three.camera.position.z;
+    st.startCamY = three.camera.position.y;
+    st.resetRotY = three.globe.rotation.y + 0.5;
 
     window.setTimeout(() => setZoomed(false), 1400);
   }, []);
@@ -442,16 +449,16 @@ export function GlobeZoom() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[35%] bg-gradient-to-t from-black/85 to-transparent" />
 
       <div className="pointer-events-none absolute left-1/2 top-[max(4.5rem,calc(env(safe-area-inset-top)+2.5rem))] z-[6] w-[min(92vw,640px)] -translate-x-1/2 px-3 text-center">
-        <span className="label-mono text-[0.65rem]">Estúdio de tatuagem</span>
+        <span className="label-mono text-[0.65rem]">{i18n.globe.studioLabel}</span>
         <h2 className="font-display mt-2 text-[clamp(1.15rem,4.6vw,2.4rem)] tracking-[0.1em] text-ink sm:tracking-[0.18em]">
-          ENCONTRE-NOS
+          {i18n.globe.findUs}
         </h2>
       </div>
 
       {loading && (
         <div className="absolute bottom-[11%] left-1/2 z-[6] flex -translate-x-1/2 items-center gap-2">
           <span className="globe-pulse h-1.5 w-1.5 rounded-full bg-bg-accent" />
-          <span className="text-[0.68rem] tracking-[0.15em] text-ink-muted">Carregando mapa…</span>
+          <span className="text-[0.68rem] tracking-[0.15em] text-ink-muted">{i18n.globe.loading}</span>
         </div>
       )}
 
@@ -469,7 +476,7 @@ export function GlobeZoom() {
             <line x1="12" y1="8" x2="12" y2="16" />
             <line x1="8" y1="12" x2="16" y2="12" />
           </svg>
-          LOCALIZAR ESTÚDIO
+          {i18n.globe.locate}
         </button>
       </div>
 
@@ -481,7 +488,7 @@ export function GlobeZoom() {
             <div className="mx-auto mt-5 flex max-w-md justify-center gap-1.5">
               {ARRIVAL.map((s, i) => (
                 <span
-                  key={s.kicker}
+                  key={`${s.kicker}-${i}`}
                   className="h-[2px] flex-1"
                   style={{ background: i <= stageIndex ? "#8B9A6B" : "#1A1A1A" }}
                 />
@@ -507,12 +514,12 @@ export function GlobeZoom() {
       >
         <span className="w-[3px] shrink-0 bg-gradient-to-b from-transparent via-bg-accent to-transparent" />
         <div className="flex flex-col px-6 py-7">
-          <span className="label-mono">Região aproximada</span>
+          <span className="label-mono">{i18n.globe.approxLabel}</span>
           <h3 className="font-display mt-2 text-2xl tracking-wide">{STUDIO.name}</h3>
-          <p className="mt-3 text-sm text-ink-secondary">{STUDIO.address.city}, {STUDIO.address.country}</p>
-          <p className="mt-2 text-xs leading-relaxed text-ink-muted">
-            O círculo marca a região — o endereço exato é confirmado na consulta.
+          <p className="mt-3 text-sm text-ink-secondary">
+            {STUDIO.address.city}, {i18n.studio.country}
           </p>
+          <p className="mt-2 text-xs leading-relaxed text-ink-muted">{i18n.globe.approxHint}</p>
           <p className="mt-3 text-sm text-moss">{STUDIO.phone}</p>
           <div className="my-5 h-px bg-line-accent/20" />
           <div className="flex flex-col gap-2.5">
@@ -522,14 +529,14 @@ export function GlobeZoom() {
               rel="noreferrer"
               className="globe-card-primary border border-line-accent/40 bg-bg-accent/15 px-4 py-3 text-center text-[0.68rem] tracking-[0.18em]"
             >
-              VER A REGIÃO NO MAPS →
+              {i18n.globe.openMaps}
             </a>
             <button
               type="button"
               className="py-1.5 text-[0.65rem] tracking-[0.18em] text-ink-muted"
               onClick={handleZoomOut}
             >
-              ← VOLTAR AO GLOBO
+              {i18n.globe.backGlobe}
             </button>
           </div>
         </div>

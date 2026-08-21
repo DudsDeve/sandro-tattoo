@@ -7,10 +7,16 @@ import { DesignPicker } from "@/components/simulator/DesignPicker";
 import { ControlPanel } from "@/components/simulator/ControlPanel";
 import { ResultExport } from "@/components/simulator/ResultExport";
 import { flashDesigns } from "@/lib/data/content";
+import { useT } from "@/lib/i18n/LanguageProvider";
+
+function CanvasLoading() {
+  const t = useT();
+  return <div className="flex h-full items-center justify-center text-ink-muted">{t.simulator.loadingCanvas}</div>;
+}
 
 const CanvasEditor = dynamic(
   () => import("@/components/simulator/CanvasEditor").then((m) => m.CanvasEditor),
-  { ssr: false, loading: () => <div className="flex h-full items-center justify-center text-ink-muted">Carregando canvas…</div> },
+  { ssr: false, loading: () => <CanvasLoading /> },
 );
 
 export function TattooSimulator() {

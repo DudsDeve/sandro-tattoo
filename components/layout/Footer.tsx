@@ -1,45 +1,35 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GlobeZoom } from "@/components/home/GlobeZoom";
 import { CursorLink } from "@/components/ui/CursorLink";
 import { gallery } from "@/lib/data/content";
-import { NAV_LINKS, STUDIO } from "@/lib/data/studio";
+import { STUDIO } from "@/lib/data/studio";
+import { useT } from "@/lib/i18n/LanguageProvider";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-function FooterGlobe() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setReady(true);
-      },
-      { rootMargin: "280px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  return (
-    <div ref={ref}>
-      {ready ? <GlobeZoom /> : <div className="h-[100svh] min-h-[520px] bg-black" aria-hidden />}
-    </div>
-  );
-}
-
 export function Footer() {
+  const t = useT();
   const ref = useRef<HTMLElement>(null);
+  const navLinks = [
+    { href: "/artistas", label: t.nav.artists },
+    { href: "/galeria", label: t.nav.gallery },
+    { href: "/processo", label: t.nav.process },
+    { href: "/loja", label: t.nav.shop },
+    { href: "/blog", label: t.nav.blog },
+  ];
+  const hours = [
+    { days: t.studio.hoursWeek, time: "11:00 — 20:00" },
+    { days: t.studio.hoursSat, time: "10:00 — 18:00" },
+    { days: t.studio.hoursSun, time: t.studio.closed },
+  ];
+
   useGSAP(
     () => {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -70,10 +60,10 @@ export function Footer() {
           <div data-foot>
             <p className="font-display text-3xl">{STUDIO.name}</p>
             <p className="mt-3 max-w-xs text-sm text-ink-secondary">
-              {STUDIO.tagline}. {STUDIO.address.city}.
+              {t.studio.tagline}. {STUDIO.address.city}.
             </p>
             <nav className="mt-6 flex flex-col gap-2 text-sm">
-              {NAV_LINKS.map((l) => (
+              {navLinks.map((l) => (
                 <CursorLink key={l.href} href={l.href} className="text-ink-secondary hover:text-ink">
                   {l.label}
                 </CursorLink>
@@ -81,14 +71,14 @@ export function Footer() {
             </nav>
           </div>
           <div data-foot>
-            <p className="label-mono mb-4">Contato</p>
-            <p className="text-sm">{STUDIO.address.full}</p>
+            <p className="label-mono mb-4">{t.footer.contact}</p>
+            <p className="text-sm">{t.studio.fullAddress}</p>
             <p className="mt-2 text-sm text-ink-secondary">{STUDIO.phone}</p>
             <p className="text-sm text-ink-secondary">{STUDIO.email}</p>
           </div>
           <div data-foot>
-            <p className="label-mono mb-4">Horários</p>
-            {STUDIO.hours.map((h) => (
+            <p className="label-mono mb-4">{t.footer.hours}</p>
+            {hours.map((h) => (
               <p key={h.days} className="flex justify-between gap-4 text-sm text-ink-secondary">
                 <span>{h.days}</span>
                 <span className="text-ink">{h.time}</span>
@@ -96,19 +86,16 @@ export function Footer() {
             ))}
           </div>
           <div data-foot>
-            <p className="label-mono mb-4">Newsletter</p>
-            <form
-              className="flex border-b border-line pb-2"
-              onSubmit={(e) => e.preventDefault()}
-            >
+            <p className="label-mono mb-4">{t.footer.newsletter}</p>
+            <form className="flex border-b border-line pb-2" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="email"
                 required
-                placeholder="seu@email.com"
+                placeholder={t.footer.emailPlaceholder}
                 className="w-full border-0 bg-transparent px-0 focus:outline-none"
               />
               <button type="submit" className="label-mono text-moss">
-                Enviar
+                {t.footer.send}
               </button>
             </form>
             <p className="mt-6 label-mono">Instagram</p>
@@ -129,11 +116,9 @@ export function Footer() {
         </div>
       </div>
 
-      <FooterGlobe />
-
       <div className="relative bg-black px-4 py-8 pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-5 md:px-8">
         <p className="mx-auto max-w-7xl text-xs text-ink-muted">
-          © {new Date().getFullYear()} {STUDIO.name}. Todas as peças são autorais.
+          © {new Date().getFullYear()} {STUDIO.name}. {t.footer.copyright}
         </p>
       </div>
     </footer>

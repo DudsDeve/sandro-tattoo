@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "updatedAt": "2026-08-21T03:04:44.839Z",
+  "categories": [
+    {
+      "id": "cat_4tidpf7a",
+      "slug": "blackwork",
+      "name": "Blackwork",
+      "description": "Sólidos, ornamentais e geométricos. Contraste absoluto, composição autoral.",
+      "image": "https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?auto=format&fit=crop&w=1600&q=80",
+      "order": 0
+    },
+    {
+      "id": "cat_kfz40gxa",
+      "slug": "realismo",
+      "name": "Realismo",
+      "description": "Retratos, fauna e textura fotográfica em black & grey ou cor.",
+      "image": "https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1600&q=80",
+      "order": 1
+    },
+    {
+      "id": "cat_x3k8t5ap",
+      "slug": "fine-line",
+      "name": "Fine Line",
+      "description": "Traço delicado, joalheria na pele. Floral, script e minimalismo preciso.",
+      "image": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1600&q=80",
+      "order": 2
+    },
+    {
+      "id": "cat_co62f3tf",
+      "slug": "old-school",
+      "name": "Old School",
+      "description": "Bold lines, paleta clássica, iconografia atemporal.",
+      "image": "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=1600&q=80",
+      "order": 3
+    },
+    {
+      "id": "cat_r0wnewyl",
+      "slug": "aquarela",
+      "name": "Aquarela",
+      "description": "Manchas, transparência e cor que respira com o corpo.",
+      "image": "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1600&q=80",
+      "order": 4
+    },
+    {
+      "id": "cat_02dkzu7r",
+      "slug": "oriental",
+      "name": "Oriental",
+      "description": "Irezumi contemporâneo: fluxo, escala e narrativa em grandes peças.",
+      "image": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80",
+      "order": 5
+    }
+  ],
+  "items": [
+    {
+      "id": "w1",
+      "title": "Retrato em black & grey",
+      "categoryId": "cat_kfz40gxa",
+      "artistId": "art_tju191l6",
+      "image": "https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1600&q=80",
+      "hours": 8,
+      "bodyPart": "Braço"
+    },
+    {
+      "id": "w2",
+      "title": "Ornamental fechado",
+      "categoryId": "cat_4tidpf7a",
+      "image": "https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?auto=format&fit=crop&w=1600&q=80",
+      "hours": 12,
+      "bodyPart": "Antebraço"
+    },
+    {
+      "id": "w3",
+      "title": "Botânica fina",
+      "categoryId": "cat_x3k8t5ap",
+      "artistId": "art_n2aw43jr",
+      "image": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1600&q=80",
+      "hours": 4,
+      "bodyPart": "Costela"
+    },
+    {
+      "id": "w4",
+      "title": "Águia tradicional",
+      "categoryId": "cat_co62f3tf",
+      "image": "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=1600&q=80",
+      "hours": 5,
+      "bodyPart": "Panturrilha"
+    },
+    {
+      "id": "w5",
+      "title": "Koi em fluxo",
+      "categoryId": "cat_02dkzu7r",
+      "image": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80",
+      "hours": 16,
+      "bodyPart": "Costas"
+    },
+    {
+      "id": "w6",
+      "title": "Splash botânico",
+      "categoryId": "cat_r0wnewyl",
+      "image": "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1600&q=80",
+      "hours": 6,
+      "bodyPart": "Coxa"
+    },
+    {
+      "id": "w7",
+      "title": "Serpente e adaga",
+      "categoryId": "cat_4tidpf7a",
+      "image": "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1600&q=80",
+      "hours": 7,
+      "bodyPart": "Braço"
+    },
+    {
+      "id": "w8",
+      "title": "Mandala pontilhada",
+      "categoryId": "cat_4tidpf7a",
+      "image": "https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&w=1600&q=80",
+      "hours": 9,
+      "bodyPart": "Ombro"
+    },
+    {
+      "id": "w9",
+      "title": "Script e ramo",
+      "categoryId": "cat_x3k8t5ap",
+      "artistId": "art_n2aw43jr",
+      "image": "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1600&q=80",
+      "hours": 3,
+      "bodyPart": "Pulso"
+    },
+    {
+      "id": "w10",
+      "title": "Fauna noturna",
+      "categoryId": "cat_kfz40gxa",
+      "artistId": "art_tju191l6",
+      "image": "https://images.unsplash.com/photo-1634986666676-ec8fd927c23d?auto=format&fit=crop&w=1600&q=80",
+      "hours": 10,
+      "bodyPart": "Peito"
+    },
+    {
+      "id": "w11",
+      "title": "Sleeve ornamental",
+      "categoryId": "cat_4tidpf7a",
+      "image": "https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?auto=format&fit=crop&w=1600&q=80&sat=-20",
+      "hours": 20,
+      "bodyPart": "Braço inteiro"
+    },
+    {
+      "id": "w12",
+      "title": "Peônia saturada",
+      "categoryId": "cat_r0wnewyl",
+      "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1600&q=80",
+      "hours": 5,
+      "bodyPart": "Ombro"
+    }
+  ],
+  "artists": [
+    {
+      "id": "art_tju191l6",
+      "slug": "sandro-vale",
+      "name": "Sandro Martins",
+      "role": "Fundador",
+      "specialty": "Realismo & Black Work",
+      "specialtyIds": [
+        "realismo",
+        "blackwork"
+      ],
+      "years": 14,
+      "bio": "Fundador do estúdio. Retratos e peças de grande escala com obsessão por luz e textura.",
+      "bioLong": "Sandro começou tatuando em 2012 e fundou o estúdio para reunir artistas que tratam a pele como tela permanente. Especialista em realismo black & grey, trabalha retratos, fauna e composições narrativas. Cada sessão é desenhada em conjunto — nada sai de um catálogo.",
+      "instagram": "sandrovale.ink",
+      "image": "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1600&q=80",
+      "available": true,
+      "works": [
+        {
+          "id": "aw_mo3llubv",
+          "title": "Trabalho 1",
+          "image": "https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1600&q=80"
+        },
+        {
+          "id": "aw_03itn17u",
+          "title": "Trabalho 2",
+          "image": "https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?auto=format&fit=crop&w=1600&q=80"
+        },
+        {
+          "id": "aw_fc3d6509",
+          "title": "Trabalho 3",
+          "image": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80"
+        },
+        {
+          "id": "aw_wefr4gyj",
+          "title": "Trabalho 4",
+          "image": "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1600&q=80"
+        }
+      ]
+    },
+    {
+      "id": "art_n2aw43jr",
+      "slug": "luna-mendes",
+      "name": "Luna Mendes",
+      "role": "Artista residente",
+      "specialty": "Fine Line & Floral",
+      "specialtyIds": [
+        "fine-line",
+        "aquarela"
+      ],
+      "years": 7,
+      "bio": "Joalheria botânica. Linhas que parecem desenhadas a grafite sobre a pele.",
+      "bioLong": "Luna constrói peças íntimas: flores, scripts e composições que acompanham a anatomia. Fine line com densidade controlada — durável, não frágil. Também explora aquarela suave em peças menores.",
+      "instagram": "luna.mendes.ink",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1600&q=80",
+      "available": true,
+      "works": [
+        {
+          "id": "aw_pmpjjhqg",
+          "title": "Trabalho 1",
+          "image": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1600&q=80"
+        },
+        {
+          "id": "aw_zqhvw64e",
+          "title": "Trabalho 2",
+          "image": "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1600&q=80"
+        },
+        {
+          "id": "aw_0stil5ps",
+          "title": "Trabalho 3",
+          "image": "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1600&q=80"
+        }
+      ]
+    }
+  ],
+  "posts": []
+}

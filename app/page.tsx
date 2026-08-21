@@ -2,11 +2,16 @@ import { AboutSection } from "@/components/home/AboutSection";
 import { ArtistsCarousel } from "@/components/home/ArtistsCarousel";
 import { CTASection } from "@/components/home/CTASection";
 import { HeroSection } from "@/components/home/HeroSection";
+import { HomeTestimonials } from "@/components/home/HomeTestimonials";
 import { SpecialtiesSection } from "@/components/home/SpecialtiesSection";
-import { TestimonialsMarquee } from "@/components/home/TestimonialsMarquee";
+import { getArtists, getSpecialties } from "@/lib/content";
 import { STUDIO } from "@/lib/data/studio";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const [specialties, artists] = await Promise.all([getSpecialties(), getArtists()]);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TattooParlor",
@@ -26,9 +31,9 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <HeroSection />
       <AboutSection />
-      <SpecialtiesSection />
-      <ArtistsCarousel />
-      <TestimonialsMarquee />
+      <SpecialtiesSection specialties={specialties} />
+      <ArtistsCarousel artists={artists} />
+      <HomeTestimonials />
       <CTASection />
     </>
   );

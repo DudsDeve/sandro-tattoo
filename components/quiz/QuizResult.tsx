@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { CtaLink } from "@/components/ui/CursorLink";
+import { useT } from "@/lib/i18n/LanguageProvider";
 import type { ArtistMatch } from "@/lib/quiz-engine";
 
 export function QuizResult({
@@ -15,12 +16,13 @@ export function QuizResult({
   explanation: string;
   onReset: () => void;
 }) {
+  const t = useT();
   const [top, ...rest] = matches;
   if (!top) return null;
 
   return (
     <motion.div initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="pb-24">
-      <p className="label-mono">Seu match</p>
+      <p className="label-mono">{t.quiz.match}</p>
       <div className="mt-8 grid items-center gap-10 md:grid-cols-2">
         <div className="relative aspect-[3/4] overflow-hidden">
           <Image src={top.artist.image} alt={top.artist.name} fill className="object-cover" />
@@ -39,15 +41,17 @@ export function QuizResult({
             ))}
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
-            <CtaLink href={`/agendar?artista=${top.artist.slug}`}>Agendar com {top.artist.name.split(" ")[0]}</CtaLink>
+            <CtaLink href={`/agendar?artista=${top.artist.slug}`}>
+              {t.quiz.bookWith} {top.artist.name.split(" ")[0]}
+            </CtaLink>
             <CtaLink href={`/artistas/${top.artist.slug}`} variant="outline">
-              Ver perfil
+              {t.quiz.seeProfile}
             </CtaLink>
           </div>
         </div>
       </div>
       <div className="mt-16">
-        <p className="label-mono mb-4">Outros matches</p>
+        <p className="label-mono mb-4">{t.quiz.other}</p>
         <div className="grid gap-4 md:grid-cols-2">
           {rest.slice(0, 2).map((m) => (
             <div key={m.artist.slug} className="flex items-center gap-4 border border-line p-4">
@@ -62,7 +66,7 @@ export function QuizResult({
           ))}
         </div>
         <button onClick={onReset} className="mt-8 text-sm text-ink-secondary underline">
-          Refazer quiz
+          {t.quiz.redo}
         </button>
       </div>
     </motion.div>

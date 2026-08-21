@@ -13,8 +13,8 @@ export function formatBRL(value: number) {
   }).format(value);
 }
 
-export function formatDate(iso: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
+export function formatDate(iso: string, locale = "en-IE") {
+  return new Intl.DateTimeFormat(locale, {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -24,7 +24,7 @@ export function formatDate(iso: string) {
 export function whatsappLink(message?: string) {
   const phone = process.env.NEXT_PUBLIC_WHATSAPP ?? "5511988880000";
   const text = encodeURIComponent(
-    message ?? "Olá! Vim pelo site do Sandro Tattoo e quero conversar sobre uma sessão.",
+    message ?? "Hi! I came from the Sandro Tattoo website and want to talk about a session.",
   );
   return `https://wa.me/${phone}?text=${text}`;
 }
@@ -34,4 +34,26 @@ export function getMessageText(parts: Array<{ type: string; text?: string }>) {
     .filter((part) => part.type === "text" && part.text)
     .map((part) => part.text)
     .join("");
+}
+
+/** Aceita @user, user ou URL completa → handle limpo. */
+export function normalizeInstagramHandle(raw: string) {
+  const value = raw.trim();
+  if (!value) return "";
+  try {
+    if (/^https?:\/\//i.test(value) || value.includes("instagram.com")) {
+      const url = new URL(value.startsWith("http") ? value : `https://${value}`);
+      const part = url.pathname.split("/").filter(Boolean)[0] || "";
+      return part.replace(/^@/, "").replace(/\/$/, "");
+    }
+  } catch {
+    /* fall through */
+  }
+  return value.replace(/^@/, "").replace(/\/+$/, "").split(/[/?#]/)[0] || "";
+}
+
+export function instagramUrl(handleOrUrl: string) {
+  const handle = normalizeInstagramHandle(handleOrUrl);
+  if (!handle) return "";
+  return `https://instagram.com/${handle}`;
 }

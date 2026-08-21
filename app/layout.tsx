@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, DM_Sans, JetBrains_Mono, Playfair_Display } from "next/font/google";
-import { AppShell } from "@/components/layout/AppShell";
 import { SiteProviders } from "@/components/layout/SiteProviders";
+import { RootShell } from "@/components/layout/RootShell";
 import { STUDIO } from "@/lib/data/studio";
 import "./globals.css";
 
@@ -43,14 +43,16 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://sandrotattoo.com"),
   title: {
-    default: `${STUDIO.name} — ${STUDIO.tagline}`,
+    default: `${STUDIO.name} — Art carved in skin`,
     template: `%s — ${STUDIO.name}`,
   },
-  description: STUDIO.description,
+  description:
+    "Authorial tattoo studio in Dublin. Realism, blackwork, fine line and one-of-a-kind pieces — from concept to healing.",
   openGraph: {
     title: STUDIO.name,
-    description: STUDIO.description,
-    locale: "pt_BR",
+    description:
+      "Authorial tattoo studio in Dublin. Realism, blackwork, fine line and one-of-a-kind pieces — from concept to healing.",
+    locale: "en_IE",
     type: "website",
   },
 };
@@ -61,10 +63,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${playfair.variable} ${dmSans.variable} ${jetbrains.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${jetbrains.variable} ${caveat.variable}`}>
       <body className="bg-bg-primary text-ink antialiased">
         <SiteProviders>
-          <AppShell>{children}</AppShell>
+          <RootShell>{children}</RootShell>
         </SiteProviders>
       </body>
     </html>

@@ -4,14 +4,25 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { LogoMark } from "@/components/ui/LogoMark";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { CtaLink, CursorLink } from "@/components/ui/CursorLink";
-import { NAV_LINKS, STUDIO } from "@/lib/data/studio";
+import { STUDIO } from "@/lib/data/studio";
+import { useT } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
+  const t = useT();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const navLinks = [
+    { href: "/artistas", label: t.nav.artists },
+    { href: "/galeria", label: t.nav.gallery },
+    { href: "/processo", label: t.nav.process },
+    { href: "/loja", label: t.nav.shop },
+    { href: "/blog", label: t.nav.blog },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 100);
@@ -42,7 +53,7 @@ export function Navbar() {
           scrolled && "border-line bg-black/80 backdrop-blur-[12px]",
         )}
       >
-        <div className="mx-auto flex h-[64px] max-w-7xl items-center justify-between px-4 sm:h-[72px] sm:px-5 md:px-8">
+        <div className="mx-auto flex h-[64px] max-w-7xl items-center justify-between gap-3 px-4 sm:h-[72px] sm:px-5 md:px-8">
           <CursorLink href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
             <LogoMark compact={scrolled} className="h-9 w-9 shrink-0 text-ink sm:h-10 sm:w-10" />
             <span className="font-display truncate text-base tracking-tight sm:text-lg">
@@ -51,7 +62,7 @@ export function Navbar() {
           </CursorLink>
 
           <nav className="hidden items-center gap-8 lg:flex">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <CursorLink
                 key={link.href}
                 href={link.href}
@@ -62,16 +73,17 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <LanguageSwitcher />
             <div className="hidden md:block">
               <CtaLink href="/agendar" variant="outline">
-                Agendar Sessão
+                {t.nav.book}
               </CtaLink>
             </div>
             <button
               className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 lg:hidden"
               onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Fechar menu" : "Abrir menu"}
+              aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
             >
               <span
                 className={cn(
@@ -100,7 +112,7 @@ export function Navbar() {
             exit={{ opacity: 0 }}
           >
             <nav className="flex flex-col gap-2">
-              {NAV_LINKS.map((link, i) => (
+              {navLinks.map((link, i) => (
                 <motion.div
                   key={link.href}
                   initial={{ y: 40, opacity: 0 }}
@@ -116,10 +128,11 @@ export function Navbar() {
                 initial={{ y: 40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="mt-8"
+                className="mt-8 flex flex-col gap-4"
               >
+                <LanguageSwitcher className="w-fit" />
                 <span onClick={() => setOpen(false)}>
-                  <CtaLink href="/agendar">Agendar Sessão</CtaLink>
+                  <CtaLink href="/agendar">{t.nav.book}</CtaLink>
                 </span>
               </motion.div>
             </nav>

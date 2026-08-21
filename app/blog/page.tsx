@@ -1,27 +1,23 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { CursorLink } from "@/components/ui/CursorLink";
+import { BlogPageHeader } from "@/components/ui/PageHeaders";
 import { getPosts } from "@/lib/content";
-import { formatDate } from "@/lib/utils";
+import { BlogCategoryLabel } from "@/components/blog/BlogCategoryLabel";
+import { LocalizedDate } from "@/components/ui/LocalizedDate";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Cuidados, tendências e bastidores do Sandro Tattoo.",
-};
-
-const labels = {
-  cuidados: "Cuidados",
-  tendencias: "Tendências",
-  bastidores: "Bastidores",
-  estilo: "Estilo",
+  description: "Aftercare, trends and studio notes from Sandro Tattoo.",
 };
 
 export default async function BlogPage() {
   const posts = await getPosts();
   return (
     <div className="px-4 pb-28 pt-28 sm:px-5 md:px-12 md:pt-32">
-      <p className="label-mono">Arquivo</p>
-      <h1 className="display-section mt-4 mb-16">Leitura para quem leva a pele a sério.</h1>
+      <BlogPageHeader />
       <div className="grid gap-8 md:grid-cols-2">
         {posts.map((post) => (
           <CursorLink key={post.slug} href={`/blog/${post.slug}`} className="group block">
@@ -35,7 +31,7 @@ export default async function BlogPage() {
               />
             </div>
             <p className="label-mono mt-4">
-              {labels[post.category]} · {post.readTime} · {formatDate(post.date)}
+              <BlogCategoryLabel category={post.category} /> · {post.readTime} · <LocalizedDate iso={post.date} />
             </p>
             <h2 className="font-display mt-2 text-3xl">{post.title}</h2>
             <p className="mt-2 text-sm text-ink-secondary">{post.excerpt}</p>

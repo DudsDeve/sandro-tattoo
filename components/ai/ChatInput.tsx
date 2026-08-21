@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { useT } from "@/lib/i18n/LanguageProvider";
 
 export function ChatInput({
   onSend,
@@ -10,6 +11,7 @@ export function ChatInput({
   onSend: (text: string) => void;
   disabled?: boolean;
 }) {
+  const t = useT();
   const [value, setValue] = useState("");
 
   return (
@@ -27,10 +29,12 @@ export function ChatInput({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         disabled={disabled}
-        placeholder="Escreva sua ideia…"
+        placeholder={t.ai.placeholder}
         className="flex-1 px-3 py-3"
       />
-      <MagneticButton type="submit" className="w-full sm:w-auto">Enviar</MagneticButton>
+      <MagneticButton type="submit" className="w-full sm:w-auto">
+        {t.ai.send}
+      </MagneticButton>
     </form>
   );
 }

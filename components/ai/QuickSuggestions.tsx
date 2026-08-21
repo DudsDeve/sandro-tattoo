@@ -1,17 +1,12 @@
 "use client";
 
-const SUGGESTIONS = [
-  "Quanto custa?",
-  "Cuidados pós-tattoo",
-  "Horário de funcionamento",
-  "Como agendar?",
-  "Vocês aceitam walk-in?",
-];
+import { useT } from "@/lib/i18n/LanguageProvider";
 
 export function QuickSuggestions({ onPick }: { onPick: (q: string) => void }) {
+  const t = useT();
   return (
     <div className="flex flex-wrap gap-2">
-      {SUGGESTIONS.map((s) => (
+      {t.ai.suggestions.map((s) => (
         <button
           key={s}
           type="button"

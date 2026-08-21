@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GalleryExperience } from "@/components/gallery/GalleryExperience";
-import { getGallery } from "@/lib/content";
+import { GalleryPageHeader } from "@/components/ui/PageHeaders";
+import { getGallery, getSpecialties } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Galeria",
-  description: "Portfólio do Sandro Tattoo — peças reais, filtradas por estilo e artista.",
+  title: "Gallery",
+  description: "Sandro Tattoo portfolio — real pieces, filtered by style and artist.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function GaleriaPage() {
-  const works = await getGallery();
+  const [works, specialties] = await Promise.all([getGallery(), getSpecialties()]);
   return (
     <div className="px-4 pb-24 pt-28 sm:px-5 md:px-12 md:pt-32">
-      <p className="label-mono">Portfólio</p>
-      <h1 className="display-section mt-4 mb-12">Arquivo vivo.</h1>
+      <GalleryPageHeader />
       <Suspense>
-        <GalleryExperience works={works} />
+        <GalleryExperience works={works} specialties={specialties} />
       </Suspense>
     </div>
   );

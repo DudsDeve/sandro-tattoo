@@ -5,9 +5,11 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatBRL } from "@/lib/utils";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { useT } from "@/lib/i18n/LanguageProvider";
 import type { Product } from "@/lib/types";
 
 export function ShopGrid({ products }: { products: Product[] }) {
+  const t = useT();
   const [active, setActive] = useState<Product | null>(null);
   const [tilt, setTilt] = useState<Record<string, string>>({});
 
@@ -74,7 +76,7 @@ export function ShopGrid({ products }: { products: Product[] }) {
                   </div>
                 )}
                 <div className="mt-8">
-                  <MagneticButton>Comprar — em breve Stripe / Mercado Pago</MagneticButton>
+                  <MagneticButton>{t.shop.buySoon}</MagneticButton>
                 </div>
               </div>
             </motion.div>

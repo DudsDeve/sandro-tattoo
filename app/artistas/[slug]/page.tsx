@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CtaLink } from "@/components/ui/CursorLink";
+import { BookWithArtist } from "@/components/ui/BookWithArtist";
 import { getArtist, getArtists, getGallery } from "@/lib/content";
 import { ArtistGallery } from "@/components/artists/ArtistGallery";
+import { instagramUrl } from "@/lib/utils";
 
 export async function generateStaticParams() {
   const list = await getArtists();
@@ -13,7 +15,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const artist = await getArtist(slug);
-  return { title: artist?.name ?? "Artista" };
+  return { title: artist?.name ?? "Artist" };
 }
 
 export default async function ArtistPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -41,16 +43,18 @@ export default async function ArtistPage({ params }: { params: Promise<{ slug: s
             ))}
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
-            <CtaLink href={`/agendar?artista=${artist.slug}`}>Agendar com {artist.name.split(" ")[0]}</CtaLink>
-            <CtaLink href={`https://instagram.com/${artist.instagram}`} variant="outline">
-              Instagram
-            </CtaLink>
+            <BookWithArtist slug={artist.slug} firstName={artist.name.split(" ")[0] ?? artist.name} />
+            {artist.instagram ? (
+              <CtaLink href={instagramUrl(artist.instagram)} variant="outline">
+                Instagram
+              </CtaLink>
+            ) : null}
           </div>
         </div>
       </div>
       <ArtistGallery works={works.length ? works : artist.works.map((image, i) => ({
         id: `${artist.slug}-${i}`,
-        title: `Trabalho ${i + 1}`,
+        title: `Work ${i + 1}`,
         artistSlug: artist.slug,
         artistName: artist.name,
         style: artist.specialties[0],

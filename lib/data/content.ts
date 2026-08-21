@@ -17,7 +17,7 @@ export const specialties: Specialty[] = [
     slug: "blackwork",
     name: "Blackwork",
     description: "Sólidos, ornamentais e geométricos. Contraste absoluto, composição autoral.",
-    image: u("photo-1611501275019-9b5c707e0d0d"),
+    image: u("photo-1568515387631-8b650bbcdb90"),
   },
   {
     slug: "realismo",
@@ -29,25 +29,25 @@ export const specialties: Specialty[] = [
     slug: "fine-line",
     name: "Fine Line",
     description: "Traço delicado, joalheria na pele. Floral, script e minimalismo preciso.",
-    image: u("photo-1590246814883-57c511e02123"),
+    image: u("photo-1605497788044-5a32c7078486"),
   },
   {
     slug: "old-school",
     name: "Old School",
     description: "Bold lines, paleta clássica, iconografia atemporal.",
-    image: u("photo-1482328166983-148ac297e917"),
+    image: u("photo-1581833971358-2c8b550f87b3"),
   },
   {
     slug: "aquarela",
     name: "Aquarela",
     description: "Manchas, transparência e cor que respira com o corpo.",
-    image: u("photo-1559628233-d11a6c0e0c1a"),
+    image: u("photo-1541961017774-22349e4a1262"),
   },
   {
     slug: "oriental",
     name: "Oriental",
     description: "Irezumi contemporâneo: fluxo, escala e narrativa em grandes peças.",
-    image: u("photo-1608666599354-1c67d4db8812"),
+    image: u("photo-1607604276583-eef5d076aa5f"),
   },
 ];
 
@@ -63,12 +63,12 @@ export const artists: Artist[] = [
     bioLong:
       "Sandro começou tatuando em 2012 e fundou o estúdio para reunir artistas que tratam a pele como tela permanente. Especialista em realismo black & grey, trabalha retratos, fauna e composições narrativas. Cada sessão é desenhada em conjunto — nada sai de um catálogo.",
     instagram: "sandrovale.ink",
-    image: u("photo-1542727270-ba18cb1c0d1d"),
+    image: u("photo-1460661419201-fd4cecdf8a8b"),
     works: [
       u("photo-1562962230-16e4623d36e6"),
-      u("photo-1611501275019-9b5c707e0d0d"),
-      u("photo-1608666599354-1c67d4db8812"),
-      u("photo-1598371839696-5c6d067a07cd"),
+      u("photo-1568515387631-8b650bbcdb90"),
+      u("photo-1607604276583-eef5d076aa5f"),
+      u("photo-1616394584738-fc6e612e71b9"),
     ],
     styleVector: {
       realismo: 5,
@@ -95,8 +95,8 @@ export const artists: Artist[] = [
     instagram: "luna.mendes.ink",
     image: u("photo-1534528741775-53994a69daeb"),
     works: [
-      u("photo-1590246814883-57c511e02123"),
-      u("photo-1559628233-d11a6c0e0c1a"),
+      u("photo-1605497788044-5a32c7078486"),
+      u("photo-1541961017774-22349e4a1262"),
       u("photo-1515377905703-c4788e51af15"),
     ],
     styleVector: {
@@ -124,9 +124,9 @@ export const artists: Artist[] = [
     instagram: "kai.nakamura.ink",
     image: u("photo-1506794778202-cad84cf45f1d"),
     works: [
-      u("photo-1611501275019-9b5c707e0d0d"),
-      u("photo-1482328166983-148ac297e917"),
-      u("photo-1608666599354-1c67d4db8812"),
+      u("photo-1568515387631-8b650bbcdb90"),
+      u("photo-1581833971358-2c8b550f87b3"),
+      u("photo-1607604276583-eef5d076aa5f"),
     ],
     styleVector: {
       realismo: 0,
@@ -153,9 +153,9 @@ export const artists: Artist[] = [
     instagram: "vera.costa.ink",
     image: u("photo-1524504388940-b1c1722653e1"),
     works: [
-      u("photo-1482328166983-148ac297e917"),
-      u("photo-1598371839696-5c6d067a07cd"),
-      u("photo-1618517044282-42ed2761a06d"),
+      u("photo-1581833971358-2c8b550f87b3"),
+      u("photo-1616394584738-fc6e612e71b9"),
+      u("photo-1515405295579-ba7b45403062"),
     ],
     styleVector: {
       realismo: 1,
@@ -182,7 +182,7 @@ export const artists: Artist[] = [
     instagram: "diego.alves.ink",
     image: u("photo-1507003211169-0a1dd7228f2d"),
     works: [
-      u("photo-1559628233-d11a6c0e0c1a"),
+      u("photo-1541961017774-22349e4a1262"),
       u("photo-1562962230-16e4623d36e6"),
       u("photo-1515377905703-c4788e51af15"),
     ],
@@ -217,7 +217,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "kai-nakamura",
     artistName: "Kai Nakamura",
     style: "blackwork",
-    image: u("photo-1611501275019-9b5c707e0d0d"),
+    image: u("photo-1568515387631-8b650bbcdb90"),
     hours: 12,
     bodyPart: "Antebraço",
   },
@@ -227,7 +227,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "luna-mendes",
     artistName: "Luna Mendes",
     style: "fine-line",
-    image: u("photo-1590246814883-57c511e02123"),
+    image: u("photo-1605497788044-5a32c7078486"),
     hours: 4,
     bodyPart: "Costela",
   },
@@ -237,7 +237,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "vera-costa",
     artistName: "Vera Costa",
     style: "old-school",
-    image: u("photo-1482328166983-148ac297e917"),
+    image: u("photo-1581833971358-2c8b550f87b3"),
     hours: 5,
     bodyPart: "Panturrilha",
   },
@@ -247,7 +247,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "kai-nakamura",
     artistName: "Kai Nakamura",
     style: "oriental",
-    image: u("photo-1608666599354-1c67d4db8812"),
+    image: u("photo-1607604276583-eef5d076aa5f"),
     hours: 16,
     bodyPart: "Costas",
   },
@@ -257,7 +257,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "diego-alves",
     artistName: "Diego Alves",
     style: "aquarela",
-    image: u("photo-1559628233-d11a6c0e0c1a"),
+    image: u("photo-1541961017774-22349e4a1262"),
     hours: 6,
     bodyPart: "Coxa",
   },
@@ -267,7 +267,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "vera-costa",
     artistName: "Vera Costa",
     style: "neo-tradicional",
-    image: u("photo-1598371839696-5c6d067a07cd"),
+    image: u("photo-1616394584738-fc6e612e71b9"),
     hours: 7,
     bodyPart: "Braço",
   },
@@ -277,7 +277,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "kai-nakamura",
     artistName: "Kai Nakamura",
     style: "dotwork",
-    image: u("photo-1618517044282-42ed2761a06d"),
+    image: u("photo-1515405295579-ba7b45403062"),
     hours: 9,
     bodyPart: "Ombro",
   },
@@ -297,7 +297,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "sandro-vale",
     artistName: "Sandro Vale",
     style: "realismo",
-    image: u("photo-1524103704584-41d39ed9c46e"),
+    image: u("photo-1634986666676-ec8fd927c23d"),
     hours: 10,
     bodyPart: "Peito",
   },
@@ -307,7 +307,7 @@ export const gallery: TattooWork[] = [
     artistSlug: "kai-nakamura",
     artistName: "Kai Nakamura",
     style: "blackwork",
-    image: u("photo-1611501275019-9b5c707e0d0d", "&sat=-20"),
+    image: u("photo-1568515387631-8b650bbcdb90", "&sat=-20"),
     hours: 20,
     bodyPart: "Braço inteiro",
   },
@@ -429,7 +429,7 @@ export const posts: BlogPost[] = [
     category: "cuidados",
     date: "2026-07-12",
     readTime: "6 min",
-    cover: u("photo-1581594693702-51336e45dcb0"),
+    cover: u("photo-1578301978018-3005759f48f7"),
     content: `A cicatrização começa no estúdio, não em casa. Saímos com filme segundo-pele e instruções escritas — siga elas, não o TikTok.
 
 Nas primeiras 24 horas, o filme permanece. Depois, lave com água morna e sabonete neutro, seque com toque (nunca esfregue) e aplique uma camada fina da pomada que indicamos.
@@ -443,7 +443,7 @@ Evite sol, piscina, academia pesada e roupa que raspe. Coceira é normal; arranh
     category: "estilo",
     date: "2026-06-03",
     readTime: "8 min",
-    cover: u("photo-1542727270-ba18cb1c0d1d"),
+    cover: u("photo-1460661419201-fd4cecdf8a8b"),
     content: `O melhor artista do mundo no estilo errado ainda é o artista errado para você. Olhe healed shots, não só o recém-feito. Veja se a pessoa desenha o que você quer — ou se você está tentando forçar um realista a fazer fine line.
 
 No Sandro Tattoo usamos um quiz de matching precisamente por isso: cruza traço, tema, cor e escala com o vetor de estilo de cada residente.`,
@@ -455,7 +455,7 @@ No Sandro Tattoo usamos um quiz de matching precisamente por isso: cruza traço,
     category: "bastidores",
     date: "2026-05-18",
     readTime: "7 min",
-    cover: u("photo-1611501275019-9b5c707e0d0d"),
+    cover: u("photo-1568515387631-8b650bbcdb90"),
     content: `Começou com um moodboard ruim e terminou em arquitetura no braço. Kai fragmentou o projeto em fluxo (ombro → cotovelo → pulso), testou stencils em sessão zero e só então abriu preto sólido.
 
 Grandes peças não são “várias tattoos juntas”. São um sistema. Por isso a consulta é obrigatória.`,
@@ -467,7 +467,7 @@ Grandes peças não são “várias tattoos juntas”. São um sistema. Por isso
     category: "tendencias",
     date: "2026-04-09",
     readTime: "5 min",
-    cover: u("photo-1590246814883-57c511e02123"),
+    cover: u("photo-1605497788044-5a32c7078486"),
     content: `Tendência não é lei. Fine line continua forte, mas o ornamental pesado e o traditional bem executado voltaram com força — gente cansada de traço que some em dois anos.
 
 O que não muda: desenho bom, colocação certa, artista que entende cicatrização.`,

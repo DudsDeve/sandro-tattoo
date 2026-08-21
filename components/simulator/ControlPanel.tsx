@@ -1,5 +1,7 @@
 "use client";
 
+import { useT } from "@/lib/i18n/LanguageProvider";
+
 export function ControlPanel({
   opacity,
   rotation,
@@ -21,11 +23,12 @@ export function ControlPanel({
   onFlip: () => void;
   onResetBody: () => void;
 }) {
+  const t = useT();
   return (
     <div className="space-y-4 border border-line p-4">
-      <p className="label-mono">Controles</p>
+      <p className="label-mono">{t.simulator.controls}</p>
       <label className="block text-sm">
-        Opacidade {Math.round(opacity * 100)}%
+        {t.simulator.opacity} {Math.round(opacity * 100)}%
         <input
           type="range"
           min={0.4}
@@ -37,7 +40,7 @@ export function ControlPanel({
         />
       </label>
       <label className="block text-sm">
-        Rotação {rotation}°
+        {t.simulator.rotation} {rotation}°
         <input
           type="range"
           min={-180}
@@ -48,7 +51,7 @@ export function ControlPanel({
         />
       </label>
       <label className="block text-sm">
-        Escala {scale.toFixed(2)}
+        {t.simulator.scale} {scale.toFixed(2)}
         <input
           type="range"
           min={0.4}
@@ -61,10 +64,10 @@ export function ControlPanel({
       </label>
       <div className="flex flex-wrap gap-3 text-sm">
         <button type="button" onClick={onFlip} className="border border-line px-3 py-2">
-          {flip ? "Desvirar" : "Espelhar"}
+          {flip ? t.simulator.unflip : t.simulator.flip}
         </button>
         <button type="button" onClick={onResetBody} className="border border-line px-3 py-2">
-          Trocar foto
+          {t.simulator.changePhoto}
         </button>
       </div>
     </div>

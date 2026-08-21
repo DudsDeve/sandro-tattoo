@@ -9,6 +9,8 @@ import { QuizQuestionView } from "@/components/quiz/QuizQuestion";
 import { QuizLoading } from "@/components/quiz/QuizLoading";
 import { QuizResult } from "@/components/quiz/QuizResult";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { localizeQuizQuestion } from "@/lib/i18n/localize";
 
 type State =
   | { phase: "ask"; index: number; weights: StyleVector[] }
@@ -34,12 +36,14 @@ function reducer(state: State, action: Action): State {
 }
 
 export function QuizContainer() {
+  const { locale, t } = useLanguage();
   const [state, dispatch] = useReducer(reducer, { phase: "ask", index: 0, weights: [] });
 
   const finish = async (weights: StyleVector[]) => {
     const preference = mergeWeights(weights);
     const matches = matchArtists(preference);
     const top = matches[0];
+    const styles = topStyles(preference).join(", ");
     const res = await fetch("/api/quiz", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -47,6 +51,7 @@ export function QuizContainer() {
         styles: topStyles(preference),
         artist: top?.artist.name,
         percent: top?.percent,
+        locale,
       }),
     });
     const data = (await res.json()) as { explanation?: string };
@@ -54,7 +59,7 @@ export function QuizContainer() {
       type: "loaded",
       explanation:
         data.explanation ??
-        `Seu olhar puxa para ${topStyles(preference).join(", ")}. ${top?.artist.name} é o encaixe mais honesto nesse espectro.`,
+        t.quiz.fallback.replace("{styles}", styles).replace("{artist}", top?.artist.name ?? ""),
     });
   };
 
@@ -67,7 +72,7 @@ export function QuizContainer() {
         {state.phase === "ask" && (
           <QuizQuestionView
             key={quizQuestions[state.index].id}
-            question={quizQuestions[state.index]}
+            question={localizeQuizQuestion(locale, quizQuestions[state.index])}
             onPick={(weights) => {
               const nextIndex = state.index + 1;
               const nextWeights = [...state.weights, weights];

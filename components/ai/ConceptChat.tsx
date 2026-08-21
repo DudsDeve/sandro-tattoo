@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ChatMessage } from "@/components/ai/ChatMessage";
 import { ChatInput } from "@/components/ai/ChatInput";
 import { ConceptResult } from "@/components/ai/ConceptResult";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 function extractImagePrompt(text: string) {
   const match = text.match(/\[GENERATE_IMAGE:\s*([\s\S]*?)\]/);
@@ -13,11 +14,19 @@ function extractImagePrompt(text: string) {
 }
 
 export function ConceptChat({ compact = false }: { compact?: boolean }) {
+  const { t, locale } = useLanguage();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const asked = useRef(new Set<string>());
 
-  const transport = useMemo(() => new DefaultChatTransport({ api: "/api/chat" }), []);
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/chat",
+        body: { locale },
+      }),
+    [locale],
+  );
   const { messages, sendMessage, status } = useChat({ transport });
   const busy = status === "submitted" || status === "streaming";
 
@@ -45,12 +54,7 @@ export function ConceptChat({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`flex flex-col ${compact ? "h-full" : "h-[70vh]"}`}>
       <div className="flex-1 space-y-4 overflow-y-auto pr-1">
-        {messages.length === 0 && (
-          <ChatMessage
-            role="assistant"
-            text="Olá! Eu sou o assistente criativo do Sandro Tattoo. Vou te ajudar a transformar sua ideia em um conceito visual. Me conta: o que você imagina para sua tattoo?"
-          />
-        )}
+        {messages.length === 0 && <ChatMessage role="assistant" text={t.ai.conceptHello} />}
         {messages.map((m) => (
           <ChatMessage
             key={m.id}
@@ -61,7 +65,11 @@ export function ConceptChat({ compact = false }: { compact?: boolean }) {
               .join("")}
           />
         ))}
-        {busy && <p className="label-mono animate-pulse">desenhando o pensamento…</p>}
+        {busy && (
+          <p className="label-mono animate-pulse">
+            {locale === "pt" ? "desenhando o pensamento…" : "sketching the idea…"}
+          </p>
+        )}
         {(imageUrl || imageLoading) && (
           <ConceptResult imageUrl={imageUrl} loading={imageLoading} />
         )}

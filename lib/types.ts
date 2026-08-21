@@ -1,12 +1,4 @@
-export type SpecialtySlug =
-  | "blackwork"
-  | "realismo"
-  | "fine-line"
-  | "old-school"
-  | "aquarela"
-  | "neo-tradicional"
-  | "dotwork"
-  | "oriental";
+export type SpecialtySlug = string;
 
 export type StyleVector = Record<string, number>;
 
@@ -46,6 +38,8 @@ export interface BlogPost {
   readTime: string;
   cover: string;
   content: string;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 export interface Product {

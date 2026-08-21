@@ -5,6 +5,7 @@ import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import type { TattooWork } from "@/lib/types";
+import { useT } from "@/lib/i18n/LanguageProvider";
 
 export function Lightbox({
   items,
@@ -17,6 +18,7 @@ export function Lightbox({
   onClose: () => void;
   onIndex: (i: number) => void;
 }) {
+  const t = useT();
   const item = index !== null ? items[index] : null;
 
   useEffect(() => {
@@ -42,21 +44,21 @@ export function Lightbox({
           <button
             className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] z-10 text-ink sm:right-6"
             onClick={onClose}
-            aria-label="Fechar"
+            aria-label={t.a11y.close}
           >
             <X />
           </button>
           <button
             className="absolute left-2 top-1/2 z-10 -translate-y-1/2 text-ink sm:left-8"
             onClick={() => onIndex((index - 1 + items.length) % items.length)}
-            aria-label="Anterior"
+            aria-label={t.a11y.prev}
           >
             <ChevronLeft size={32} />
           </button>
           <button
             className="absolute right-2 top-1/2 z-10 -translate-y-1/2 text-ink sm:right-8"
             onClick={() => onIndex((index + 1) % items.length)}
-            aria-label="Próxima"
+            aria-label={t.a11y.next}
           >
             <ChevronRight size={32} />
           </button>

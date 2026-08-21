@@ -5,14 +5,17 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CtaLink } from "@/components/ui/CursorLink";
-import { processSteps } from "@/lib/data/content";
+import { processSteps as defaultSteps } from "@/lib/data/content";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
+import { useT } from "@/lib/i18n/LanguageProvider";
+import type { ProcessStep } from "@/lib/types";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-export function ProcessScenes() {
+export function ProcessScenes({ steps = defaultSteps }: { steps?: ProcessStep[] }) {
+  const t = useT();
   const root = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
 
@@ -37,12 +40,12 @@ export function ProcessScenes() {
           .fromTo(scene.querySelector("[data-line]"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "left" }, 0.2);
       });
     },
-    { scope: root, dependencies: [reduced] },
+    { scope: root, dependencies: [reduced, steps] },
   );
 
   return (
     <div ref={root}>
-      {processSteps.map((step, i) => (
+      {steps.map((step, i) => (
         <section
           key={step.id}
           data-scene
@@ -65,9 +68,9 @@ export function ProcessScenes() {
         </section>
       ))}
       <section className="flex min-h-[60svh] flex-col items-center justify-center bg-black px-5 text-center">
-        <h2 className="display-section">O primeiro passo é a consulta.</h2>
+        <h2 className="display-section">{t.cta.title}</h2>
         <div className="mt-10">
-          <CtaLink href="/agendar">Agendar consulta</CtaLink>
+          <CtaLink href="/agendar">{t.cta.book}</CtaLink>
         </div>
       </section>
     </div>

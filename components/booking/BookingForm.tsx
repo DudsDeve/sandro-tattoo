@@ -12,30 +12,44 @@ import { artists } from "@/lib/data/content";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CtaLink } from "@/components/ui/CursorLink";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n/LanguageProvider";
 
-const schema = z.object({
-  artist: z.string().min(1, "Escolha um artista ou peça ajuda"),
-  idea: z.string().min(12, "Conta um pouco mais da ideia"),
-  bodyPart: z.string().min(2),
-  size: z.string().min(1),
-  firstTattoo: z.enum(["sim", "nao"]),
-  name: z.string().min(2),
-  email: z.string().email(),
-  phone: z.string().min(8),
-  instagram: z.string().optional(),
-  slot: z.string().min(1, "Escolha um horário"),
-});
-
-type Form = z.infer<typeof schema>;
-
-const STEPS = ["Artista", "Ideia", "Corpo", "Você", "Agenda", "Confirma"];
-
-const SLOTS = ["Qui 10/09 · 14h", "Sex 11/09 · 11h", "Sáb 12/09 · 10h", "Ter 15/09 · 16h"];
+type Form = {
+  artist: string;
+  idea: string;
+  bodyPart: string;
+  size: string;
+  firstTattoo: "sim" | "nao";
+  name: string;
+  email: string;
+  phone: string;
+  instagram?: string;
+  slot: string;
+};
 
 export function BookingForm() {
+  const t = useT();
   const params = useSearchParams();
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
+
+  const schema = useMemo(
+    () =>
+      z.object({
+        artist: z.string().min(1, t.booking.errArtist),
+        idea: z.string().min(12, t.booking.errIdea),
+        bodyPart: z.string().min(2),
+        size: z.string().min(1),
+        firstTattoo: z.enum(["sim", "nao"]),
+        name: z.string().min(2),
+        email: z.string().email(),
+        phone: z.string().min(8),
+        instagram: z.string().optional(),
+        slot: z.string().min(1, t.booking.errSlot),
+      }),
+    [t],
+  );
+
   const form = useForm<Form>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -55,6 +69,8 @@ export function BookingForm() {
 
   const values = form.watch();
   const artist = useMemo(() => artists.find((a) => a.slug === values.artist), [values.artist]);
+  const steps = t.booking.steps;
+  const slots = t.booking.slots;
 
   const next = async () => {
     const fields: Array<keyof Form>[] = [
@@ -66,7 +82,7 @@ export function BookingForm() {
       [],
     ];
     const ok = await form.trigger(fields[step]);
-    if (ok) setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    if (ok) setStep((s) => Math.min(s + 1, steps.length - 1));
   };
 
   const submit = form.handleSubmit(async (data) => {
@@ -81,41 +97,44 @@ export function BookingForm() {
   if (done) {
     return (
       <div className="py-24 text-center">
-        <p className="label-mono">Confirmado</p>
-        <h2 className="display-section mt-4">Pedido enviado.</h2>
-        <p className="mx-auto mt-4 max-w-md text-ink-secondary">
-          Vamos retornar em até 1 dia útil para fechar depósito e briefing. Guarde o resumo — e se quiser, simule o design enquanto espera.
-        </p>
+        <p className="label-mono">{t.booking.doneLabel}</p>
+        <h2 className="display-section mt-4">{t.booking.doneTitle}</h2>
+        <p className="mx-auto mt-4 max-w-md text-ink-secondary">{t.booking.doneBody}</p>
         <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
-          <CtaLink href="/simular">Simular na pele</CtaLink>
+          <CtaLink href="/simular">{t.booking.simulate}</CtaLink>
           <CtaLink href="/" variant="outline">
-            Voltar
+            {t.booking.goHome}
           </CtaLink>
         </div>
       </div>
     );
   }
 
+  const ideaHint = t.booking.ideaHint
+    .replace("{quiz}", "___QUIZ___")
+    .replace("{sim}", "___SIM___")
+    .split(/(___QUIZ___|___SIM___)/);
+
   return (
     <form onSubmit={submit} className="mx-auto max-w-3xl">
       <div className="mb-8 md:mb-12">
         <p className="label-mono mb-3 md:hidden">
-          {step + 1}/{STEPS.length} · {STEPS[step]}
+          {step + 1}/{steps.length} · {steps[step]}
         </p>
         <div className="flex gap-2">
-        {STEPS.map((label, i) => (
-          <div key={label} className="flex-1">
-            <div className="h-[2px] bg-line">
-              <motion.div
-                className="h-full bg-bg-accent-light"
-                animate={{ width: i <= step ? "100%" : "0%" }}
-              />
+          {steps.map((label, i) => (
+            <div key={label} className="flex-1">
+              <div className="h-[2px] bg-line">
+                <motion.div
+                  className="h-full bg-bg-accent-light"
+                  animate={{ width: i <= step ? "100%" : "0%" }}
+                />
+              </div>
+              <p className={cn("label-mono mt-2 hidden md:block", i === step ? "text-moss" : "text-ink-muted")}>
+                {label}
+              </p>
             </div>
-            <p className={cn("label-mono mt-2 hidden md:block", i === step ? "text-moss" : "text-ink-muted")}>
-              {label}
-            </p>
-          </div>
-        ))}
+          ))}
         </div>
       </div>
 
@@ -129,7 +148,7 @@ export function BookingForm() {
         >
           {step === 0 && (
             <div>
-              <h2 className="font-display text-3xl sm:text-4xl">Com quem você quer tatuar?</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">{t.booking.pickArtist}</h2>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 {artists.map((a) => (
                   <button
@@ -151,7 +170,7 @@ export function BookingForm() {
                   </button>
                 ))}
                 <CtaLink href="/quiz" variant="outline" className="sm:col-span-2">
-                  Não sei — me ajuda no quiz
+                  {t.booking.helpQuiz}
                 </CtaLink>
               </div>
             </div>
@@ -159,45 +178,53 @@ export function BookingForm() {
 
           {step === 1 && (
             <div>
-              <h2 className="font-display text-3xl sm:text-4xl">Descreva a ideia</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">{t.booking.describeIdea}</h2>
               <textarea
                 rows={6}
                 className="mt-6 w-full p-4"
-                placeholder="Motivo, referências, o que não quer..."
+                placeholder={t.booking.ideaPlaceholder}
                 {...form.register("idea")}
               />
               {form.formState.errors.idea && (
                 <p className="mt-2 text-sm text-error">{form.formState.errors.idea.message}</p>
               )}
               <p className="mt-4 text-sm text-ink-secondary">
-                Sem referência? Abra o{" "}
-                <Link href="/quiz" className="text-moss underline">
-                  quiz de estilo
-                </Link>{" "}
-                ou o{" "}
-                <Link href="/simular" className="text-moss underline">
-                  simulador
-                </Link>
-                .
+                {ideaHint.map((part, i) => {
+                  if (part === "___QUIZ___") {
+                    return (
+                      <Link key={i} href="/quiz" className="text-moss underline">
+                        {t.booking.ideaHintQuiz}
+                      </Link>
+                    );
+                  }
+                  if (part === "___SIM___") {
+                    return (
+                      <Link key={i} href="/simular" className="text-moss underline">
+                        {t.booking.ideaHintSim}
+                      </Link>
+                    );
+                  }
+                  return <span key={i}>{part}</span>;
+                })}
               </p>
             </div>
           )}
 
           {step === 2 && (
             <div className="grid gap-6">
-              <h2 className="font-display text-3xl sm:text-4xl">Onde e em que escala?</h2>
-              <input placeholder="Local do corpo" className="w-full p-4" {...form.register("bodyPart")} />
+              <h2 className="font-display text-3xl sm:text-4xl">{t.booking.whereScale}</h2>
+              <input placeholder={t.booking.bodyPart} className="w-full p-4" {...form.register("bodyPart")} />
               <select className="w-full p-4" {...form.register("size")}>
-                <option value="pequena">Pequena</option>
-                <option value="media">Média</option>
-                <option value="grande">Grande / projeto</option>
+                <option value="pequena">{t.booking.sizeSmall}</option>
+                <option value="media">{t.booking.sizeMedium}</option>
+                <option value="grande">{t.booking.sizeLarge}</option>
               </select>
               <fieldset className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" value="sim" {...form.register("firstTattoo")} /> Primeira tattoo
+                  <input type="radio" value="sim" {...form.register("firstTattoo")} /> {t.booking.firstYes}
                 </label>
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" value="nao" {...form.register("firstTattoo")} /> Já tenho
+                  <input type="radio" value="nao" {...form.register("firstTattoo")} /> {t.booking.firstNo}
                 </label>
               </fieldset>
             </div>
@@ -205,22 +232,20 @@ export function BookingForm() {
 
           {step === 3 && (
             <div className="grid gap-4">
-              <h2 className="font-display text-3xl sm:text-4xl">Quem é você</h2>
-              <input placeholder="Nome" className="w-full p-4" {...form.register("name")} />
-              <input placeholder="E-mail" className="w-full p-4" {...form.register("email")} />
-              <input placeholder="Telefone / WhatsApp" className="w-full p-4" {...form.register("phone")} />
-              <input placeholder="Instagram (opcional)" className="w-full p-4" {...form.register("instagram")} />
+              <h2 className="font-display text-3xl sm:text-4xl">{t.booking.whoAreYou}</h2>
+              <input placeholder={t.booking.name} className="w-full p-4" {...form.register("name")} />
+              <input placeholder={t.booking.email} className="w-full p-4" {...form.register("email")} />
+              <input placeholder={t.booking.phone} className="w-full p-4" {...form.register("phone")} />
+              <input placeholder={t.booking.instagram} className="w-full p-4" {...form.register("instagram")} />
             </div>
           )}
 
           {step === 4 && (
             <div>
-              <h2 className="font-display text-3xl sm:text-4xl">Escolha um horário</h2>
-              <p className="mt-2 text-sm text-ink-secondary">
-                Prévia de disponibilidade. Cal.com entra quando o token estiver no ambiente.
-              </p>
+              <h2 className="font-display text-3xl sm:text-4xl">{t.booking.pickSlot}</h2>
+              <p className="mt-2 text-sm text-ink-secondary">{t.booking.slotHint}</p>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {SLOTS.map((slot) => (
+                {slots.map((slot) => (
                   <button
                     type="button"
                     key={slot}
@@ -239,17 +264,23 @@ export function BookingForm() {
 
           {step === 5 && (
             <div>
-              <h2 className="font-display text-3xl sm:text-4xl">Resumo</h2>
+              <h2 className="font-display text-3xl sm:text-4xl">{t.booking.summary}</h2>
               <ul className="mt-6 space-y-2 text-ink-secondary">
-                <li>Artista: {artist?.name ?? values.artist}</li>
-                <li>Ideia: {values.idea}</li>
                 <li>
-                  {values.bodyPart} · {values.size} · primeira: {values.firstTattoo}
+                  {t.booking.summaryArtist}: {artist?.name ?? values.artist}
+                </li>
+                <li>
+                  {t.booking.summaryIdea}: {values.idea}
+                </li>
+                <li>
+                  {values.bodyPart} · {values.size} · {t.booking.summaryFirst}: {values.firstTattoo}
                 </li>
                 <li>
                   {values.name} · {values.email} · {values.phone}
                 </li>
-                <li>Horário: {values.slot}</li>
+                <li>
+                  {t.booking.summarySlot}: {values.slot}
+                </li>
               </ul>
             </div>
           )}
@@ -263,12 +294,12 @@ export function BookingForm() {
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           disabled={step === 0}
         >
-          Voltar
+          {t.booking.back}
         </button>
-        {step < STEPS.length - 1 ? (
-          <MagneticButton onClick={next}>Continuar</MagneticButton>
+        {step < steps.length - 1 ? (
+          <MagneticButton onClick={next}>{t.booking.continue}</MagneticButton>
         ) : (
-          <MagneticButton type="submit">Enviar pedido</MagneticButton>
+          <MagneticButton type="submit">{t.booking.submit}</MagneticButton>
         )}
       </div>
     </form>

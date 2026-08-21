@@ -5,10 +5,17 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Lightbox } from "@/components/ui/Lightbox";
-import { specialties } from "@/lib/data/content";
+import { useT } from "@/lib/i18n/LanguageProvider";
 import type { SpecialtySlug, TattooWork } from "@/lib/types";
 
-export function GalleryExperience({ works }: { works: TattooWork[] }) {
+export function GalleryExperience({
+  works,
+  specialties,
+}: {
+  works: TattooWork[];
+  specialties: Array<{ slug: SpecialtySlug; name: string }>;
+}) {
+  const t = useT();
   const params = useSearchParams();
   const initial = (params.get("estilo") as SpecialtySlug | null) ?? "todos";
   const [filter, setFilter] = useState<SpecialtySlug | "todos">(
@@ -22,7 +29,7 @@ export function GalleryExperience({ works }: { works: TattooWork[] }) {
   );
 
   const chips: Array<{ slug: SpecialtySlug | "todos"; name: string }> = [
-    { slug: "todos", name: "Todos" },
+    { slug: "todos", name: t.gallery.all },
     ...specialties.map((s) => ({ slug: s.slug, name: s.name })),
   ];
 
