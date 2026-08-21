@@ -2,7 +2,6 @@
 
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ParallaxImage } from "@/components/ui/ParallaxImage";
-import { TextReveal } from "@/components/ui/TextReveal";
 import { EditableMedia, EditableText } from "@/components/site-editor/Editable";
 import { STUDIO } from "@/lib/data/studio";
 import { useT } from "@/lib/i18n/LanguageProvider";

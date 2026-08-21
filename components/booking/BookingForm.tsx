@@ -68,7 +68,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
   });
 
   const values = form.watch();
-  const artist = useMemo(() => artists.find((a) => a.slug === values.artist), [values.artist]);
+  const artist = useMemo(() => artists.find((a) => a.slug === values.artist), [artists, values.artist]);
   const steps = t.booking.steps;
   const slots = t.booking.slots;
 
