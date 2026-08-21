@@ -68,7 +68,9 @@ export async function PUT(req: Request) {
       works = works.filter((w) => w.id !== body.removeWorkId);
     }
 
-    const { addWork: _a, removeWorkId: _r, ...rest } = body;
+    const rest = { ...body };
+    delete rest.addWork;
+    delete rest.removeWorkId;
     const next = {
       ...current,
       ...Object.fromEntries(Object.entries(rest).filter(([, v]) => v !== undefined)),

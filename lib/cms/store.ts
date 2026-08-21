@@ -3,7 +3,6 @@ import path from "path";
 import { put, list, del } from "@vercel/blob";
 import { artists, gallery, posts, specialties } from "@/lib/data/content";
 import {
-  emptyStore,
   type CmsArtist,
   type CmsCategory,
   type CmsPost,
