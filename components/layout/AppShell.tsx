@@ -39,6 +39,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   const path = usePathname();
   const isStudio = path.startsWith("/studio");
   const isAdmin = path.startsWith("/admin");
+  const [visualEdit, setVisualEdit] = useState(false);
+
+  useEffect(() => {
+    setVisualEdit(new URLSearchParams(window.location.search).get("visualEdit") === "1");
+  }, []);
 
   if (isStudio || isAdmin) {
     return <div className="min-h-screen bg-black text-ink">{children}</div>;
@@ -46,15 +51,15 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <Preloader />
+      {!visualEdit && <Preloader />}
       <NoiseOverlay />
-      <ScrollProgress />
+      {!visualEdit && <ScrollProgress />}
       <Navbar />
       <main>{children}</main>
-      <LocateSection />
+      {!visualEdit && <LocateSection />}
       <Footer />
-      <AssistantWidget />
-      <WhatsAppButton />
+      {!visualEdit && <AssistantWidget />}
+      {!visualEdit && <WhatsAppButton />}
     </>
   );
 }

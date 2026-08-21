@@ -91,6 +91,64 @@ export default function SiteVisualEditorPage() {
     }
   }
 
+  async function restoreDefaults(scope: "field" | "page") {
+    if (scope === "field" && !selection) return;
+    const label =
+      scope === "page"
+        ? `Restaurar o padrão de toda a página "${page?.label}"? Alterações salvas desta página serão descartadas.`
+        : `Restaurar o padrão de "${selection?.label}"?`;
+    if (!confirm(label)) return;
+
+    setSaving(true);
+    setMsg("");
+    try {
+      const res = await fetch("/api/admin/site", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          scope === "page"
+            ? { reset: "page", pagePath: path }
+            : { reset: "field", fieldId: selection!.fieldId },
+        ),
+      });
+      const data = (await res.json()) as {
+        error?: string;
+        siteContent?: Record<string, string>;
+        appliedDefaults?: Record<string, string>;
+      };
+      if (!res.ok) throw new Error(data.error || "Falha ao restaurar");
+
+      setContent(data.siteContent || {});
+      const defaults = data.appliedDefaults || {};
+      for (const [id, value] of Object.entries(defaults)) {
+        pushToIframe(id, value);
+      }
+
+      if (scope === "field" && selection) {
+        const value = defaults[selection.fieldId] ?? "";
+        setDraft(value);
+        setSelection({ ...selection, value });
+      } else {
+        setSelection(null);
+        setDraft("");
+      }
+
+      setMsg(
+        scope === "page"
+          ? "Página restaurada ao padrão (provisório)."
+          : "Campo restaurado ao padrão (provisório).",
+      );
+      // Refresh iframe so media/defaults settle cleanly
+      if (iframeRef.current) {
+        iframeRef.current.src = iframeSrc;
+      }
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : "Erro ao restaurar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   function applyLive(value: string) {
     setDraft(value);
     if (selection) pushToIframe(selection.fieldId, value);
@@ -120,7 +178,16 @@ export default function SiteVisualEditorPage() {
           <p className="font-serif text-lg">{page.label}</p>
           <span className="font-mono text-[0.65rem] text-[#8b9a6b]">{page.path}</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            disabled={saving}
+            onClick={() => void restoreDefaults("page")}
+            className="border border-[#4c5634]/60 px-3 py-1.5 text-xs text-[#8b9a6b] hover:bg-[#4c5634]/20"
+            title="Volta todos os campos desta página aos valores padrão do sistema (ainda provisórios)"
+          >
+            Restaurar padrão
+          </button>
           <button
             type="button"
             onClick={() => setDevice("desktop")}
@@ -245,6 +312,15 @@ export default function SiteVisualEditorPage() {
 
                 <button
                   type="button"
+                  disabled={saving}
+                  onClick={() => void restoreDefaults("field")}
+                  className="w-full border border-[#4c5634]/50 px-4 py-2 text-xs text-[#8b9a6b]"
+                >
+                  Restaurar padrão deste campo
+                </button>
+
+                <button
+                  type="button"
                   className="w-full border border-[#1a1a1a] px-4 py-2 text-xs text-[#a09b95]"
                   onClick={() => {
                     setSelection(null);
@@ -253,6 +329,11 @@ export default function SiteVisualEditorPage() {
                 >
                   Limpar seleção
                 </button>
+
+                <p className="text-[11px] leading-relaxed text-[#5c5955]">
+                  O padrão atual é provisório. Quando o layout final estiver definido, este botão volta
+                  exatamente para essa versão.
+                </p>
 
                 {msg && <p className="text-sm text-[#8b9a6b]">{msg}</p>}
               </div>

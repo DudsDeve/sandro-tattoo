@@ -5,8 +5,8 @@ import { normalizeInstagramHandle } from "@/lib/utils";
 
 export async function POST(req: Request) {
   const body = (await req.json()) as Partial<CmsArtist>;
-  if (!body.name?.trim() || !body.image) {
-    return NextResponse.json({ error: "Nome e foto são obrigatórios" }, { status: 400 });
+  if (!body.name?.trim()) {
+    return NextResponse.json({ error: "Nome é obrigatório" }, { status: 400 });
   }
 
   const slug =
@@ -19,18 +19,25 @@ export async function POST(req: Request) {
       .replace(/(^-|-$)/g, "");
 
   const store = await mutateCmsStore((s) => {
+    let nextSlug = slug || newId("artista");
+    const base = nextSlug;
+    let n = 2;
+    while (s.artists.some((a) => a.slug === nextSlug)) {
+      nextSlug = `${base}-${n++}`;
+    }
+
     s.artists.push({
       id: newId("art"),
-      slug,
+      slug: nextSlug,
       name: body.name!.trim(),
       role: body.role?.trim() || "Artista",
       specialty: body.specialty?.trim() || "",
       specialtyIds: body.specialtyIds || [],
-      years: body.years ?? 1,
+      years: Number.isFinite(body.years) ? Number(body.years) : 1,
       bio: body.bio?.trim() || "",
       bioLong: body.bioLong?.trim() || body.bio?.trim() || "",
       instagram: normalizeInstagramHandle(body.instagram || ""),
-      image: body.image!,
+      image: body.image?.trim() || "",
       available: body.available ?? true,
       works: body.works || [],
     });

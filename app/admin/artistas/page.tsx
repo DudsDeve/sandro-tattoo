@@ -26,29 +26,44 @@ export default function AdminArtistsPage() {
   const [workTitle, setWorkTitle] = useState("");
   const [workImage, setWorkImage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
 
   if (loading || !store) return <p className="text-[#a09b95]">Carregando…</p>;
 
   async function save() {
+    setMsg("");
+    if (!draft.name?.trim()) {
+      setMsg("Informe o nome do artista.");
+      return;
+    }
     setBusy(true);
-    const res = await fetch("/api/admin/artists", {
-      method: editing ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editing ? { ...editing, ...draft, id: editing.id } : draft),
-    });
-    setBusy(false);
-    if (res.ok) {
+    try {
+      const res = await fetch("/api/admin/artists", {
+        method: editing ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editing ? { ...editing, ...draft, id: editing.id } : draft),
+      });
       const data = await res.json();
+      if (!res.ok) {
+        setMsg(data.error || "Não foi possível salvar o artista.");
+        return;
+      }
       setStore(data);
       if (!editing) {
         setDraft(blank());
+        setMsg("Artista adicionado.");
       } else {
         const updated = data.artists.find((a: CmsArtist) => a.id === editing.id);
         if (updated) {
           setEditing(updated);
           setDraft(updated);
         }
+        setMsg("Artista atualizado.");
       }
+    } catch {
+      setMsg("Erro de rede ao salvar. Tente de novo.");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -181,7 +196,7 @@ export default function AdminArtistsPage() {
             })}
           </div>
           <button type="button" disabled={busy} onClick={() => void save()} className="bg-[#4c5634] px-4 py-3 text-sm text-white">
-            {editing ? "Salvar artista" : "Adicionar artista"}
+            {busy ? "Salvando…" : editing ? "Salvar artista" : "Adicionar artista"}
           </button>
           {editing && (
             <button
@@ -190,10 +205,15 @@ export default function AdminArtistsPage() {
               onClick={() => {
                 setEditing(null);
                 setDraft(blank());
+                setMsg("");
               }}
             >
               Novo
             </button>
+          )}
+          {msg && <p className="mt-2 text-sm text-[#8b9a6b]">{msg}</p>}
+          {!draft.image && (
+            <p className="text-xs text-[#5c5955]">Dica: você pode salvar sem foto e enviar a imagem depois.</p>
           )}
         </div>
 

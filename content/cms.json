@@ -1,9 +1,40 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-21T20:00:00.000Z",
+  "updatedAt": "2026-08-21T20:12:30.175Z",
   "categories": [],
   "items": [],
-  "artists": [],
+  "artists": [
+    {
+      "id": "art_14ss9dds",
+      "slug": "sandro-martins",
+      "name": "Sandro Martins",
+      "role": "Artista",
+      "specialty": "",
+      "specialtyIds": [],
+      "years": 1,
+      "bio": "",
+      "bioLong": "",
+      "instagram": "",
+      "image": "",
+      "available": true,
+      "works": []
+    },
+    {
+      "id": "art_x5o6mdet",
+      "slug": "vivian-santos",
+      "name": "Vivian Santos",
+      "role": "Artista",
+      "specialty": "",
+      "specialtyIds": [],
+      "years": 1,
+      "bio": "",
+      "bioLong": "",
+      "instagram": "",
+      "image": "",
+      "available": true,
+      "works": []
+    }
+  ],
   "posts": [],
   "siteContent": {}
 }
