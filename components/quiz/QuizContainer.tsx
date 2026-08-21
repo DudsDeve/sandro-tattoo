@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useReducer } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -35,13 +35,13 @@ function reducer(state: State, action: Action): State {
   return state;
 }
 
-export function QuizContainer() {
+export function QuizContainer({ artists = [] }: { artists?: import("@/lib/types").Artist[] }) {
   const { locale, t } = useLanguage();
   const [state, dispatch] = useReducer(reducer, { phase: "ask", index: 0, weights: [] });
 
   const finish = async (weights: StyleVector[]) => {
     const preference = mergeWeights(weights);
-    const matches = matchArtists(preference);
+    const matches = matchArtists(preference, artists);
     const top = matches[0];
     const styles = topStyles(preference).join(", ");
     const res = await fetch("/api/quiz", {
@@ -87,7 +87,7 @@ export function QuizContainer() {
         {state.phase === "result" && (
           <QuizResult
             key="result"
-            matches={matchArtists(mergeWeights(state.weights))}
+            matches={matchArtists(mergeWeights(state.weights), artists)}
             explanation={state.explanation}
             onReset={() => dispatch({ type: "reset" })}
           />
@@ -96,3 +96,4 @@ export function QuizContainer() {
     </div>
   );
 }
+

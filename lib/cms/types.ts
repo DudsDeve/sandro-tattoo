@@ -59,6 +59,8 @@ export type CmsStore = {
   items: CmsWorkItem[];
   artists: CmsArtist[];
   posts: CmsPost[];
+  /** Visual site editor overrides: fieldId → value */
+  siteContent?: Record<string, string>;
 };
 
 export function emptyStore(): CmsStore {
@@ -69,6 +71,7 @@ export function emptyStore(): CmsStore {
     items: [],
     artists: [],
     posts: [],
+    siteContent: {},
   };
 }
 

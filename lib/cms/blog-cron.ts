@@ -1,6 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { list, put } from "@vercel/blob";
+import { isSupabaseConfigured } from "@/lib/supabase/admin";
+import { readBlogCronFromSupabase, writeBlogCronToSupabase } from "@/lib/supabase/blog-cron";
 
 export type BlogCronState = {
   /** YYYY-MM-DD no fuso America/Sao_Paulo */
@@ -91,12 +93,30 @@ async function writeBlob(state: BlogCronState) {
 }
 
 export async function getBlogCronState(): Promise<BlogCronState | null> {
-  return (await readBlob()) ?? (await readLocal());
+  const fromSupabase = await readBlogCronFromSupabase();
+  if (fromSupabase) return fromSupabase;
+
+  const fromBlob = await readBlob();
+  if (fromBlob) {
+    if (isSupabaseConfigured()) await writeBlogCronToSupabase(fromBlob);
+    return fromBlob;
+  }
+
+  return readLocal();
 }
 
 export async function saveBlogCronState(state: BlogCronState) {
-  await writeLocal(state);
-  await writeBlob(state);
+  const wrote = await writeBlogCronToSupabase(state);
+  if (!wrote) {
+    await writeLocal(state);
+    await writeBlob(state);
+  } else {
+    try {
+      await writeLocal(state);
+    } catch {
+      /* ignore */
+    }
+  }
   return state;
 }
 

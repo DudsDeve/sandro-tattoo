@@ -1,11 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import type { TattooWork } from "@/lib/types";
 import { useT } from "@/lib/i18n/LanguageProvider";
+import { MediaImage } from "@/components/ui/MediaImage";
 
 export function Lightbox({
   items,
@@ -63,7 +63,7 @@ export function Lightbox({
             <ChevronRight size={32} />
           </button>
           <div className="relative mx-10 aspect-[3/4] h-[min(68svh,calc(100vw-4rem))] w-auto max-w-[min(92vw,28rem)] overflow-hidden md:aspect-[4/5]">
-            <Image src={item.image} alt={item.title} fill className="object-cover" />
+            <MediaImage src={item.image} alt={item.title} fill className="object-cover" />
           </div>
           <div className="mt-4 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
             <p className="font-display text-xl sm:text-2xl">{item.title}</p>

@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-import Image from "next/image";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { flashDesigns } from "@/lib/data/content";
 import { useT } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
@@ -16,20 +16,24 @@ export function DesignPicker({
   return (
     <div>
       <p className="label-mono mb-3">{t.simulator.designs}</p>
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-        {flashDesigns.map((d) => (
-          <button
-            key={d.id}
-            onClick={() => onSelect(d.image)}
-            className={cn(
-              "relative aspect-square overflow-hidden border",
-              selected === d.image ? "border-line-accent" : "border-line",
-            )}
-          >
-            <Image src={d.image} alt={d.name} fill className="object-cover" sizes="80px" />
-          </button>
-        ))}
-      </div>
+      {!flashDesigns.length ? (
+        <p className="mb-3 text-xs text-ink-muted">Nenhum flash no catalogo — use o upload abaixo.</p>
+      ) : (
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          {flashDesigns.map((d) => (
+            <button
+              key={d.id}
+              onClick={() => onSelect(d.image)}
+              className={cn(
+                "relative aspect-square overflow-hidden border",
+                selected === d.image ? "border-line-accent" : "border-line",
+              )}
+            >
+              <MediaImage src={d.image} alt={d.name} fill className="object-cover" sizes="80px" />
+            </button>
+          ))}
+        </div>
+      )}
       <label className="mt-3 block text-sm text-moss underline">
         {t.simulator.uploadOwn}
         <input

@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { CtaLink } from "@/components/ui/CursorLink";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { useT } from "@/lib/i18n/LanguageProvider";
 import type { ArtistMatch } from "@/lib/quiz-engine";
 
@@ -25,7 +25,7 @@ export function QuizResult({
       <p className="label-mono">{t.quiz.match}</p>
       <div className="mt-8 grid items-center gap-10 md:grid-cols-2">
         <div className="relative aspect-[3/4] overflow-hidden">
-          <Image src={top.artist.image} alt={top.artist.name} fill className="object-cover" />
+          <MediaImage src={top.artist.image} alt={top.artist.name} fill className="object-cover" />
         </div>
         <div>
           <h2 className="display-section">{top.artist.name}</h2>
@@ -36,7 +36,7 @@ export function QuizResult({
           <div className="mt-6 flex gap-2 overflow-x-auto">
             {top.artist.works.slice(0, 4).map((w) => (
               <div key={w} className="relative h-16 w-16 shrink-0 overflow-hidden sm:h-20 sm:w-20">
-                <Image src={w} alt="" fill className="object-cover" />
+                <MediaImage src={w} alt="" fill className="object-cover" />
               </div>
             ))}
           </div>
@@ -56,7 +56,7 @@ export function QuizResult({
           {rest.slice(0, 2).map((m) => (
             <div key={m.artist.slug} className="flex items-center gap-4 border border-line p-4">
               <div className="relative h-16 w-16 overflow-hidden">
-                <Image src={m.artist.image} alt="" fill className="object-cover" />
+                <MediaImage src={m.artist.image} alt="" fill className="object-cover" />
               </div>
               <div>
                 <p className="font-display text-2xl">{m.artist.name}</p>

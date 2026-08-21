@@ -1,6 +1,7 @@
 "use client";
 
 import { ProcessScenes } from "@/components/home/ProcessScenes";
+import { EditableText } from "@/components/site-editor/Editable";
 import { processSteps } from "@/lib/data/content";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { ProcessStep } from "@/lib/types";
@@ -49,7 +50,9 @@ export function ProcessPageClient() {
     <div className="pt-16">
       <div className="px-4 pb-10 pt-16 sm:px-5 md:px-16">
         <p className="label-mono">{t.nav.process}</p>
-        <h1 className="display-section mt-4">{t.pages.processTitle}</h1>
+        <EditableText id="page.process.title" as="h1" className="display-section mt-4">
+          {t.pages.processTitle}
+        </EditableText>
       </div>
       <ProcessScenes steps={steps} />
     </div>

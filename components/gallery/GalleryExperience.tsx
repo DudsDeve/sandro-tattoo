@@ -1,10 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Lightbox } from "@/components/ui/Lightbox";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { useT } from "@/lib/i18n/LanguageProvider";
 import type { SpecialtySlug, TattooWork } from "@/lib/types";
 
@@ -49,6 +49,9 @@ export function GalleryExperience({
         ))}
       </div>
       <motion.div className="snap-x-row pb-8">
+        {!filtered.length && (
+          <p className="text-sm text-ink-muted">Nenhum trabalho na galeria ainda. Adicione no admin.</p>
+        )}
         <AnimatePresence mode="popLayout">
           {filtered.map((work, i) => (
             <motion.button
@@ -60,7 +63,7 @@ export function GalleryExperience({
               className="group relative h-[min(62vh,32rem)] w-[min(78vw,22rem)] shrink-0 overflow-hidden sm:h-[70vh] sm:w-[min(70vw,420px)]"
               onClick={() => setIndex(i)}
             >
-              <Image src={work.image} alt={work.title} fill className="object-cover" sizes="420px" />
+              <MediaImage src={work.image} alt={work.title} fill className="object-cover" sizes="420px" />
               <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/75 via-black/20 to-transparent p-4 opacity-100 sm:p-6 md:bg-black/0 md:opacity-0 md:transition md:group-hover:bg-black/55 md:group-hover:opacity-100">
                 <p className="font-display text-2xl">{work.artistName}</p>
                 <p className="label-mono mt-1">

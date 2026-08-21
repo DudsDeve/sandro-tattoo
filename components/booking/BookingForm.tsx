@@ -6,13 +6,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
-import { artists } from "@/lib/data/content";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CtaLink } from "@/components/ui/CursorLink";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n/LanguageProvider";
+import type { Artist } from "@/lib/types";
 
 type Form = {
   artist: string;
@@ -27,7 +27,7 @@ type Form = {
   slot: string;
 };
 
-export function BookingForm() {
+export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
   const t = useT();
   const params = useSearchParams();
   const [step, setStep] = useState(0);
@@ -161,7 +161,7 @@ export function BookingForm() {
                     )}
                   >
                     <span className="relative h-16 w-16 overflow-hidden">
-                      <Image src={a.image} alt="" fill className="object-cover" />
+                      <MediaImage src={a.image} alt="" fill className="object-cover" />
                     </span>
                     <span>
                       <span className="block font-display text-xl">{a.name}</span>

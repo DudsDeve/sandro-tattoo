@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/lib/content";
 import { LocalizedDate } from "@/components/ui/LocalizedDate";
 import { ContinuesLabel } from "@/components/ui/ContinuesLabel";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
 import { CursorLink } from "@/components/ui/CursorLink";
+import { MediaImage } from "@/components/ui/MediaImage";
 
 export async function generateStaticParams() {
   const posts = await getPosts();
@@ -41,7 +41,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </p>
       <h1 className="display-section mt-4 max-w-4xl">{post.title}</h1>
       <div className="relative my-12 aspect-[16/10] max-w-5xl overflow-hidden sm:aspect-[16/8]">
-        <Image src={post.cover} alt="" fill className="object-cover" priority />
+        <MediaImage src={post.cover} alt="" fill className="object-cover" priority />
       </div>
       <div className="max-w-2xl space-y-6 text-lg text-ink-secondary">
         {post.content.split("\n\n").map((block, i) => {

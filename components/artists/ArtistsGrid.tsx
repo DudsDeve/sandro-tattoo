@@ -1,13 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { CursorLink } from "@/components/ui/CursorLink";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { useT } from "@/lib/i18n/LanguageProvider";
 import type { Artist } from "@/lib/types";
 
 export function ArtistsGrid({ artists }: { artists: Artist[] }) {
   const t = useT();
+  if (!artists.length) {
+    return <p className="mt-16 text-sm text-ink-muted">Nenhum artista cadastrado ainda. Adicione no admin.</p>;
+  }
   return (
     <div className="mt-16 columns-1 gap-6 md:columns-2 lg:columns-3">
       {artists.map((artist, i) => (
@@ -21,7 +24,7 @@ export function ArtistsGrid({ artists }: { artists: Artist[] }) {
         >
           <CursorLink href={`/artistas/${artist.slug}`} className="group block">
             <div className={`relative overflow-hidden ${i % 2 === 0 ? "aspect-[3/4]" : "aspect-[4/5]"}`}>
-              <Image
+              <MediaImage
                 src={artist.image}
                 alt={artist.name}
                 fill
@@ -32,7 +35,7 @@ export function ArtistsGrid({ artists }: { artists: Artist[] }) {
                 <div className="grid h-full grid-cols-2">
                   {artist.works.slice(0, 4).map((w) => (
                     <div key={w} className="relative">
-                      <Image src={w} alt="" fill className="object-cover" sizes="20vw" />
+                      <MediaImage src={w} alt="" fill className="object-cover" sizes="20vw" />
                     </div>
                   ))}
                 </div>

@@ -1,14 +1,15 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { put, list, del } from "@vercel/blob";
-import { artists, gallery, posts, specialties } from "@/lib/data/content";
 import {
-  type CmsArtist,
-  type CmsCategory,
-  type CmsPost,
   type CmsStore,
-  type CmsWorkItem,
 } from "@/lib/cms/types";
+import { isSupabaseConfigured } from "@/lib/supabase/admin";
+import {
+  readCmsFromSupabase,
+  uploadMediaToSupabase,
+  writeCmsToSupabase,
+} from "@/lib/supabase/cms";
 
 const LOCAL_PATH = path.join(process.cwd(), "content", "cms.json");
 const BLOB_KEY = "cms/store.json";
@@ -18,64 +19,15 @@ function id(prefix: string) {
 }
 
 export function seedFromLocal(): CmsStore {
-  const categories: CmsCategory[] = specialties.map((s, i) => ({
-    id: id("cat"),
-    slug: s.slug,
-    name: s.name,
-    description: s.description,
-    image: s.image,
-    order: i,
-  }));
-
-  const cmsArtists: CmsArtist[] = artists.map((a) => ({
-    id: id("art"),
-    slug: a.slug,
-    name: a.name,
-    role: a.role,
-    specialty: a.specialty,
-    specialtyIds: a.specialties,
-    years: a.years,
-    bio: a.bio,
-    bioLong: a.bioLong,
-    instagram: a.instagram,
-    image: a.image,
-    available: a.available,
-    works: a.works.map((image, i) => ({
-      id: id("aw"),
-      title: `Trabalho ${i + 1}`,
-      image,
-    })),
-  }));
-
-  const items: CmsWorkItem[] = gallery.map((g) => {
-    const category = categories.find((c) => c.slug === g.style);
-    const artist = cmsArtists.find((a) => a.slug === g.artistSlug);
-    return {
-      id: g.id || id("item"),
-      title: g.title,
-      categoryId: category?.id ?? categories[0]?.id ?? "",
-      artistId: artist?.id,
-      image: g.image,
-      hours: g.hours,
-      bodyPart: g.bodyPart,
-    };
-  });
-
-  const cmsPosts: CmsPost[] = posts.map((p) => ({
-    ...p,
-    id: id("post"),
-    seoTitle: p.title,
-    seoDescription: p.excerpt,
-    published: true,
-  }));
-
+  // Sem conteúdo mock — o admin preenche categorias, artistas, trabalhos e posts.
   return {
     version: 1,
     updatedAt: new Date().toISOString(),
-    categories,
-    items,
-    artists: cmsArtists,
-    posts: cmsPosts,
+    categories: [],
+    items: [],
+    artists: [],
+    posts: [],
+    siteContent: {},
   };
 }
 
@@ -119,19 +71,51 @@ async function writeBlob(store: CmsStore) {
 
 let memoryCache: CmsStore | null = null;
 
+function normalizeStore(store: CmsStore): CmsStore {
+  return {
+    ...store,
+    siteContent: store.siteContent || {},
+  };
+}
+
+function isValidStore(store: CmsStore | null | undefined): store is CmsStore {
+  return Boolean(store && store.version === 1 && Array.isArray(store.categories));
+}
+
+/**
+ * Persistence order:
+ * 1. Supabase (when configured) — source of truth in production
+ * 2. Vercel Blob
+ * 3. Local content/cms.json
+ * 4. Empty seed (no mock media)
+ */
 export async function getCmsStore(): Promise<CmsStore> {
   if (memoryCache) return memoryCache;
 
+  const fromSupabase = await readCmsFromSupabase();
+  if (isValidStore(fromSupabase)) {
+    memoryCache = normalizeStore(fromSupabase);
+    return memoryCache;
+  }
+
   const fromBlob = await readBlob();
-  if (fromBlob?.categories?.length) {
-    memoryCache = fromBlob;
-    return fromBlob;
+  if (isValidStore(fromBlob)) {
+    const normalized = normalizeStore(fromBlob);
+    memoryCache = normalized;
+    if (isSupabaseConfigured()) {
+      await writeCmsToSupabase(normalized);
+    }
+    return normalized;
   }
 
   const fromLocal = await readLocal();
-  if (fromLocal?.categories?.length) {
-    memoryCache = fromLocal;
-    return fromLocal;
+  if (isValidStore(fromLocal)) {
+    const normalized = normalizeStore(fromLocal);
+    memoryCache = normalized;
+    if (isSupabaseConfigured()) {
+      await writeCmsToSupabase(normalized);
+    }
+    return normalized;
   }
 
   const seeded = seedFromLocal();
@@ -140,10 +124,23 @@ export async function getCmsStore(): Promise<CmsStore> {
 }
 
 export async function saveCmsStore(store: CmsStore) {
-  const next = { ...store, updatedAt: new Date().toISOString() };
+  const next = normalizeStore({ ...store, updatedAt: new Date().toISOString() });
   memoryCache = next;
-  await writeLocal(next);
-  await writeBlob(next);
+
+  const wroteSupabase = await writeCmsToSupabase(next);
+  // Keep local/blob as backup when Supabase is off or write failed
+  if (!wroteSupabase) {
+    await writeLocal(next);
+    await writeBlob(next);
+  } else {
+    // Mirror locally for offline/dev convenience (best-effort)
+    try {
+      await writeLocal(next);
+    } catch {
+      /* ignore on serverless without writable FS */
+    }
+  }
+
   return next;
 }
 
@@ -157,15 +154,25 @@ export function newId(prefix: string) {
   return id(prefix);
 }
 
+export function getCmsPersistenceMode(): "supabase" | "blob" | "local" {
+  if (isSupabaseConfigured()) return "supabase";
+  if (process.env.BLOB_READ_WRITE_TOKEN) return "blob";
+  return "local";
+}
+
 export async function uploadMedia(file: File): Promise<string> {
   const bytes = Buffer.from(await file.arrayBuffer());
   const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
   const safe = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const contentType = file.type || "application/octet-stream";
+
+  const fromSupabase = await uploadMediaToSupabase(bytes, safe, contentType);
+  if (fromSupabase) return fromSupabase;
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     const blob = await put(`uploads/${safe}`, bytes, {
       access: "public",
-      contentType: file.type || "application/octet-stream",
+      contentType,
     });
     return blob.url;
   }
@@ -185,4 +192,5 @@ export async function removeMedia(url: string) {
       /* ignore */
     }
   }
+  // Supabase Storage delete can be added when needed (keep file history for now)
 }

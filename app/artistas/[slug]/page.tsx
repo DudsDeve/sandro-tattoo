@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CtaLink } from "@/components/ui/CursorLink";
 import { BookWithArtist } from "@/components/ui/BookWithArtist";
 import { getArtist, getArtists, getGallery } from "@/lib/content";
 import { ArtistGallery } from "@/components/artists/ArtistGallery";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { instagramUrl } from "@/lib/utils";
 
 export async function generateStaticParams() {
@@ -28,7 +28,7 @@ export default async function ArtistPage({ params }: { params: Promise<{ slug: s
     <div className="pb-28 pt-28">
       <div className="grid items-end gap-10 px-4 sm:px-5 md:grid-cols-2 md:px-12">
         <div className="relative aspect-[3/4] overflow-hidden">
-          <Image src={artist.image} alt={artist.name} fill className="object-cover" priority sizes="50vw" />
+          <MediaImage src={artist.image} alt={artist.name} fill className="object-cover" priority sizes="50vw" />
         </div>
         <div>
           <p className="label-mono">{artist.role}</p>

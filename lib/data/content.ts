@@ -9,470 +9,59 @@ import type {
   Testimonial,
 } from "@/lib/types";
 
-const u = (id: string, extras = "") =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80${extras}`;
-
+/** Categorias sem imagem — preencha no admin. */
 export const specialties: Specialty[] = [
   {
     slug: "blackwork",
     name: "Blackwork",
     description: "Sólidos, ornamentais e geométricos. Contraste absoluto, composição autoral.",
-    image: u("photo-1568515387631-8b650bbcdb90"),
+    image: "",
   },
   {
     slug: "realismo",
     name: "Realismo",
     description: "Retratos, fauna e textura fotográfica em black & grey ou cor.",
-    image: u("photo-1562962230-16e4623d36e6"),
+    image: "",
   },
   {
     slug: "fine-line",
     name: "Fine Line",
     description: "Traço delicado, joalheria na pele. Floral, script e minimalismo preciso.",
-    image: u("photo-1605497788044-5a32c7078486"),
+    image: "",
   },
   {
     slug: "old-school",
     name: "Old School",
     description: "Bold lines, paleta clássica, iconografia atemporal.",
-    image: u("photo-1581833971358-2c8b550f87b3"),
+    image: "",
   },
   {
     slug: "aquarela",
     name: "Aquarela",
     description: "Manchas, transparência e cor que respira com o corpo.",
-    image: u("photo-1541961017774-22349e4a1262"),
+    image: "",
   },
   {
     slug: "oriental",
     name: "Oriental",
     description: "Irezumi contemporâneo: fluxo, escala e narrativa em grandes peças.",
-    image: u("photo-1607604276583-eef5d076aa5f"),
+    image: "",
   },
 ];
 
-export const artists: Artist[] = [
-  {
-    slug: "sandro-vale",
-    name: "Sandro Vale",
-    role: "Fundador",
-    specialty: "Realismo & Black & Grey",
-    specialties: ["realismo", "blackwork"],
-    years: 14,
-    bio: "Fundador do estúdio. Retratos e peças de grande escala com obsessão por luz e textura.",
-    bioLong:
-      "Sandro começou tatuando em 2012 e fundou o estúdio para reunir artistas que tratam a pele como tela permanente. Especialista em realismo black & grey, trabalha retratos, fauna e composições narrativas. Cada sessão é desenhada em conjunto — nada sai de um catálogo.",
-    instagram: "sandrovale.ink",
-    image: u("photo-1460661419201-fd4cecdf8a8b"),
-    works: [
-      u("photo-1562962230-16e4623d36e6"),
-      u("photo-1568515387631-8b650bbcdb90"),
-      u("photo-1607604276583-eef5d076aa5f"),
-      u("photo-1616394584738-fc6e612e71b9"),
-    ],
-    styleVector: {
-      realismo: 5,
-      blackwork: 3,
-      "fine-line": 1,
-      "old-school": 0,
-      aquarela: 1,
-      oriental: 2,
-      dotwork: 1,
-      "neo-tradicional": 1,
-    },
-    available: true,
-  },
-  {
-    slug: "luna-mendes",
-    name: "Luna Mendes",
-    role: "Artista residente",
-    specialty: "Fine Line & Floral",
-    specialties: ["fine-line", "aquarela"],
-    years: 7,
-    bio: "Joalheria botânica. Linhas que parecem desenhadas a grafite sobre a pele.",
-    bioLong:
-      "Luna constrói peças íntimas: flores, scripts e composições que acompanham a anatomia. Fine line com densidade controlada — durável, não frágil. Também explora aquarela suave em peças menores.",
-    instagram: "luna.mendes.ink",
-    image: u("photo-1534528741775-53994a69daeb"),
-    works: [
-      u("photo-1605497788044-5a32c7078486"),
-      u("photo-1541961017774-22349e4a1262"),
-      u("photo-1515377905703-c4788e51af15"),
-    ],
-    styleVector: {
-      realismo: 1,
-      blackwork: 1,
-      "fine-line": 5,
-      "old-school": 0,
-      aquarela: 4,
-      oriental: 1,
-      dotwork: 2,
-      "neo-tradicional": 1,
-    },
-    available: true,
-  },
-  {
-    slug: "kai-nakamura",
-    name: "Kai Nakamura",
-    role: "Artista residente",
-    specialty: "Blackwork & Geometria",
-    specialties: ["blackwork", "oriental", "dotwork"],
-    years: 9,
-    bio: "Ornamental, sagrado e geométrico. Composições que ocupam o corpo como arquitetura.",
-    bioLong:
-      "Kai trabalha blackwork ornamental, dotwork e influências japonesas contemporâneas. Pensa em fluxo, simetria quebrada e preenchimentos densos. Ideal para sleeves, costas e peças que crescem com o tempo.",
-    instagram: "kai.nakamura.ink",
-    image: u("photo-1506794778202-cad84cf45f1d"),
-    works: [
-      u("photo-1568515387631-8b650bbcdb90"),
-      u("photo-1581833971358-2c8b550f87b3"),
-      u("photo-1607604276583-eef5d076aa5f"),
-    ],
-    styleVector: {
-      realismo: 0,
-      blackwork: 5,
-      "fine-line": 2,
-      "old-school": 1,
-      aquarela: 0,
-      oriental: 4,
-      dotwork: 4,
-      "neo-tradicional": 1,
-    },
-    available: true,
-  },
-  {
-    slug: "vera-costa",
-    name: "Vera Costa",
-    role: "Artista residente",
-    specialty: "Old School & Neo Trad",
-    specialties: ["old-school", "neo-tradicional"],
-    years: 11,
-    bio: "Bold, saturado, icônico. A tradição americana com paleta contemporânea.",
-    bioLong:
-      "Vera é referência em traditional e neo-tradicional: linhas pesadas, cor sólida e iconografia que envelhece bem. Adagas, águias, flores e lettering com alma de shop clássico.",
-    instagram: "vera.costa.ink",
-    image: u("photo-1524504388940-b1c1722653e1"),
-    works: [
-      u("photo-1581833971358-2c8b550f87b3"),
-      u("photo-1616394584738-fc6e612e71b9"),
-      u("photo-1515405295579-ba7b45403062"),
-    ],
-    styleVector: {
-      realismo: 1,
-      blackwork: 2,
-      "fine-line": 0,
-      "old-school": 5,
-      aquarela: 1,
-      oriental: 1,
-      dotwork: 0,
-      "neo-tradicional": 5,
-    },
-    available: true,
-  },
-  {
-    slug: "diego-alves",
-    name: "Diego Alves",
-    role: "Artista convidado",
-    specialty: "Illustrative & Aquarela",
-    specialties: ["aquarela", "realismo"],
-    years: 6,
-    bio: "Ilustração na pele: cor, movimento e personagens que parecem saltar do papel.",
-    bioLong:
-      "Diego mistura ilustração contemporânea, aquarela e realismo solto. Trabalha capas, peças autorais e projetos de cor intensa. Sessões longas, paleta saturada, acabamento pictórico.",
-    instagram: "diego.alves.ink",
-    image: u("photo-1507003211169-0a1dd7228f2d"),
-    works: [
-      u("photo-1541961017774-22349e4a1262"),
-      u("photo-1562962230-16e4623d36e6"),
-      u("photo-1515377905703-c4788e51af15"),
-    ],
-    styleVector: {
-      realismo: 3,
-      blackwork: 1,
-      "fine-line": 2,
-      "old-school": 1,
-      aquarela: 5,
-      oriental: 1,
-      dotwork: 1,
-      "neo-tradicional": 2,
-    },
-    available: true,
-  },
-];
+/** Sem artistas mock — adicione no admin. */
+export const artists: Artist[] = [];
 
-export const gallery: TattooWork[] = [
-  {
-    id: "w1",
-    title: "Retrato em black & grey",
-    artistSlug: "sandro-vale",
-    artistName: "Sandro Vale",
-    style: "realismo",
-    image: u("photo-1562962230-16e4623d36e6"),
-    hours: 8,
-    bodyPart: "Braço",
-  },
-  {
-    id: "w2",
-    title: "Ornamental fechado",
-    artistSlug: "kai-nakamura",
-    artistName: "Kai Nakamura",
-    style: "blackwork",
-    image: u("photo-1568515387631-8b650bbcdb90"),
-    hours: 12,
-    bodyPart: "Antebraço",
-  },
-  {
-    id: "w3",
-    title: "Botânica fina",
-    artistSlug: "luna-mendes",
-    artistName: "Luna Mendes",
-    style: "fine-line",
-    image: u("photo-1605497788044-5a32c7078486"),
-    hours: 4,
-    bodyPart: "Costela",
-  },
-  {
-    id: "w4",
-    title: "Águia tradicional",
-    artistSlug: "vera-costa",
-    artistName: "Vera Costa",
-    style: "old-school",
-    image: u("photo-1581833971358-2c8b550f87b3"),
-    hours: 5,
-    bodyPart: "Panturrilha",
-  },
-  {
-    id: "w5",
-    title: "Koi em fluxo",
-    artistSlug: "kai-nakamura",
-    artistName: "Kai Nakamura",
-    style: "oriental",
-    image: u("photo-1607604276583-eef5d076aa5f"),
-    hours: 16,
-    bodyPart: "Costas",
-  },
-  {
-    id: "w6",
-    title: "Splash botânico",
-    artistSlug: "diego-alves",
-    artistName: "Diego Alves",
-    style: "aquarela",
-    image: u("photo-1541961017774-22349e4a1262"),
-    hours: 6,
-    bodyPart: "Coxa",
-  },
-  {
-    id: "w7",
-    title: "Serpente e adaga",
-    artistSlug: "vera-costa",
-    artistName: "Vera Costa",
-    style: "neo-tradicional",
-    image: u("photo-1616394584738-fc6e612e71b9"),
-    hours: 7,
-    bodyPart: "Braço",
-  },
-  {
-    id: "w8",
-    title: "Mandala pontilhada",
-    artistSlug: "kai-nakamura",
-    artistName: "Kai Nakamura",
-    style: "dotwork",
-    image: u("photo-1515405295579-ba7b45403062"),
-    hours: 9,
-    bodyPart: "Ombro",
-  },
-  {
-    id: "w9",
-    title: "Script e ramo",
-    artistSlug: "luna-mendes",
-    artistName: "Luna Mendes",
-    style: "fine-line",
-    image: u("photo-1515377905703-c4788e51af15"),
-    hours: 3,
-    bodyPart: "Pulso",
-  },
-  {
-    id: "w10",
-    title: "Fauna noturna",
-    artistSlug: "sandro-vale",
-    artistName: "Sandro Vale",
-    style: "realismo",
-    image: u("photo-1634986666676-ec8fd927c23d"),
-    hours: 10,
-    bodyPart: "Peito",
-  },
-  {
-    id: "w11",
-    title: "Sleeve ornamental",
-    artistSlug: "kai-nakamura",
-    artistName: "Kai Nakamura",
-    style: "blackwork",
-    image: u("photo-1568515387631-8b650bbcdb90", "&sat=-20"),
-    hours: 20,
-    bodyPart: "Braço inteiro",
-  },
-  {
-    id: "w12",
-    title: "Peônia saturada",
-    artistSlug: "diego-alves",
-    artistName: "Diego Alves",
-    style: "aquarela",
-    image: u("photo-1490750967868-88aa4486c946"),
-    hours: 5,
-    bodyPart: "Ombro",
-  },
-];
+/** Sem trabalhos mock — adicione no admin. */
+export const gallery: TattooWork[] = [];
 
-export const testimonials: Testimonial[] = [
-  {
-    id: "t1",
-    name: "Marina F.",
-    text: "O Sandro transformou uma foto antiga da minha avó em algo que eu choro toda vez que olho. Cuidado absurdo com luz e pele.",
-    rating: 5,
-  },
-  {
-    id: "t2",
-    name: "Rafael M.",
-    text: "Fiz um sleeve com o Kai em três sessões. O estúdio é silencioso, limpo, e o processo foi explicado do início ao fim.",
-    rating: 5,
-  },
-  {
-    id: "t3",
-    name: "Helena S.",
-    text: "A Luna desenhou um ramo que parece feito à mão livre. Delicado sem ser frágil — exatamente o que eu queria.",
-    rating: 5,
-  },
-  {
-    id: "t4",
-    name: "Bruno T.",
-    text: "Primeira tattoo. Eles me seguraram no quiz, no chat e na consulta. Cheguei nervoso, saí viciado.",
-    rating: 5,
-  },
-  {
-    id: "t5",
-    name: "Camila R.",
-    text: "A Vera tem mão de shop clássico com olhar de agora. Cores que vão durar décadas.",
-    rating: 5,
-  },
-  {
-    id: "t6",
-    name: "Igor P.",
-    text: "Usei o gerador de conceito, levei a referência e o Diego elevou tudo. Não é gimmick — realmente ajuda a conversa.",
-    rating: 5,
-  },
-];
+/** Sem produtos mock — adicione quando a loja tiver estoque. */
+export const products: Product[] = [];
 
-export const products: Product[] = [
-  {
-    slug: "tee-gravada",
-    name: "Camiseta Gravada",
-    price: 189,
-    category: "apparel",
-    image: u("photo-1521572163474-6864f9cf17ab"),
-    images: [u("photo-1521572163474-6864f9cf17ab"), u("photo-1583743814966-8936f5b7be1a")],
-    description: "Algodão pesado, silk no peito com o lettering do estúdio. Preta, oversized.",
-    sizes: ["S", "M", "L", "XL"],
-  },
-  {
-    slug: "hoodie-atelier",
-    name: "Hoodie Atelier",
-    price: 349,
-    category: "apparel",
-    image: u("photo-1556821840-3a63f95609a7"),
-    images: [u("photo-1556821840-3a63f95609a7")],
-    description: "Moletom felpado, capuz duplo, bordado musgo na manga.",
-    sizes: ["S", "M", "L", "XL"],
-  },
-  {
-    slug: "print-serpente",
-    name: "Print Serpente — Kai",
-    price: 120,
-    category: "print",
-    image: u("photo-1578301978693-85fa9c0320b9"),
-    images: [u("photo-1578301978693-85fa9c0320b9")],
-    description: "Giclée A3 da flash original. Edição limitada de 50.",
-  },
-  {
-    slug: "print-retrato",
-    name: "Print Retrato — Sandro",
-    price: 140,
-    category: "print",
-    image: u("photo-1579783902614-a3fb3927b6a5"),
-    images: [u("photo-1579783902614-a3fb3927b6a5")],
-    description: "Estudo em carvão digital, papel archival A3.",
-  },
-  {
-    slug: "kit-cuidados",
-    name: "Kit de cicatrização",
-    price: 89,
-    category: "aftercare",
-    image: u("photo-1556228578-0d85b1a4d571"),
-    images: [u("photo-1556228578-0d85b1a4d571")],
-    description: "Filme, sabonete neutro e pomada recomendada pelo estúdio. Para as primeiras duas semanas.",
-  },
-  {
-    slug: "vale-presente",
-    name: "Vale-presente",
-    price: 500,
-    category: "gift",
-    image: u("photo-1513885535751-8b9238bd345a"),
-    images: [u("photo-1513885535751-8b9238bd345a")],
-    description: "Crédito de R$ 500 para consulta e sessão. Válido por 12 meses.",
-  },
-];
+/** Sem posts mock — gere no Blog + IA ou crie no admin. */
+export const posts: BlogPost[] = [];
 
-export const posts: BlogPost[] = [
-  {
-    slug: "primeiras-72-horas",
-    title: "As primeiras 72 horas: o que realmente importa",
-    excerpt: "Filme, lavagem, o que não fazer e por que a internet costuma errar o aftercare.",
-    category: "cuidados",
-    date: "2026-07-12",
-    readTime: "6 min",
-    cover: u("photo-1578301978018-3005759f48f7"),
-    content: `A cicatrização começa no estúdio, não em casa. Saímos com filme segundo-pele e instruções escritas — siga elas, não o TikTok.
-
-Nas primeiras 24 horas, o filme permanece. Depois, lave com água morna e sabonete neutro, seque com toque (nunca esfregue) e aplique uma camada fina da pomada que indicamos.
-
-Evite sol, piscina, academia pesada e roupa que raspe. Coceira é normal; arranhar não é. Se houver calor excessivo, pus ou febre, procure um dermatologista — não improvisamos medicina aqui.`,
-  },
-  {
-    slug: "como-escolher-artista",
-    title: "Como escolher o artista certo (sem se perder no Instagram)",
-    excerpt: "Portfólio, especialidade e química importam mais do que número de seguidores.",
-    category: "estilo",
-    date: "2026-06-03",
-    readTime: "8 min",
-    cover: u("photo-1460661419201-fd4cecdf8a8b"),
-    content: `O melhor artista do mundo no estilo errado ainda é o artista errado para você. Olhe healed shots, não só o recém-feito. Veja se a pessoa desenha o que você quer — ou se você está tentando forçar um realista a fazer fine line.
-
-No Sandro Tattoo usamos um quiz de matching precisamente por isso: cruza traço, tema, cor e escala com o vetor de estilo de cada residente.`,
-  },
-  {
-    slug: "bastidores-sleeve",
-    title: "Bastidores: um sleeve de 20 horas",
-    excerpt: "Do briefing ao último sombreado — como o Kai construiu uma peça que cresce com o corpo.",
-    category: "bastidores",
-    date: "2026-05-18",
-    readTime: "7 min",
-    cover: u("photo-1568515387631-8b650bbcdb90"),
-    content: `Começou com um moodboard ruim e terminou em arquitetura no braço. Kai fragmentou o projeto em fluxo (ombro → cotovelo → pulso), testou stencils em sessão zero e só então abriu preto sólido.
-
-Grandes peças não são “várias tattoos juntas”. São um sistema. Por isso a consulta é obrigatória.`,
-  },
-  {
-    slug: "tendencias-2026",
-    title: "O que está vivo em 2026 — e o que já era",
-    excerpt: "Micro-realism, ornamental denso e a volta do traditional saturado.",
-    category: "tendencias",
-    date: "2026-04-09",
-    readTime: "5 min",
-    cover: u("photo-1605497788044-5a32c7078486"),
-    content: `Tendência não é lei. Fine line continua forte, mas o ornamental pesado e o traditional bem executado voltaram com força — gente cansada de traço que some em dois anos.
-
-O que não muda: desenho bom, colocação certa, artista que entende cicatrização.`,
-  },
-];
+export const testimonials: Testimonial[] = [];
 
 export const processSteps: ProcessStep[] = [
   {
@@ -519,56 +108,27 @@ export const processSteps: ProcessStep[] = [
   },
 ];
 
+/** Quiz só com texto — sem imagens mockadas. */
 export const quizQuestions: QuizQuestion[] = [
   {
     id: "q1",
     prompt: "Qual linguagem visual te puxa primeiro?",
     hint: "Escolha com o estômago, não com a cabeça.",
-    type: "image",
+    type: "text",
     options: [
-      {
-        id: "blackwork",
-        label: "Blackwork",
-        image: gallery[1].image,
-        weights: { blackwork: 3, oriental: 1, dotwork: 1 },
-      },
-      {
-        id: "realismo",
-        label: "Realismo",
-        image: gallery[0].image,
-        weights: { realismo: 3, aquarela: 1 },
-      },
-      {
-        id: "fine-line",
-        label: "Fine Line",
-        image: gallery[2].image,
-        weights: { "fine-line": 3, aquarela: 1, dotwork: 1 },
-      },
-      {
-        id: "old-school",
-        label: "Old School",
-        image: gallery[3].image,
-        weights: { "old-school": 3, "neo-tradicional": 2 },
-      },
+      { id: "blackwork", label: "Blackwork", icon: "■", weights: { blackwork: 3, oriental: 1, dotwork: 1 } },
+      { id: "realismo", label: "Realismo", icon: "◎", weights: { realismo: 3, aquarela: 1 } },
+      { id: "fine-line", label: "Fine Line", icon: "┄", weights: { "fine-line": 3, aquarela: 1, dotwork: 1 } },
+      { id: "old-school", label: "Old School", icon: "★", weights: { "old-school": 3, "neo-tradicional": 2 } },
     ],
   },
   {
     id: "q2",
     prompt: "Você prefere…",
-    type: "image",
+    type: "text",
     options: [
-      {
-        id: "detalhe",
-        label: "Densidade e detalhe",
-        image: gallery[4].image,
-        weights: { realismo: 2, blackwork: 2, oriental: 1 },
-      },
-      {
-        id: "minimo",
-        label: "Essência minimalista",
-        image: gallery[8].image,
-        weights: { "fine-line": 3, dotwork: 1 },
-      },
+      { id: "detalhe", label: "Densidade e detalhe", icon: "▣", weights: { realismo: 2, blackwork: 2, oriental: 1 } },
+      { id: "minimo", label: "Essência minimalista", icon: "·", weights: { "fine-line": 3, dotwork: 1 } },
     ],
   },
   {
@@ -584,12 +144,12 @@ export const quizQuestions: QuizQuestion[] = [
   {
     id: "q4",
     prompt: "Qual universo visual te representa?",
-    type: "image",
+    type: "text",
     options: [
-      { id: "natureza", label: "Natureza", image: gallery[11].image, weights: { aquarela: 2, "fine-line": 2, realismo: 1 } },
-      { id: "geo", label: "Geométrico", image: gallery[7].image, weights: { blackwork: 2, dotwork: 3 } },
-      { id: "cultural", label: "Cultural / oriental", image: gallery[4].image, weights: { oriental: 3, blackwork: 1 } },
-      { id: "dark", label: "Dark / surreal", image: gallery[6].image, weights: { blackwork: 2, "neo-tradicional": 2, realismo: 1 } },
+      { id: "natureza", label: "Natureza", icon: "✿", weights: { aquarela: 2, "fine-line": 2, realismo: 1 } },
+      { id: "geo", label: "Geométrico", icon: "◇", weights: { blackwork: 2, dotwork: 3 } },
+      { id: "cultural", label: "Cultural / oriental", icon: "☯", weights: { oriental: 3, blackwork: 1 } },
+      { id: "dark", label: "Dark / surreal", icon: "☽", weights: { blackwork: 2, "neo-tradicional": 2, realismo: 1 } },
     ],
   },
   {
@@ -613,18 +173,6 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: "q7",
-    prompt: "Qual dessas artes te dá arrepio?",
-    hint: "Sem spoiler de quem fez.",
-    type: "image",
-    options: [
-      { id: "a", label: "Peça A", image: gallery[0].image, weights: { realismo: 4 } },
-      { id: "b", label: "Peça B", image: gallery[2].image, weights: { "fine-line": 4 } },
-      { id: "c", label: "Peça C", image: gallery[1].image, weights: { blackwork: 4 } },
-      { id: "d", label: "Peça D", image: gallery[3].image, weights: { "old-school": 4 } },
-    ],
-  },
-  {
-    id: "q8",
     prompt: "O que a tatuagem deve transmitir?",
     type: "text",
     options: [
@@ -636,9 +184,4 @@ export const quizQuestions: QuizQuestion[] = [
   },
 ];
 
-export const flashDesigns = gallery.slice(0, 8).map((work) => ({
-  id: work.id,
-  name: work.title,
-  image: work.image,
-  artist: work.artistName,
-}));
+export const flashDesigns: { id: string; name: string; image: string; artist: string }[] = [];

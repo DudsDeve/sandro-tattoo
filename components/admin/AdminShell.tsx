@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 const LINKS = [
   { href: "/admin", label: "Painel", exact: true },
+  { href: "/admin/site", label: "Site" },
   { href: "/admin/categorias", label: "Categorias" },
   { href: "/admin/itens", label: "Trabalhos" },
   { href: "/admin/artistas", label: "Artistas" },
@@ -16,6 +17,7 @@ const LINKS = [
 export function AdminShell({ children }: { children: ReactNode }) {
   const path = usePathname();
   const router = useRouter();
+  const isVisualEditor = path.startsWith("/admin/site/editor");
 
   if (path === "/admin/login") {
     return <>{children}</>;
@@ -62,10 +64,15 @@ export function AdminShell({ children }: { children: ReactNode }) {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
-      <p className="px-4 pb-8 text-center text-xs text-[#5c5955]">
-        Apenas mídia e conteúdo — estrutura do site não é editável aqui.
-      </p>
+      <main className={cn(isVisualEditor ? "max-w-none px-0 py-0" : "mx-auto max-w-7xl px-4 py-8")}>
+        {children}
+      </main>
+      {!isVisualEditor && (
+        <p className="px-4 pb-8 text-center text-xs text-[#5c5955]">
+          Use <span className="text-[#8b9a6b]">Site</span> para editar textos, imagens e vídeos no visual
+          da página.
+        </p>
+      )}
     </div>
   );
 }

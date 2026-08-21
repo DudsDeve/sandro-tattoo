@@ -1,8 +1,4 @@
 import {
-  artists as seedArtists,
-  gallery as seedGallery,
-  posts as seedPosts,
-  products,
   specialties as seedSpecialties,
 } from "@/lib/data/content";
 import {
@@ -12,7 +8,7 @@ import {
 } from "@/lib/cms/types";
 import { getCmsStore } from "@/lib/cms/store";
 import { sanityClient } from "@/lib/sanity/client";
-import { artistBySlugQuery, artistsQuery, postsQuery, productsQuery, tattoosQuery } from "@/lib/sanity/queries";
+import { artistsQuery, postsQuery, productsQuery, tattoosQuery } from "@/lib/sanity/queries";
 import type { Artist, BlogPost, Product, Specialty, TattooWork } from "@/lib/types";
 
 async function fromCms() {
@@ -25,25 +21,27 @@ async function fromCms() {
 
 export async function getSpecialties(): Promise<Specialty[]> {
   const cms = await fromCms();
-  if (cms?.categories?.length) {
-    return [...cms.categories]
+  if (cms) {
+    const fromCmsCats = [...cms.categories]
       .sort((a, b) => a.order - b.order)
       .map(categoryToSpecialty);
+    if (fromCmsCats.length) return fromCmsCats;
   }
-  return seedSpecialties;
+  // Fallback: category names only, no mock images
+  return seedSpecialties.map((s) => ({ ...s, image: "" }));
 }
 
 export async function getArtists(): Promise<Artist[]> {
   const cms = await fromCms();
-  if (cms?.artists?.length) {
+  if (cms) {
     return cms.artists.filter((a) => a.available !== false).map(cmsArtistToArtist);
   }
-  if (!sanityClient) return seedArtists;
+  if (!sanityClient) return [];
   try {
     const data = await sanityClient.fetch<Artist[]>(artistsQuery);
-    return data?.length ? data : seedArtists;
+    return data ?? [];
   } catch {
-    return seedArtists;
+    return [];
   }
 }
 
@@ -54,21 +52,21 @@ export async function getArtist(slug: string): Promise<Artist | undefined> {
 
 export async function getGallery(): Promise<TattooWork[]> {
   const cms = await fromCms();
-  if (cms?.items?.length) {
+  if (cms) {
     return cms.items.map((item) => cmsItemToTattoo(item, cms));
   }
-  if (!sanityClient) return seedGallery;
+  if (!sanityClient) return [];
   try {
     const data = await sanityClient.fetch<TattooWork[]>(tattoosQuery);
-    return data?.length ? data : seedGallery;
+    return data ?? [];
   } catch {
-    return seedGallery;
+    return [];
   }
 }
 
 export async function getPosts(): Promise<BlogPost[]> {
   const cms = await fromCms();
-  if (cms?.posts?.length) {
+  if (cms) {
     return cms.posts
       .filter((p) => p.published !== false)
       .map((p) => ({
@@ -84,12 +82,12 @@ export async function getPosts(): Promise<BlogPost[]> {
         seoDescription: p.seoDescription,
       }));
   }
-  if (!sanityClient) return seedPosts;
+  if (!sanityClient) return [];
   try {
     const data = await sanityClient.fetch<BlogPost[]>(postsQuery);
-    return data?.length ? data : seedPosts;
+    return data ?? [];
   } catch {
-    return seedPosts;
+    return [];
   }
 }
 
@@ -99,22 +97,16 @@ export async function getPost(slug: string): Promise<BlogPost | undefined> {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  if (!sanityClient) return products;
+  if (!sanityClient) return [];
   try {
     const data = await sanityClient.fetch<Product[]>(productsQuery);
-    return data?.length ? data : products;
+    return data?.length ? data : [];
   } catch {
-    return products;
+    return [];
   }
 }
 
-/** @deprecated kept for callers that still import artistBySlugQuery path */
+/** @deprecated */
 export async function getArtistFromSanity(slug: string) {
-  if (!sanityClient) return seedArtists.find((a) => a.slug === slug);
-  try {
-    const data = await sanityClient.fetch<Artist | null>(artistBySlugQuery, { slug });
-    return data ?? seedArtists.find((a) => a.slug === slug);
-  } catch {
-    return seedArtists.find((a) => a.slug === slug);
-  }
+  return getArtist(slug);
 }

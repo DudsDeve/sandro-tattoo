@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CursorLink } from "@/components/ui/CursorLink";
-import { gallery } from "@/lib/data/content";
 import { STUDIO } from "@/lib/data/studio";
 import { useT } from "@/lib/i18n/LanguageProvider";
 
@@ -99,19 +97,14 @@ export function Footer() {
               </button>
             </form>
             <p className="mt-6 label-mono">Instagram</p>
-            <div className="mt-3 grid grid-cols-3 gap-1">
-              {gallery.slice(0, 6).map((g) => (
-                <a
-                  key={g.id}
-                  href={`https://instagram.com/${STUDIO.instagram}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="relative aspect-square overflow-hidden"
-                >
-                  <Image src={g.image} alt="" fill className="object-cover" sizes="120px" />
-                </a>
-              ))}
-            </div>
+            <a
+              href={`https://instagram.com/${STUDIO.instagram}`}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-block text-sm text-moss"
+            >
+              @{STUDIO.instagram}
+            </a>
           </div>
         </div>
       </div>
