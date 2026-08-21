@@ -56,8 +56,34 @@ async function runCron() {
     };
   }
 
-  const due = nextDueSlot(state, hour);
-  if (due == null) {
+  // Hobby Vercel: 1 cron/day — publish every due slot in this run (catch-up).
+  const publishedPosts: Array<{ title: string; slug: string; topic: string; slot: number }> = [];
+
+  while (state.done.length < 2) {
+    const due = nextDueSlot(state, hour);
+    if (due == null) break;
+
+    const slotIndex = state.slots.indexOf(due);
+    const topic = state.topics[slotIndex] || state.topics[0];
+    const result = await runFullBlogPipeline({ manualTopic: topic, published: true });
+
+    publishedPosts.push({
+      title: result.post.title,
+      slug: result.saved.slug,
+      topic,
+      slot: due,
+    });
+
+    state = {
+      ...state,
+      done: [...state.done, due],
+      lastRunAt: new Date().toISOString(),
+      lastTitles: [...(state.lastTitles || []), result.post.title].slice(-6),
+    };
+    await saveBlogCronState(state);
+  }
+
+  if (!publishedPosts.length) {
     return {
       ok: true,
       skipped: true,
@@ -70,25 +96,12 @@ async function runCron() {
     };
   }
 
-  const slotIndex = state.slots.indexOf(due);
-  const topic = state.topics[slotIndex] || state.topics[0];
-  const result = await runFullBlogPipeline({ manualTopic: topic, published: true });
-
-  state = {
-    ...state,
-    done: [...state.done, due],
-    lastRunAt: new Date().toISOString(),
-    lastTitles: [...(state.lastTitles || []), result.post.title].slice(-6),
-  };
-  await saveBlogCronState(state);
-
   return {
     ok: true,
     published: true,
     date,
     hour,
-    slot: due,
-    post: { title: result.post.title, slug: result.saved.slug, topic },
+    posts: publishedPosts,
     slots: state.slots,
     done: state.done,
   };
