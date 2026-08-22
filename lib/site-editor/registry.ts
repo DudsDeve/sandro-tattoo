@@ -15,7 +15,7 @@ export const SITE_PAGES: SitePageDef[] = [
       { id: "home.hero.video2", label: "Hero · video 2", type: "video", defaultValue: "/videos/hero-2.mp4", section: "Hero" },
       { id: "home.about.label", label: "About · label", type: "text", defaultValue: "About the studio", section: "About" },
       { id: "home.about.title", label: "About · title", type: "text", defaultValue: "An atelier, not an assembly line.", section: "About" },
-      { id: "home.about.body", label: "About · body", type: "textarea", defaultValue: "Sandro Tattoo was born from refusing the catalog. Every piece is drawn for a specific body, with consultation time, stencil, and healing treated as part of the art — not aftersales.", section: "About" },
+      { id: "home.about.body", label: "About · body", type: "textarea", defaultValue: "VERSUS was born from refusing the catalog. Every piece is drawn for a specific body, with consultation time, stencil, and healing treated as part of the art — not aftersales.", section: "About" },
       { id: "home.about.yearsLabel", label: "About · years label", type: "text", defaultValue: "years of skin and craft", section: "About" },
       { id: "home.about.image", label: "About · image", type: "image", defaultValue: "", section: "About" },
       { id: "home.specialties.label", label: "Specialties · label", type: "text", defaultValue: "Specialties", section: "Specialties" },

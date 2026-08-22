@@ -7,7 +7,7 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
 export default defineConfig({
   name: "sandro-tattoo",
-  title: "Sandro Tattoo CMS",
+  title: "VERSUS CMS",
   projectId,
   dataset,
   basePath: "/studio",

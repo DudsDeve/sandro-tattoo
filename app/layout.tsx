@@ -41,7 +41,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://sandrotattoo.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://sandro-tattoo.vercel.app"),
   title: {
     default: `${STUDIO.name} — Art carved in skin`,
     template: `%s — ${STUDIO.name}`,

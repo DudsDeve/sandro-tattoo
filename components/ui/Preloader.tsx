@@ -63,7 +63,7 @@ export function Preloader() {
       }}
     >
       <LogoMark className="h-24 w-24 text-ink" animate />
-      <p className="font-script mt-6 text-3xl text-moss">Sandro Tattoo</p>
+      <p className="font-script mt-6 text-3xl text-moss">VERSUS</p>
       <div className="mt-10 h-[1px] w-40 overflow-hidden bg-line">
         <div className="h-full bg-bg-accent-light" style={{ width: `${progress}%` }} />
       </div>

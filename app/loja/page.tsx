@@ -5,7 +5,7 @@ import { getProducts } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Shop",
-  description: "Merch, prints and healing kit from Sandro Tattoo.",
+  description: "Merch, prints and healing kit from VERSUS.",
 };
 
 export default async function LojaPage() {

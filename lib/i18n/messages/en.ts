@@ -20,7 +20,7 @@ export const en = {
   about: {
     label: "About the studio",
     title: "An atelier, not an assembly line.",
-    body: "Sandro Tattoo was born from refusing the catalog. Every piece is drawn for a specific body, with consultation time, stencil, and healing treated as part of the art — not aftersales.",
+    body: "VERSUS was born from refusing the catalog. Every piece is drawn for a specific body, with consultation time, stencil, and healing treated as part of the art — not aftersales.",
     years: "years of skin and craft",
   },
   specialties: {
@@ -195,9 +195,9 @@ export const en = {
     you: "You",
     studio: "Studio",
     assistantHello:
-      "Hi! I’m the Sandro Tattoo assistant. I can help with booking, aftercare, pricing, and artists. What do you need?",
+      "Hi! I’m the VERSUS assistant. I can help with booking, aftercare, pricing, and artists. What do you need?",
     conceptHello:
-      "Hi! I’m the creative assistant at Sandro Tattoo. I’ll help turn your idea into a visual concept. Tell me: what do you imagine for your tattoo?",
+      "Hi! I’m the creative assistant at VERSUS. I’ll help turn your idea into a visual concept. Tell me: what do you imagine for your tattoo?",
     suggestions: [
       "How much does it cost?",
       "Aftercare tips",

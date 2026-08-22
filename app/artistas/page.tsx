@@ -5,7 +5,7 @@ import { ArtistsPageHeader } from "@/components/ui/PageHeaders";
 
 export const metadata: Metadata = {
   title: "Artists",
-  description: "Meet the resident artists at Sandro Tattoo and find the hand that fits you.",
+  description: "Meet the resident artists at VERSUS and find the hand that fits you.",
 };
 
 export default async function ArtistasPage() {

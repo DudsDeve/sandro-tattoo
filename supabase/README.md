@@ -1,4 +1,4 @@
-# Supabase — Sandro Tattoo
+# Supabase — VERSUS
 
 O admin (Site, categorias, artistas, trabalhos, blog) persiste no **Supabase** quando as variáveis de ambiente estão configuradas.
 

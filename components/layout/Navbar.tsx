@@ -57,7 +57,7 @@ export function Navbar() {
           <CursorLink href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
             <LogoMark compact={scrolled} className="h-9 w-9 shrink-0 text-ink sm:h-10 sm:w-10" />
             <span className="font-display truncate text-base tracking-tight sm:text-lg">
-              {scrolled ? "S" : STUDIO.name}
+              {scrolled ? "V" : STUDIO.name}
             </span>
           </CursorLink>
 

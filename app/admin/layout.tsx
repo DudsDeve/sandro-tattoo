@@ -3,7 +3,7 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { AdminStoreProvider } from "@/components/admin/AdminStoreProvider";
 
 export const metadata = {
-  title: "Admin — Sandro Tattoo",
+  title: "Admin — VERSUS",
   robots: { index: false, follow: false },
 };
 

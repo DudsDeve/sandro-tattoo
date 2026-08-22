@@ -49,7 +49,7 @@ export function isEventTopic(topicHint?: string) {
 async function fromGoogleNews(query: string, locale: LocaleOpts): Promise<ResearchHit[]> {
   const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=${locale.hl}&gl=${locale.gl}&ceid=${encodeURIComponent(locale.ceid)}`;
   const res = await fetch(url, {
-    headers: { "User-Agent": "SandroTattooBot/1.0" },
+    headers: { "User-Agent": "VersusStudioBot/1.0" },
     next: { revalidate: 0 },
   });
   if (!res.ok) return [];

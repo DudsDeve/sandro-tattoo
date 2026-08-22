@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Book",
-  description: "Book a consultation and session at Sandro Tattoo in a few steps.",
+  description: "Book a consultation and session at VERSUS in a few steps.",
 };
 
 export default async function AgendarPage() {

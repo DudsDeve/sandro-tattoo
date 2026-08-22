@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Aftercare, trends and studio notes from Sandro Tattoo.",
+  description: "Aftercare, trends and studio notes from VERSUS.",
 };
 
 export default async function BlogPage() {

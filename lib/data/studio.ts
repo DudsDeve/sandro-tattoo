@@ -1,14 +1,14 @@
 export const STUDIO = {
-  name: "Sandro Tattoo",
-  shortName: "Sandro",
+  name: "VERSUS",
+  shortName: "VERSUS",
   tagline: "Arte gravada na pele",
   description:
     "Estúdio de tatuagem autoral em Dublin. Realismo, blackwork, fine line e peças únicas — do conceito à cicatrização.",
   years: 14,
   phone: "+55 11 98888-0000",
   whatsapp: "5511988880000",
-  email: "studio@sandrotattoo.com",
-  instagram: "sandrotattoo",
+  email: "studio@versus.tattoo",
+  instagram: "versus",
   address: {
     street: "Região central",
     neighborhood: "North City",

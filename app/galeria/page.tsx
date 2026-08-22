@@ -6,7 +6,7 @@ import { getGallery, getSpecialties } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Gallery",
-  description: "Sandro Tattoo portfolio — real pieces, filtered by style and artist.",
+  description: "VERSUS portfolio — real pieces, filtered by style and artist.",
 };
 
 export const dynamic = "force-dynamic";

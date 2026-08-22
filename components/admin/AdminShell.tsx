@@ -35,7 +35,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <div>
             <p className="font-mono text-[0.65rem] tracking-[0.2em] text-[#8b9a6b]">ADMIN</p>
-            <p className="font-serif text-xl">Sandro Tattoo</p>
+            <p className="font-serif text-xl">VERSUS</p>
           </div>
           <nav className="flex flex-wrap gap-1">
             {LINKS.map((l) => {

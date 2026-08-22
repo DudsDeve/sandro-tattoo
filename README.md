@@ -1,4 +1,4 @@
-# Sandro Tattoo
+# VERSUS
 
 Website cinematográfico para estúdio de tatuagem — Next.js 15, GSAP, Framer Motion, Sanity, Claude e simulador na pele.
 

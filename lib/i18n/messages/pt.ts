@@ -22,7 +22,7 @@ export const pt: Messages = {
   about: {
     label: "Sobre o estúdio",
     title: "Um ateliê, não uma linha de montagem.",
-    body: "O Sandro Tattoo nasceu da recusa ao catálogo. Cada peça é desenhada para um corpo específico, com tempo de consulta, stencil e cicatrização tratados como parte da arte — não como pós-venda.",
+    body: "O VERSUS nasceu da recusa ao catálogo. Cada peça é desenhada para um corpo específico, com tempo de consulta, stencil e cicatrização tratados como parte da arte — não como pós-venda.",
     years: "anos de pele e ofício",
   },
   specialties: {
@@ -197,9 +197,9 @@ export const pt: Messages = {
     you: "Você",
     studio: "Estúdio",
     assistantHello:
-      "Oi! Sou o assistente do Sandro Tattoo. Posso te ajudar com agendamento, cuidados, preços, artistas. O que você quer saber?",
+      "Oi! Sou o assistente do VERSUS. Posso te ajudar com agendamento, cuidados, preços, artistas. O que você quer saber?",
     conceptHello:
-      "Olá! Eu sou o assistente criativo do Sandro Tattoo. Vou te ajudar a transformar sua ideia em um conceito visual. Me conta: o que você imagina para sua tattoo?",
+      "Olá! Eu sou o assistente criativo do VERSUS. Vou te ajudar a transformar sua ideia em um conceito visual. Me conta: o que você imagina para sua tattoo?",
     suggestions: [
       "Quanto custa?",
       "Cuidados pós-tattoo",

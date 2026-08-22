@@ -30,7 +30,7 @@ export function AboutSection() {
         </div>
         <EditableMedia id="home.about.image" type="image" className="aspect-[4/5] w-full">
           {(src) => (
-            <ParallaxImage src={src} alt="Sandro Tattoo studio interior" className="h-full w-full" speed={0.25} />
+            <ParallaxImage src={src} alt="VERSUS studio interior" className="h-full w-full" speed={0.25} />
           )}
         </EditableMedia>
       </div>

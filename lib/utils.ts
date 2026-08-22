@@ -24,7 +24,7 @@ export function formatDate(iso: string, locale = "en-IE") {
 export function whatsappLink(message?: string) {
   const phone = process.env.NEXT_PUBLIC_WHATSAPP ?? "5511988880000";
   const text = encodeURIComponent(
-    message ?? "Hi! I came from the Sandro Tattoo website and want to talk about a session.",
+    message ?? "Hi! I came from the VERSUS website and want to talk about a session.",
   );
   return `https://wa.me/${phone}?text=${text}`;
 }
