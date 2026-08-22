@@ -7,15 +7,24 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CtaLink } from "@/components/ui/CursorLink";
 import { processSteps as defaultSteps } from "@/lib/data/content";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
-import { useT } from "@/lib/i18n/LanguageProvider";
 import type { ProcessStep } from "@/lib/types";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, useGSAP);
-}
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export function ProcessScenes({ steps = defaultSteps }: { steps?: ProcessStep[] }) {
-  const t = useT();
+const SCENE_VIDEO: Record<string, string> = {
+  consulta: "/videos/consultation.mp4",
+  design: "/videos/design.mp4",
+};
+
+export function ProcessScenes({
+  steps = defaultSteps,
+  ctaTitle = "Ready to mark your story?",
+  ctaBook = "Book a session",
+}: {
+  steps?: ProcessStep[];
+  ctaTitle?: string;
+  ctaBook?: string;
+}) {
   const root = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
 
@@ -45,13 +54,31 @@ export function ProcessScenes({ steps = defaultSteps }: { steps?: ProcessStep[] 
 
   return (
     <div ref={root}>
-      {steps.map((step, i) => (
+      {steps.map((step, i) => {
+        const videoSrc = SCENE_VIDEO[step.id];
+        return (
         <section
           key={step.id}
           data-scene
-          className="relative flex min-h-[100svh] flex-col justify-center px-4 py-24 sm:px-5 md:px-16"
-          style={{ background: i % 2 === 0 ? "#000" : "#0D0F0A" }}
+          className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-4 py-24 sm:px-5 md:px-16"
+          style={{ background: videoSrc ? "#000" : i % 2 === 0 ? "#000" : "#0D0F0A" }}
         >
+          {videoSrc && (
+            <>
+              <video
+                className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                src={videoSrc}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-hidden
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/25" />
+            </>
+          )}
+          <div className="relative z-10">
           <p data-num className="label-mono">
             {step.number} / 06
           </p>
@@ -65,12 +92,14 @@ export function ProcessScenes({ steps = defaultSteps }: { steps?: ProcessStep[] 
           <p data-body className="mt-4 max-w-xl text-sm text-ink-muted">
             {step.detail}
           </p>
+          </div>
         </section>
-      ))}
+        );
+      })}
       <section className="flex min-h-[60svh] flex-col items-center justify-center bg-black px-5 text-center">
-        <h2 className="display-section">{t.cta.title}</h2>
+        <h2 className="display-section">{ctaTitle}</h2>
         <div className="mt-10">
-          <CtaLink href="/agendar">{t.cta.book}</CtaLink>
+          <CtaLink href="/agendar">{ctaBook}</CtaLink>
         </div>
       </section>
     </div>

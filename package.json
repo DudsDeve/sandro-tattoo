@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "studio": "next dev --turbopack"
+    "studio": "next dev --turbopack",
+    "supabase:setup": "node scripts/setup-supabase.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.40",
@@ -30,6 +31,7 @@
     "lucide-react": "^1.33.0",
     "next": "^15.5.10",
     "next-sanity": "^9.12.3",
+    "pg": "^8.23.0",
     "posthog-js": "^1.418.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -48,6 +50,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.185.4",

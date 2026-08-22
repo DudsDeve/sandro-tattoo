@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LogoMark } from "@/components/ui/LogoMark";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { CtaLink, CursorLink } from "@/components/ui/CursorLink";
-import { STUDIO } from "@/lib/data/studio";
 import { useT } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -54,11 +53,14 @@ export function Navbar() {
         )}
       >
         <div className="mx-auto flex h-[64px] max-w-7xl items-center justify-between gap-3 px-4 sm:h-[72px] sm:px-5 md:px-8">
-          <CursorLink href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <LogoMark compact={scrolled} className="h-9 w-9 shrink-0 text-ink sm:h-10 sm:w-10" />
-            <span className="font-display truncate text-base tracking-tight sm:text-lg">
-              {scrolled ? "V" : STUDIO.name}
-            </span>
+          <CursorLink href="/" className="flex min-w-0 items-center">
+            <LogoMark
+              compact={scrolled}
+              className={cn(
+                "shrink-0",
+                scrolled ? "h-9 w-9 sm:h-10 sm:w-10" : "h-12 w-12 sm:h-14 sm:w-14",
+              )}
+            />
           </CursorLink>
 
           <nav className="hidden items-center gap-8 lg:flex">

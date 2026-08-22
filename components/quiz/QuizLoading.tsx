@@ -13,7 +13,7 @@ export function QuizLoading() {
       exit={{ opacity: 0 }}
       className="flex flex-1 flex-col items-center justify-center pb-32"
     >
-      <LogoMark animate className="h-20 w-20 text-ink" />
+      <LogoMark compact animate className="h-20 w-20" />
       <p className="font-script mt-6 text-3xl">{t.quiz.loading}</p>
     </motion.div>
   );

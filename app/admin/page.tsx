@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useAdminStore } from "@/components/admin/AdminStoreProvider";
 
 type PersistenceInfo = {
-  persistence: "supabase" | "blob" | "local";
+  persistence: "supabase" | "postgres" | "blob" | "local";
   ready: boolean;
   hint: string;
   supabase: { configured: boolean; url: string | null };
@@ -36,7 +36,9 @@ export default function AdminHomePage() {
 
   const modeLabel =
     persistence?.persistence === "supabase"
-      ? "Supabase (banco)"
+      ? "Supabase (API)"
+      : persistence?.persistence === "postgres"
+        ? "Supabase (Postgres)"
       : persistence?.persistence === "blob"
         ? "Vercel Blob (fallback)"
         : "Arquivo local (dev)";

@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { isDatabaseConfigured } from "@/lib/supabase/pg";
 
 let adminClient: SupabaseClient | null = null;
 
@@ -28,9 +29,10 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 
 export function getSupabaseStatus() {
   return {
-    configured: isSupabaseConfigured(),
+    configured: isSupabaseConfigured() || isDatabaseConfigured(),
     url: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || null,
     hasServiceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    hasDatabase: isDatabaseConfigured(),
     mediaBucket: process.env.SUPABASE_MEDIA_BUCKET || "media",
   };
 }

@@ -10,6 +10,7 @@ import {
 } from "react";
 import { usePathname } from "next/navigation";
 import type { CmsStore } from "@/lib/cms/types";
+import { parseJsonResponse } from "@/lib/utils";
 
 type Ctx = {
   store: CmsStore | null;
@@ -29,7 +30,9 @@ export function AdminStoreProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       const res = await fetch("/api/admin/store", { cache: "no-store" });
-      if (res.ok) setStore(await res.json());
+      if (!res.ok) return;
+      const data = await parseJsonResponse<CmsStore>(res);
+      setStore(data);
     } finally {
       setLoading(false);
     }

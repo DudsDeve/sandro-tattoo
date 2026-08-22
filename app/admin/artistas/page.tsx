@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { MediaField } from "@/components/admin/MediaField";
 import { useAdminStore } from "@/components/admin/AdminStoreProvider";
-import type { CmsArtist } from "@/lib/cms/types";
+import type { CmsArtist, CmsStore } from "@/lib/cms/types";
+import { parseJsonResponse } from "@/lib/utils";
 
 const blank = (): Partial<CmsArtist> => ({
   name: "",
@@ -43,7 +44,7 @@ export default function AdminArtistsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing ? { ...editing, ...draft, id: editing.id } : draft),
       });
-      const data = await res.json();
+      const data = await parseJsonResponse<CmsStore & { error?: string }>(res);
       if (!res.ok) {
         setMsg(data.error || "Não foi possível salvar o artista.");
         return;
@@ -80,11 +81,13 @@ export default function AdminArtistsPage() {
     });
     setBusy(false);
     if (res.ok) {
-      const data = await res.json();
+      const data = await parseJsonResponse<CmsStore>(res);
       setStore(data);
-      const updated = data.artists.find((a: CmsArtist) => a.id === editing.id);
-      setEditing(updated);
-      setDraft(updated);
+      const updated = data.artists.find((a) => a.id === editing.id);
+      if (updated) {
+        setEditing(updated);
+        setDraft(updated);
+      }
       setWorkImage("");
       setWorkTitle("");
     }
@@ -98,11 +101,13 @@ export default function AdminArtistsPage() {
       body: JSON.stringify({ id: editing.id, removeWorkId: workId }),
     });
     if (res.ok) {
-      const data = await res.json();
+      const data = await parseJsonResponse<CmsStore>(res);
       setStore(data);
-      const updated = data.artists.find((a: CmsArtist) => a.id === editing.id);
-      setEditing(updated);
-      setDraft(updated);
+      const updated = data.artists.find((a) => a.id === editing.id);
+      if (updated) {
+        setEditing(updated);
+        setDraft(updated);
+      }
     }
   }
 
@@ -110,7 +115,7 @@ export default function AdminArtistsPage() {
     if (!confirm("Remover artista?")) return;
     const res = await fetch(`/api/admin/artists?id=${id}`, { method: "DELETE" });
     if (res.ok) {
-      setStore(await res.json());
+      setStore(await parseJsonResponse<CmsStore>(res));
       setEditing(null);
       setDraft(blank());
     }

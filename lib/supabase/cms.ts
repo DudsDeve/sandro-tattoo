@@ -1,79 +1,133 @@
 import type { CmsStore } from "@/lib/cms/types";
 import { getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/admin";
+import { getPgPool, isDatabaseConfigured } from "@/lib/supabase/pg";
 
 const STORE_ID = "main";
 
-export async function readCmsFromSupabase(): Promise<CmsStore | null> {
-  if (!isSupabaseConfigured()) return null;
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return null;
-
-  const { data, error } = await supabase
-    .from("cms_store")
-    .select("payload")
-    .eq("id", STORE_ID)
-    .maybeSingle();
-
-  if (error) {
-    console.error("[supabase] read cms_store:", error.message);
-    return null;
-  }
-
-  const payload = data?.payload as CmsStore | null | undefined;
+function normalizePayload(payload: unknown): CmsStore | null {
   if (!payload || typeof payload !== "object") return null;
-  if (!Array.isArray(payload.categories)) return null;
+  const data = payload as CmsStore;
+  if (!Array.isArray(data.categories)) return null;
   return {
-    ...payload,
-    siteContent: payload.siteContent || {},
+    ...data,
+    siteContent: data.siteContent || {},
   };
 }
 
-export async function writeCmsToSupabase(store: CmsStore): Promise<boolean> {
-  if (!isSupabaseConfigured()) return false;
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return false;
+async function readCmsFromPg(): Promise<CmsStore | null> {
+  const pool = getPgPool();
+  if (!pool) return null;
+  try {
+    const { rows } = await pool.query<{ payload: CmsStore }>(
+      "select payload from public.cms_store where id = $1",
+      [STORE_ID],
+    );
+    return normalizePayload(rows[0]?.payload);
+  } catch (e) {
+    console.error("[postgres] read cms_store:", e instanceof Error ? e.message : e);
+    return null;
+  }
+}
 
-  const { error } = await supabase.from("cms_store").upsert(
-    {
-      id: STORE_ID,
-      payload: store,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: "id" },
-  );
-
-  if (error) {
-    console.error("[supabase] write cms_store:", error.message);
+async function writeCmsToPg(store: CmsStore): Promise<boolean> {
+  const pool = getPgPool();
+  if (!pool) return false;
+  try {
+    await pool.query(
+      `insert into public.cms_store (id, payload, updated_at)
+       values ($1, $2::jsonb, now())
+       on conflict (id) do update set payload = excluded.payload, updated_at = now()`,
+      [STORE_ID, JSON.stringify(store)],
+    );
+    const entries = Object.entries(store.siteContent || {});
+    for (const [field_id, value] of entries) {
+      await pool.query(
+        `insert into public.site_content (field_id, value, updated_at)
+         values ($1, $2, now())
+         on conflict (field_id) do update set value = excluded.value, updated_at = now()`,
+        [field_id, value],
+      );
+    }
+    return true;
+  } catch (e) {
+    console.error("[postgres] write cms_store:", e instanceof Error ? e.message : e);
     return false;
   }
+}
 
-  // Keep site_content flat table in sync for SQL / future queries
-  const entries = Object.entries(store.siteContent || {});
-  if (entries.length) {
-    const rows = entries.map(([field_id, value]) => ({
-      field_id,
-      value,
-      updated_at: new Date().toISOString(),
-    }));
-    const { error: siteErr } = await supabase.from("site_content").upsert(rows, {
-      onConflict: "field_id",
-    });
-    if (siteErr) {
-      console.error("[supabase] sync site_content:", siteErr.message);
+export async function readCmsFromSupabase(): Promise<CmsStore | null> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { data, error } = await supabase
+        .from("cms_store")
+        .select("payload")
+        .eq("id", STORE_ID)
+        .maybeSingle();
+
+      if (error) {
+        console.error("[supabase] read cms_store:", error.message);
+      } else {
+        const parsed = normalizePayload(data?.payload);
+        if (parsed) return parsed;
+      }
     }
   }
+  if (isDatabaseConfigured()) return readCmsFromPg();
+  return null;
+}
 
-  return true;
+export async function writeCmsToSupabase(store: CmsStore): Promise<boolean> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { error } = await supabase.from("cms_store").upsert(
+        {
+          id: STORE_ID,
+          payload: store,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "id" },
+      );
+
+      if (error) {
+        console.error("[supabase] write cms_store:", error.message);
+      } else {
+        const entries = Object.entries(store.siteContent || {});
+        if (entries.length) {
+          const rows = entries.map(([field_id, value]) => ({
+            field_id,
+            value,
+            updated_at: new Date().toISOString(),
+          }));
+          const { error: siteErr } = await supabase.from("site_content").upsert(rows, {
+            onConflict: "field_id",
+          });
+          if (siteErr) {
+            console.error("[supabase] sync site_content:", siteErr.message);
+          }
+        }
+        return true;
+      }
+    }
+  }
+  if (isDatabaseConfigured()) return writeCmsToPg(store);
+  return false;
 }
 
 export async function uploadMediaToSupabase(
   bytes: Buffer,
   filename: string,
   contentType: string,
-): Promise<string | null> {
-  if (!isSupabaseConfigured()) return null;
+): Promise<{ url: string } | { error: string }> {
+  if (!isSupabaseConfigured()) {
+    return {
+      error:
+        "Upload no Storage precisa de SUPABASE_SERVICE_ROLE_KEY (Settings → API no painel do Supabase). Tabelas já estão no Postgres.",
+    };
+  }
   const supabase = getSupabaseAdmin();
-  if (!supabase) return null;
+  if (!supabase) return { error: "supabase-off" };
 
   const bucket = process.env.SUPABASE_MEDIA_BUCKET || "media";
   const path = `uploads/${filename}`;
@@ -85,9 +139,11 @@ export async function uploadMediaToSupabase(
 
   if (error) {
     console.error("[supabase] upload media:", error.message);
-    return null;
+    return {
+      error: `Supabase Storage: ${error.message}. Confira o bucket público "${bucket}".`,
+    };
   }
 
   const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-  return data.publicUrl;
+  return { url: data.publicUrl };
 }

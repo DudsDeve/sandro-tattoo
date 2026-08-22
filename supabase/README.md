@@ -11,7 +11,10 @@ O admin (Site, categorias, artistas, trabalhos, blog) persiste no **Supabase** q
    - Project URL → `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_URL`
    - `service_role` (secret) → `SUPABASE_SERVICE_ROLE_KEY`
 4. Cole no `.env.local` e na Vercel (Environment Variables)
-5. Reinicie o `npm run dev`
+5. Ou use a conexão direta: `DATABASE_URL` (Postgres) e rode `npm run supabase:setup`
+6. Reinicie o `npm run dev`
+
+Uploads de foto/vídeo no Storage ainda precisam da **service_role** (Settings → API). Com só o `DATABASE_URL`, o CMS (textos, artistas, posts) já grava no Postgres.
 
 ## O que é salvo
 

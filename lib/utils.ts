@@ -5,6 +5,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export async function parseJsonResponse<T>(res: Response): Promise<T> {
+  const text = await res.text();
+  if (!text.trim()) {
+    throw new Error(`Resposta vazia do servidor (HTTP ${res.status})`);
+  }
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error("O servidor não devolveu JSON válido.");
+  }
+}
+
 export function formatBRL(value: number) {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",

@@ -48,6 +48,7 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  try {
   const body = (await req.json()) as CmsArtist & { addWork?: CmsArtistWork; removeWorkId?: string };
   if (!body.id) return NextResponse.json({ error: "id obrigatório" }, { status: 400 });
 
@@ -94,6 +95,14 @@ export async function PUT(req: Request) {
   });
 
   return NextResponse.json(store);
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Erro ao atualizar artista";
+    if (message === "NOT_FOUND") {
+      return NextResponse.json({ error: "Artista não encontrado" }, { status: 404 });
+    }
+    console.error("[admin/artists PUT]", message);
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: Request) {

@@ -5,6 +5,7 @@ import {
   type CmsStore,
 } from "@/lib/cms/types";
 import { isSupabaseConfigured } from "@/lib/supabase/admin";
+import { isDatabaseConfigured } from "@/lib/supabase/pg";
 import {
   readCmsFromSupabase,
   uploadMediaToSupabase,
@@ -102,7 +103,7 @@ export async function getCmsStore(): Promise<CmsStore> {
   if (isValidStore(fromBlob)) {
     const normalized = normalizeStore(fromBlob);
     memoryCache = normalized;
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() || isDatabaseConfigured()) {
       await writeCmsToSupabase(normalized);
     }
     return normalized;
@@ -112,7 +113,7 @@ export async function getCmsStore(): Promise<CmsStore> {
   if (isValidStore(fromLocal)) {
     const normalized = normalizeStore(fromLocal);
     memoryCache = normalized;
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() || isDatabaseConfigured()) {
       await writeCmsToSupabase(normalized);
     }
     return normalized;
@@ -154,8 +155,9 @@ export function newId(prefix: string) {
   return id(prefix);
 }
 
-export function getCmsPersistenceMode(): "supabase" | "blob" | "local" {
+export function getCmsPersistenceMode(): "supabase" | "postgres" | "blob" | "local" {
   if (isSupabaseConfigured()) return "supabase";
+  if (isDatabaseConfigured()) return "postgres";
   if (process.env.BLOB_READ_WRITE_TOKEN) return "blob";
   return "local";
 }
@@ -165,9 +167,15 @@ export async function uploadMedia(file: File): Promise<string> {
   const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
   const safe = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const contentType = file.type || "application/octet-stream";
+  const onVercel = Boolean(process.env.VERCEL);
 
-  const fromSupabase = await uploadMediaToSupabase(bytes, safe, contentType);
-  if (fromSupabase) return fromSupabase;
+  if (isSupabaseConfigured()) {
+    const fromSupabase = await uploadMediaToSupabase(bytes, safe, contentType);
+    if ("url" in fromSupabase) return fromSupabase.url;
+    if (fromSupabase.error !== "supabase-off" && !process.env.BLOB_READ_WRITE_TOKEN) {
+      throw new Error(fromSupabase.error);
+    }
+  }
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     const blob = await put(`uploads/${safe}`, bytes, {
@@ -175,6 +183,12 @@ export async function uploadMedia(file: File): Promise<string> {
       contentType,
     });
     return blob.url;
+  }
+
+  if (onVercel) {
+    throw new Error(
+      "Em produção o disco é somente leitura. Configure BLOB_READ_WRITE_TOKEN (Vercel Blob) ou Supabase Storage (bucket público “media”).",
+    );
   }
 
   const dir = path.join(process.cwd(), "public", "uploads");

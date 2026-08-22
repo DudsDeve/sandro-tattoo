@@ -48,12 +48,17 @@ export const metadata: Metadata = {
   },
   description:
     "Authorial tattoo studio in Dublin. Realism, blackwork, fine line and one-of-a-kind pieces — from concept to healing.",
+  icons: {
+    icon: [{ url: "/brand/versus-mark.png", type: "image/png" }],
+    apple: "/brand/versus-mark.png",
+  },
   openGraph: {
     title: STUDIO.name,
     description:
       "Authorial tattoo studio in Dublin. Realism, blackwork, fine line and one-of-a-kind pieces — from concept to healing.",
     locale: "en_IE",
     type: "website",
+    images: [{ url: "/brand/versus-logo.png", width: 1024, height: 1024, alt: STUDIO.name }],
   },
 };
 

@@ -9,7 +9,9 @@ export async function GET() {
     supabase,
     ready: supabase.configured,
     hint: supabase.configured
-      ? "Salvamentos do admin vão para o Supabase."
-      : "Configure NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY e rode supabase/migrations/001_cms.sql",
+      ? supabase.hasServiceRole
+        ? "Salvamentos e uploads vão para o Supabase."
+        : "CMS no Postgres. Para fotos/vídeos, cole SUPABASE_SERVICE_ROLE_KEY (Settings → API)."
+      : "Configure DATABASE_URL ou SUPABASE_SERVICE_ROLE_KEY.",
   });
 }

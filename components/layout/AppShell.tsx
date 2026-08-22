@@ -10,6 +10,7 @@ import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
 import { Preloader } from "@/components/ui/Preloader";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 
 function LocateSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -45,21 +46,22 @@ export function AppShell({ children }: { children: ReactNode }) {
     setVisualEdit(new URLSearchParams(window.location.search).get("visualEdit") === "1");
   }, []);
 
-  if (isStudio || isAdmin) {
-    return <div className="min-h-screen bg-black text-ink">{children}</div>;
-  }
+  const body =
+    isStudio || isAdmin ? (
+      <div className="min-h-screen bg-black text-ink">{children}</div>
+    ) : (
+      <>
+        {!visualEdit && <Preloader />}
+        <NoiseOverlay />
+        {!visualEdit && <ScrollProgress />}
+        <Navbar />
+        <main>{children}</main>
+        {!visualEdit && <LocateSection />}
+        <Footer />
+        {!visualEdit && <AssistantWidget />}
+        {!visualEdit && <WhatsAppButton />}
+      </>
+    );
 
-  return (
-    <>
-      {!visualEdit && <Preloader />}
-      <NoiseOverlay />
-      {!visualEdit && <ScrollProgress />}
-      <Navbar />
-      <main>{children}</main>
-      {!visualEdit && <LocateSection />}
-      <Footer />
-      {!visualEdit && <AssistantWidget />}
-      {!visualEdit && <WhatsAppButton />}
-    </>
-  );
+  return <LanguageProvider>{body}</LanguageProvider>;
 }
