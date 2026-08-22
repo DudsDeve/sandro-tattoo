@@ -20,7 +20,7 @@ export function QuizQuestionView({
     >
       <h1 className="display-section max-w-4xl">{question.prompt}</h1>
       {question.hint && <p className="mt-3 text-ink-secondary">{question.hint}</p>}
-      <div className={`mt-12 grid gap-4 sm:grid-cols-2 ${question.options.length > 3 ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
+      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {question.options.map((opt) =>
           question.type === "image" && opt.image ? (
             <button

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { QuizContainer } from "@/components/quiz/QuizContainer";
-import { getArtists } from "@/lib/content";
+import { getArtists, getSpecialties } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default async function QuizPage() {
-  const artists = await getArtists();
-  return <QuizContainer artists={artists} />;
+  const [artists, specialties] = await Promise.all([getArtists(), getSpecialties()]);
+  return <QuizContainer artists={artists} specialties={specialties} />;
 }

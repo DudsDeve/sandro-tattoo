@@ -43,7 +43,7 @@ export function SpecialtiesSection({ specialties }: { specialties: Specialty[] }
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent transition group-hover:bg-bg-accent/25" />
                 <div className="absolute inset-x-0 bottom-0 p-6">
                   <h3 className="font-display text-2xl sm:text-3xl">{s.name}</h3>
-                  <p className="mt-2 text-sm text-ink-secondary">{s.description}</p>
+                  <p className="mt-2 line-clamp-2 text-sm text-ink-secondary">{s.description}</p>
                 </div>
               </Link>
             </motion.div>

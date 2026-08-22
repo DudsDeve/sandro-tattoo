@@ -4,47 +4,54 @@ import type { CmsArtist, CmsArtistWork } from "@/lib/cms/types";
 import { normalizeInstagramHandle } from "@/lib/utils";
 
 export async function POST(req: Request) {
-  const body = (await req.json()) as Partial<CmsArtist>;
-  if (!body.name?.trim()) {
-    return NextResponse.json({ error: "Nome é obrigatório" }, { status: 400 });
-  }
-
-  const slug =
-    body.slug?.trim() ||
-    body.name
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
-
-  const store = await mutateCmsStore((s) => {
-    let nextSlug = slug || newId("artista");
-    const base = nextSlug;
-    let n = 2;
-    while (s.artists.some((a) => a.slug === nextSlug)) {
-      nextSlug = `${base}-${n++}`;
+  try {
+    const body = (await req.json()) as Partial<CmsArtist>;
+    if (!body.name?.trim()) {
+      return NextResponse.json({ error: "Nome é obrigatório" }, { status: 400 });
     }
 
-    s.artists.push({
-      id: newId("art"),
-      slug: nextSlug,
-      name: body.name!.trim(),
-      role: body.role?.trim() || "Artista",
-      specialty: body.specialty?.trim() || "",
-      specialtyIds: body.specialtyIds || [],
-      years: Number.isFinite(body.years) ? Number(body.years) : 1,
-      bio: body.bio?.trim() || "",
-      bioLong: body.bioLong?.trim() || body.bio?.trim() || "",
-      instagram: normalizeInstagramHandle(body.instagram || ""),
-      image: body.image?.trim() || "",
-      available: body.available ?? true,
-      works: body.works || [],
-    });
-    return s;
-  });
+    const slug =
+      body.slug?.trim() ||
+      body.name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
 
-  return NextResponse.json(store);
+    const store = await mutateCmsStore((s) => {
+      const artists = Array.isArray(s.artists) ? s.artists : [];
+      let nextSlug = slug || newId("artista");
+      const base = nextSlug;
+      let n = 2;
+      while (artists.some((a) => a.slug === nextSlug)) {
+        nextSlug = `${base}-${n++}`;
+      }
+
+      artists.push({
+        id: newId("art"),
+        slug: nextSlug,
+        name: body.name!.trim(),
+        role: body.role?.trim() || "Artista",
+        specialty: body.specialty?.trim() || "",
+        specialtyIds: body.specialtyIds || [],
+        years: Number.isFinite(body.years) ? Number(body.years) : 1,
+        bio: body.bio?.trim() || "",
+        bioLong: body.bioLong?.trim() || body.bio?.trim() || "",
+        instagram: normalizeInstagramHandle(body.instagram || ""),
+        image: body.image?.trim() || "",
+        available: body.available ?? true,
+        works: body.works || [],
+      });
+      return { ...s, artists };
+    });
+
+    return NextResponse.json(store);
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Erro ao salvar artista";
+    console.error("[admin/artists POST]", message);
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
 
 export async function PUT(req: Request) {

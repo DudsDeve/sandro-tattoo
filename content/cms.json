@@ -1,40 +1,80 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-21T20:12:30.175Z",
-  "categories": [],
+  "updatedAt": "2026-08-22T23:01:58.554Z",
+  "categories": [
+    {
+      "id": "cat_o97ewtgn",
+      "slug": "blackwork",
+      "name": "Blackwork",
+      "description": "Bold, solid ink work that uses pure black to create striking contrast. From geometric patterns to large-scale coverage, blackwork turns skin into graphic art — no gray areas, no hesitation.",
+      "image": "",
+      "order": 0
+    },
+    {
+      "id": "cat_8hql3qro",
+      "slug": "realism",
+      "name": "Realism",
+      "description": "Skin becomes canvas. Portraits, nature, objects rendered with photographic precision — every shadow, every highlight placed to trick the eye into seeing depth where there's only ink.",
+      "image": "",
+      "order": 1
+    },
+    {
+      "id": "cat_l4lwq30n",
+      "slug": "fine-line",
+      "name": "Fine Line",
+      "description": "Delicate, single-needle precision. Thin, clean strokes that create intricate detail without weight. Subtle enough to feel like a whisper on the skin, sharp enough to last.",
+      "image": "",
+      "order": 2
+    },
+    {
+      "id": "cat_gamyxl40",
+      "slug": "custom-design",
+      "name": "Custom Design",
+      "description": "Your story, built from zero. No flash, no repeats — every piece is drawn for your body, your idea, your intention. The artist interprets, you approve, and the result exists only once.",
+      "image": "",
+      "order": 3
+    }
+  ],
   "items": [],
   "artists": [
     {
       "id": "art_14ss9dds",
-      "slug": "sandro-martins",
+      "bio": "",
       "name": "Sandro Martins",
       "role": "Artista",
-      "specialty": "",
-      "specialtyIds": [],
-      "years": 1,
-      "bio": "",
+      "slug": "sandro-martins",
+      "image": "/uploads/1787438785136-jhap7z.jpg",
+      "works": [],
+      "years": 8,
       "bioLong": "",
-      "instagram": "",
-      "image": "",
       "available": true,
-      "works": []
+      "instagram": "sanndro_martins",
+      "specialty": "Blackwork, Realism, Fine Line, Custom Design",
+      "specialtyIds": [
+        "blackwork",
+        "realism",
+        "fine-line",
+        "custom-design"
+      ]
     },
     {
       "id": "art_x5o6mdet",
-      "slug": "vivian-santos",
+      "bio": "",
       "name": "Vivian Santos",
       "role": "Artista",
-      "specialty": "",
-      "specialtyIds": [],
-      "years": 1,
-      "bio": "",
-      "bioLong": "",
-      "instagram": "",
+      "slug": "vivian-santos",
       "image": "",
+      "works": [],
+      "years": 1,
+      "bioLong": "",
       "available": true,
-      "works": []
+      "instagram": "",
+      "specialty": "",
+      "specialtyIds": []
     }
   ],
   "posts": [],
-  "siteContent": {}
+  "siteContent": {
+    "home.about.image": "/uploads/1787439341168-duxg8d.jpg"
+  }
 }

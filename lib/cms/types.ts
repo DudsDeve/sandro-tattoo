@@ -97,7 +97,7 @@ export function cmsArtistToArtist(a: CmsArtist): Artist {
     instagram: a.instagram,
     image: a.image,
     works: a.works.map((w) => w.image),
-    styleVector: {},
+    styleVector: Object.fromEntries((a.specialtyIds || []).map((id) => [id, 3])),
     available: a.available,
   };
 }

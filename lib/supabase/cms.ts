@@ -5,11 +5,21 @@ import { getPgPool, isDatabaseConfigured } from "@/lib/supabase/pg";
 const STORE_ID = "main";
 
 function normalizePayload(payload: unknown): CmsStore | null {
-  if (!payload || typeof payload !== "object") return null;
-  const data = payload as CmsStore;
-  if (!Array.isArray(data.categories)) return null;
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return null;
+  const data = payload as Partial<CmsStore>;
+  const hasShape =
+    data.version === 1 ||
+    Array.isArray(data.categories) ||
+    Array.isArray(data.artists) ||
+    Array.isArray(data.items);
+  if (!hasShape) return null;
   return {
-    ...data,
+    version: 1,
+    updatedAt: data.updatedAt || new Date().toISOString(),
+    categories: Array.isArray(data.categories) ? data.categories : [],
+    items: Array.isArray(data.items) ? data.items : [],
+    artists: Array.isArray(data.artists) ? data.artists : [],
+    posts: Array.isArray(data.posts) ? data.posts : [],
     siteContent: data.siteContent || {},
   };
 }

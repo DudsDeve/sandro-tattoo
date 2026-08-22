@@ -1,7 +1,4 @@
 import {
-  specialties as seedSpecialties,
-} from "@/lib/data/content";
-import {
   categoryToSpecialty,
   cmsArtistToArtist,
   cmsItemToTattoo,
@@ -21,14 +18,10 @@ async function fromCms() {
 
 export async function getSpecialties(): Promise<Specialty[]> {
   const cms = await fromCms();
-  if (cms) {
-    const fromCmsCats = [...cms.categories]
-      .sort((a, b) => a.order - b.order)
-      .map(categoryToSpecialty);
-    if (fromCmsCats.length) return fromCmsCats;
-  }
-  // Fallback: category names only, no mock images
-  return seedSpecialties.map((s) => ({ ...s, image: "" }));
+  if (!cms?.categories?.length) return [];
+  return [...cms.categories]
+    .sort((a, b) => a.order - b.order)
+    .map(categoryToSpecialty);
 }
 
 export async function getArtists(): Promise<Artist[]> {

@@ -21,7 +21,7 @@ const blank = (): Partial<CmsArtist> => ({
 });
 
 export default function AdminArtistsPage() {
-  const { store, setStore, loading } = useAdminStore();
+  const { store, setStore, loading, refresh } = useAdminStore();
   const [draft, setDraft] = useState(blank());
   const [editing, setEditing] = useState<CmsArtist | null>(null);
   const [workTitle, setWorkTitle] = useState("");
@@ -49,6 +49,11 @@ export default function AdminArtistsPage() {
         setMsg(data.error || "Não foi possível salvar o artista.");
         return;
       }
+      if (!Array.isArray(data.artists)) {
+        await refresh();
+        setMsg("Artista salvo. Atualize a lista se não aparecer.");
+        return;
+      }
       setStore(data);
       if (!editing) {
         setDraft(blank());
@@ -61,8 +66,14 @@ export default function AdminArtistsPage() {
         }
         setMsg("Artista atualizado.");
       }
-    } catch {
-      setMsg("Erro de rede ao salvar. Tente de novo.");
+    } catch (e) {
+      try {
+        await refresh();
+      } catch {
+        /* ignore */
+      }
+      const detail = e instanceof Error ? e.message : "Erro ao salvar";
+      setMsg(detail);
     } finally {
       setBusy(false);
     }

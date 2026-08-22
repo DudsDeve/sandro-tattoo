@@ -1,29 +1,41 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { AboutSection } from "@/components/home/AboutSection";
 import { ArtistsCarousel } from "@/components/home/ArtistsCarousel";
 import { CTASection } from "@/components/home/CTASection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { SpecialtiesSection } from "@/components/home/SpecialtiesSection";
-import { getArtists, getSpecialties } from "@/lib/content";
 import { STUDIO } from "@/lib/data/studio";
+import type { Artist, Specialty } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "TattooParlor",
+  name: STUDIO.name,
+  description: STUDIO.description,
+  telephone: STUDIO.phone,
+  email: STUDIO.email,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: STUDIO.address.city,
+    addressCountry: "IE",
+  },
+};
 
-export default async function HomePage() {
-  const [specialties, artists] = await Promise.all([getSpecialties(), getArtists()]);
+export default function HomePage() {
+  const [specialties, setSpecialties] = useState<Specialty[]>([]);
+  const [artists, setArtists] = useState<Artist[]>([]);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "TattooParlor",
-    name: STUDIO.name,
-    description: STUDIO.description,
-    telephone: STUDIO.phone,
-    email: STUDIO.email,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: STUDIO.address.city,
-      addressCountry: "IE",
-    },
-  };
+  useEffect(() => {
+    void fetch("/api/home")
+      .then((r) => r.json())
+      .then((d: { specialties?: Specialty[]; artists?: Artist[] }) => {
+        setSpecialties(Array.isArray(d.specialties) ? d.specialties : []);
+        setArtists(Array.isArray(d.artists) ? d.artists : []);
+      })
+      .catch(() => undefined);
+  }, []);
 
   return (
     <>

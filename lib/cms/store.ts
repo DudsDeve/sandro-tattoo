@@ -74,13 +74,18 @@ let memoryCache: CmsStore | null = null;
 
 function normalizeStore(store: CmsStore): CmsStore {
   return {
-    ...store,
-    siteContent: store.siteContent || {},
+    version: 1,
+    updatedAt: store.updatedAt || new Date().toISOString(),
+    categories: Array.isArray(store.categories) ? store.categories : [],
+    items: Array.isArray(store.items) ? store.items : [],
+    artists: Array.isArray(store.artists) ? store.artists : [],
+    posts: Array.isArray(store.posts) ? store.posts : [],
+    siteContent: store.siteContent && typeof store.siteContent === "object" ? store.siteContent : {},
   };
 }
 
 function isValidStore(store: CmsStore | null | undefined): store is CmsStore {
-  return Boolean(store && store.version === 1 && Array.isArray(store.categories));
+  return Boolean(store && Array.isArray(store.categories));
 }
 
 /**
