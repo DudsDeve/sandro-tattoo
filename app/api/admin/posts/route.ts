@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { mutateCmsStore, newId, removeMedia } from "@/lib/cms/store";
+import { upsertBlogCategory } from "@/lib/cms/blog-categories";
 import type { CmsPost } from "@/lib/cms/types";
 
 export async function POST(req: Request) {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
       slug,
       title: body.title!.trim(),
       excerpt: body.excerpt?.trim() || body.seoDescription?.trim() || "",
-      category: body.category || "tendencias",
+      category: upsertBlogCategory(s, body.category).slug,
       date: body.date || new Date().toISOString().slice(0, 10),
       readTime: body.readTime || "5 min",
       cover: body.cover || "",
@@ -49,7 +50,11 @@ export async function PUT(req: Request) {
   const store = await mutateCmsStore((s) => {
     const i = s.posts.findIndex((p) => p.id === body.id);
     if (i < 0) throw new Error("NOT_FOUND");
-    s.posts[i] = { ...s.posts[i], ...body };
+    s.posts[i] = {
+      ...s.posts[i],
+      ...body,
+      category: upsertBlogCategory(s, body.category || s.posts[i].category).slug,
+    };
     return s;
   });
 

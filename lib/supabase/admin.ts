@@ -3,11 +3,25 @@ import { isDatabaseConfigured } from "@/lib/supabase/pg";
 
 let adminClient: SupabaseClient | null = null;
 
-export function isSupabaseConfigured() {
-  return Boolean(
-    (process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL) &&
-      process.env.SUPABASE_SERVICE_ROLE_KEY,
+function env(name: string) {
+  const value = process.env[name]?.trim();
+  return value || undefined;
+}
+
+export function supabaseUrl() {
+  return env("NEXT_PUBLIC_SUPABASE_URL") || env("SUPABASE_URL");
+}
+
+export function supabaseServiceKey() {
+  return (
+    env("SUPABASE_SERVICE_ROLE_KEY") ||
+    env("SUPABASE_SERVICE_KEY") ||
+    env("SUPABASE_SECRET_KEY")
   );
+}
+
+export function isSupabaseConfigured() {
+  return Boolean(supabaseUrl() && supabaseServiceKey());
 }
 
 /** Server-only client with service role (full write access to CMS tables). */
@@ -15,10 +29,7 @@ export function getSupabaseAdmin(): SupabaseClient | null {
   if (!isSupabaseConfigured()) return null;
   if (adminClient) return adminClient;
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-  adminClient = createClient(url, key, {
+  adminClient = createClient(supabaseUrl()!, supabaseServiceKey()!, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -28,11 +39,12 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 }
 
 export function getSupabaseStatus() {
+  const hasKey = Boolean(supabaseServiceKey());
   return {
     configured: isSupabaseConfigured() || isDatabaseConfigured(),
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || null,
-    hasServiceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    url: supabaseUrl() || null,
+    hasServiceRole: hasKey,
     hasDatabase: isDatabaseConfigured(),
-    mediaBucket: process.env.SUPABASE_MEDIA_BUCKET || "media",
+    mediaBucket: env("SUPABASE_MEDIA_BUCKET") || "media",
   };
 }

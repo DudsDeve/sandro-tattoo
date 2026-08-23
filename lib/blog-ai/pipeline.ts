@@ -1,7 +1,8 @@
 import { generateText } from "ai";
 import { hasLlmKey, llmModel } from "@/lib/ai/llm";
 import { buildResearchPrompt, WRITER_PROMPT_CLIENT_SEO } from "@/lib/cms/blog-prompts";
-import { isDuplicate, mapCategoryToCms } from "@/lib/cms/dedup";
+import { isDuplicate } from "@/lib/cms/dedup";
+import { upsertBlogCategory } from "@/lib/cms/blog-categories";
 import { buildCoverPrompt } from "@/lib/blog-ai/cover-prompt-builder";
 import { generateCoverImage } from "@/lib/cms/generate-post";
 import { mutateCmsStore, newId } from "@/lib/cms/store";
@@ -190,7 +191,7 @@ export async function publishBlogDraft(input: {
       slug,
       title: post.title,
       excerpt: post.excerpt,
-      category: mapCategoryToCms(post.category),
+      category: upsertBlogCategory(s, post.category).slug,
       date: new Date().toISOString().slice(0, 10),
       readTime: post.readingTime,
       cover,
@@ -218,7 +219,7 @@ export async function runFullBlogPipeline(options?: {
   const post = await runBlogWrite(research);
   const cover = await runBlogCover(post.imageSubject || research.imageSubject, post.slug);
   const saved = await publishBlogDraft({
-    post,
+    post: { ...post, category: post.category || research.suggestedCategory },
     cover,
     sources: research.sources.map((s) => s.url),
     published: options?.published ?? false,

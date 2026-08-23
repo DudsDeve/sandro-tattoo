@@ -67,9 +67,6 @@ export const pt: Messages = {
   footer: {
     contact: "Contato",
     hours: "Horários",
-    newsletter: "Newsletter",
-    emailPlaceholder: "seu@email.com",
-    send: "Enviar",
     copyright: "Todas as peças são autorais.",
   },
   studio: {
@@ -103,6 +100,9 @@ export const pt: Messages = {
     blogExplore: "Explorar artigos",
     blogCatsTitle: "Categorias",
     blogAllCats: "Ver todas as categorias",
+    blogCatEmpty: "Ainda não há posts nesta categoria.",
+    blogBack: "Voltar ao blog",
+    blogPostsCount: "posts",
     blogFeatured: "Artigos em destaque",
     blogFeaturedLead: "Leituras que voltam sempre.",
     blogSeeAll: "Ver todos os artigos",
@@ -262,6 +262,11 @@ export const pt: Messages = {
     tendencias: "Tendências",
     bastidores: "Bastidores",
     estilo: "Estilo",
+    ideias: "Ideias",
+    "primeira-tattoo": "Primeira tattoo",
+    significados: "Significados",
+    cultura: "Cultura",
+    localizacao: "Localização",
   },
   tryout: {
     label: "Provador virtual",

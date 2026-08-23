@@ -44,6 +44,14 @@ export type CmsArtist = {
   works: CmsArtistWork[];
 };
 
+export type CmsBlogCategory = {
+  id: string;
+  slug: string;
+  name: string;
+  namePt: string;
+  order: number;
+};
+
 export type CmsPost = BlogPost & {
   id: string;
   seoTitle?: string;
@@ -91,6 +99,7 @@ export type CmsStore = {
   items: CmsWorkItem[];
   artists: CmsArtist[];
   posts: CmsPost[];
+  blogCategories: CmsBlogCategory[];
   testimonials: CmsTestimonial[];
   clients: CmsClient[];
   /** Visual site editor overrides: fieldId → value */
@@ -105,6 +114,7 @@ export function emptyStore(): CmsStore {
     items: [],
     artists: [],
     posts: [],
+    blogCategories: [],
     testimonials: [],
     clients: [],
     siteContent: {},

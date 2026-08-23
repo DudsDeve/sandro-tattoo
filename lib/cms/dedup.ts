@@ -1,4 +1,5 @@
 import type { CmsPost } from "@/lib/cms/types";
+import { resolveCategorySlug } from "@/lib/cms/blog-categories";
 
 export type ExistingPost = {
   title: string;
@@ -65,21 +66,15 @@ export function isDuplicate(
   return { duplicate: false, reason: "" };
 }
 
-export function leastUsedCmsCategory(posts: CmsPost[]): CmsPost["category"] {
-  const order = ["tendencias", "estilo", "cuidados", "bastidores"] as const;
-  const counts = Object.fromEntries(order.map((c) => [c, 0])) as Record<(typeof order)[number], number>;
+export function leastUsedCmsCategory(posts: CmsPost[]): string {
+  const order = ["tendencias", "estilo", "cuidados", "bastidores", "ideias"];
+  const counts = Object.fromEntries(order.map((c) => [c, 0])) as Record<string, number>;
   for (const p of posts) {
-    if (p.category in counts) counts[p.category as keyof typeof counts]++;
+    if (p.category in counts) counts[p.category]++;
   }
   return order.reduce((a, b) => (counts[a] <= counts[b] ? a : b));
 }
 
-export function mapCategoryToCms(raw?: string): CmsPost["category"] {
-  const v = (raw || "").toLowerCase();
-  if (/aftercare|cuidado|heal|first.?time|pain|cost|question/.test(v)) return "cuidados";
-  if (/technique|style|estilo|fine.?line|blackwork|guide|placement|geometric|minimal|watercolor/.test(v))
-    return "estilo";
-  if (/artist|culture|bastidor|studio|behind|dublin/.test(v)) return "bastidores";
-  if (/meaning|ideas|placement|cover/.test(v)) return "tendencias";
-  return "tendencias";
+export function mapCategoryToCms(raw?: string): string {
+  return resolveCategorySlug(raw);
 }

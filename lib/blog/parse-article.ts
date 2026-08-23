@@ -48,3 +48,6 @@ export function bulletLines(block: string) {
     .map((l) => l.replace(/^[-*•]\s+/, "").replace(/^\d+\.\s+/, "").trim())
     .filter(Boolean);
 }
+
+export const isListBlock = isBulletBlock;
+export const listItems = bulletLines;

@@ -33,7 +33,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  category: "cuidados" | "tendencias" | "bastidores" | "estilo";
+  category: string;
   date: string;
   readTime: string;
   cover: string;

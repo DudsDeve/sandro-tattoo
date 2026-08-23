@@ -93,16 +93,6 @@ const quizEn: Record<
     },
   },
   q7: {
-    prompt: "Which of these pieces gives you chills?",
-    hint: "No spoiler on who made it.",
-    options: {
-      a: "Piece A",
-      b: "Piece B",
-      c: "Piece C",
-      d: "Piece D",
-    },
-  },
-  q8: {
     prompt: "What should the tattoo convey?",
     options: {
       forca: "Strength",
@@ -113,17 +103,38 @@ const quizEn: Record<
   },
 };
 
+const optionLabelEn: Record<string, string> = {
+  Força: "Strength",
+  Delicadeza: "Delicacy",
+  Mistério: "Mystery",
+  Liberdade: "Freedom",
+  "Densidade e detalhe": "Density and detail",
+  "Essência minimalista": "Minimal essence",
+  "Linhas grossas e bold": "Thick, bold lines",
+  "Linhas finas e delicadas": "Fine, delicate lines",
+  "Sem linha — só volume": "No line — just volume",
+  Natureza: "Nature",
+  Geométrico: "Geometric",
+  "Cultural / oriental": "Cultural / oriental",
+  "Dark / surreal": "Dark / surreal",
+  "Pequena — pulso, dedo, atrás da orelha": "Small — wrist, finger, behind the ear",
+  "Média — antebraço, panturrilha, ombro": "Medium — forearm, calf, shoulder",
+  "Grande — sleeve, costas, peito": "Large — sleeve, back, chest",
+  "Preto e cinza": "Black & grey",
+  Colorido: "Colour",
+  Realismo: "Realism",
+};
+
 export function localizeQuizQuestion(locale: Locale, q: QuizQuestion): QuizQuestion {
   if (locale === "pt") return q;
   const hit = quizEn[q.id];
-  if (!hit) return q;
   return {
     ...q,
-    prompt: hit.prompt,
-    hint: hit.hint ?? q.hint,
+    prompt: hit?.prompt ?? q.prompt,
+    hint: hit?.hint ?? q.hint,
     options: q.options.map((opt) => ({
       ...opt,
-      label: hit.options[opt.id] ?? opt.label,
+      label: hit?.options[opt.id] ?? optionLabelEn[opt.label] ?? opt.label,
     })),
   };
 }

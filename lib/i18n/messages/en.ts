@@ -65,9 +65,6 @@ export const en = {
   footer: {
     contact: "Contact",
     hours: "Hours",
-    newsletter: "Newsletter",
-    emailPlaceholder: "you@email.com",
-    send: "Send",
     copyright: "All pieces are original.",
   },
   studio: {
@@ -101,6 +98,9 @@ export const en = {
     blogExplore: "Explore articles",
     blogCatsTitle: "Categories",
     blogAllCats: "See all categories",
+    blogCatEmpty: "No posts in this category yet.",
+    blogBack: "Back to blog",
+    blogPostsCount: "posts",
     blogFeatured: "Featured articles",
     blogFeaturedLead: "Pieces we keep coming back to.",
     blogSeeAll: "See all articles",
@@ -260,6 +260,11 @@ export const en = {
     tendencias: "Trends",
     bastidores: "Behind the scenes",
     estilo: "Style",
+    ideias: "Ideas",
+    "primeira-tattoo": "First tattoo",
+    significados: "Meanings",
+    cultura: "Culture",
+    localizacao: "Placement",
   },
   tryout: {
     label: "Virtual try-on",

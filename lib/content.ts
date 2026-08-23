@@ -91,14 +91,14 @@ export async function getPosts(): Promise<BlogPost[]> {
   const cms = await fromCms();
   if (cms) {
     return cms.posts
-      .filter((p) => p.published !== false)
+      .filter((p) => p.published !== false && (p as { published?: boolean }).published !== false)
       .map((p) => ({
         slug: p.slug,
         title: p.title,
         excerpt: p.excerpt || "",
         category: p.category,
-        date: p.date || "",
-        readTime: p.readTime || "",
+        date: p.date || (p as { date?: string }).date || "",
+        readTime: p.readTime || (p as { readTime?: string }).readTime || "",
         cover: p.cover || "",
         content: typeof p.content === "string" ? p.content : "",
         seoTitle: p.seoTitle,
@@ -112,6 +112,30 @@ export async function getPosts(): Promise<BlogPost[]> {
   } catch {
     return [];
   }
+}
+
+export async function getBlogCategories() {
+  const cms = await fromCms();
+  const posts = await getPosts();
+  const counts = new Map<string, number>();
+  for (const p of posts) counts.set(p.category, (counts.get(p.category) || 0) + 1);
+  const list = (cms?.blogCategories || []).map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    namePt: c.namePt,
+    count: counts.get(c.slug) || 0,
+  }));
+  for (const [slug, count] of counts) {
+    if (!list.some((c) => c.slug === slug)) {
+      list.push({ slug, name: slug, namePt: slug, count });
+    }
+  }
+  return list;
+}
+
+export async function getPostsByCategory(slug: string) {
+  const posts = await getPosts();
+  return posts.filter((p) => p.category === slug);
 }
 
 export async function getPost(slug: string): Promise<BlogPost | undefined> {

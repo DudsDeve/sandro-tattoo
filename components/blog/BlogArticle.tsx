@@ -5,13 +5,15 @@ import { CursorLink } from "@/components/ui/CursorLink";
 import { LocalizedDate } from "@/components/ui/LocalizedDate";
 import { MediaImage } from "@/components/ui/MediaImage";
 import {
-  bulletLines,
   isBulletBlock,
+  isListBlock,
+  listItems,
   parseArticle,
   splitBlocks,
   type ArticleSection,
 } from "@/lib/blog/parse-article";
-import { useT } from "@/lib/i18n/LanguageProvider";
+import { useLanguage, useT } from "@/lib/i18n/LanguageProvider";
+import { labelForCategory, type PublicBlogCategory } from "@/lib/blog/category-label";
 import type { BlogPost } from "@/lib/types";
 import { cn, whatsappLink } from "@/lib/utils";
 
@@ -72,7 +74,7 @@ function BodyBlocks({ body }: { body: string }) {
   return (
     <div className="space-y-5 text-[15px] leading-[1.85] text-ink-secondary sm:text-base">
       {splitBlocks(body).map((block, i) => {
-        if (isListBlock(block)) {
+        if (isListBlock(block) || isBulletBlock(block)) {
           const items = listItems(block);
           if (items.length >= 3) {
             return (
@@ -132,13 +134,17 @@ export function BlogArticle({
   related,
   prev,
   next,
+  categories = [],
 }: {
   post: BlogPost;
   related: BlogPost[];
   prev: BlogPost | null;
   next: BlogPost | null;
+  categories?: PublicBlogCategory[];
 }) {
-  const t = useT();
+  const { t, locale } = useLanguage();
+  const catLabel = (slug: string) =>
+    labelForCategory(slug, locale, t.blogCats as Record<string, string>, categories.find((c) => c.slug === slug));
   const { intro, sections } = useMemo(() => parseArticle(post.content || ""), [post.content]);
   const [active, setActive] = useState(sections[0]?.id ?? "");
   const bookHref = whatsappLink(`I read “${post.title}” on the blog and would like to book a session.`);
@@ -171,7 +177,7 @@ export function BlogArticle({
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-16">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#c4b07a]">
-            {t.pages.blogLabel} · {t.blogCats[post.category]}
+            {t.pages.blogLabel} · {catLabel(post.category)}
           </p>
           <h1 className="font-display mt-4 max-w-3xl text-[clamp(2rem,5vw,3.4rem)] leading-[1.05] tracking-[-0.03em]">
             {post.title}
@@ -293,7 +299,7 @@ export function BlogArticle({
                       </span>
                       <span>
                         <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#c4b07a]">
-                          {t.blogCats[r.category]}
+                          {catLabel(r.category)}
                         </span>
                         <span className="font-display mt-1 block text-[15px] leading-snug">{r.title}</span>
                         <span className="mt-1 block text-[11px] text-ink-muted">{r.readTime}</span>

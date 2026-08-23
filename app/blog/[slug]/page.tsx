@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
-import { getPost, getPosts } from "@/lib/content";
+import { getBlogCategories, getPost, getPosts } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +21,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await getPost(slug);
   if (!post) notFound();
   const all = await getPosts();
+  const categories = await getBlogCategories();
   const index = all.findIndex((p) => p.slug === post.slug);
   const related = all.filter((p) => p.slug !== post.slug).slice(0, 3);
   const prev = index > 0 ? all[index - 1] : null;
@@ -29,7 +30,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <ReadingProgress />
-      <BlogArticle post={post} related={related} prev={prev} next={next} />
+      <BlogArticle post={post} related={related} prev={prev} next={next} categories={categories} />
     </>
   );
 }

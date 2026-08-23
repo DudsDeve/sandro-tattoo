@@ -1,9 +1,16 @@
 "use client";
 
-import { useT } from "@/lib/i18n/LanguageProvider";
-import type { BlogPost } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { labelForCategory, type PublicBlogCategory } from "@/lib/blog/category-label";
 
-export function BlogCategoryLabel({ category }: { category: BlogPost["category"] }) {
-  const t = useT();
-  return <>{t.blogCats[category]}</>;
+export function BlogCategoryLabel({
+  category,
+  categories = [],
+}: {
+  category: string;
+  categories?: PublicBlogCategory[];
+}) {
+  const { t, locale } = useLanguage();
+  const cat = categories.find((c) => c.slug === category);
+  return <>{labelForCategory(category, locale, t.blogCats as Record<string, string>, cat)}</>;
 }

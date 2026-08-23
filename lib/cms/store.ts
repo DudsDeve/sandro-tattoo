@@ -4,6 +4,7 @@ import { put, list } from "@vercel/blob";
 import {
   type CmsStore,
 } from "@/lib/cms/types";
+import { ensureBlogCategories } from "@/lib/cms/blog-categories";
 import { isSupabaseConfigured } from "@/lib/supabase/admin";
 import { isDatabaseConfigured } from "@/lib/supabase/pg";
 import {
@@ -29,6 +30,7 @@ export function seedFromLocal(): CmsStore {
     items: [],
     artists: [],
     posts: [],
+    blogCategories: [],
     testimonials: [],
     clients: [],
     siteContent: {},
@@ -76,17 +78,18 @@ async function writeBlob(store: CmsStore) {
 let memoryCache: CmsStore | null = null;
 
 function normalizeStore(store: CmsStore): CmsStore {
-  return {
+  return ensureBlogCategories({
     version: 1,
     updatedAt: store.updatedAt || new Date().toISOString(),
     categories: Array.isArray(store.categories) ? store.categories : [],
     items: Array.isArray(store.items) ? store.items : [],
     artists: Array.isArray(store.artists) ? store.artists : [],
     posts: Array.isArray(store.posts) ? store.posts : [],
+    blogCategories: Array.isArray(store.blogCategories) ? store.blogCategories : [],
     testimonials: Array.isArray(store.testimonials) ? store.testimonials : [],
     clients: Array.isArray(store.clients) ? store.clients : [],
     siteContent: store.siteContent && typeof store.siteContent === "object" ? store.siteContent : {},
-  };
+  });
 }
 
 function isValidStore(store: CmsStore | null | undefined): store is CmsStore {

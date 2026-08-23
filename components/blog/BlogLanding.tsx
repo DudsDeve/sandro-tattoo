@@ -1,135 +1,35 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { BlogPostCard } from "@/components/blog/BlogPostCard";
+import { CategoryIcon } from "@/components/blog/blog-ui";
 import { CursorLink } from "@/components/ui/CursorLink";
-import { LocalizedDate } from "@/components/ui/LocalizedDate";
 import { MediaImage } from "@/components/ui/MediaImage";
-import { useT } from "@/lib/i18n/LanguageProvider";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { labelForCategory, type PublicBlogCategory } from "@/lib/blog/category-label";
 import type { BlogPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const CATS: BlogPost["category"][] = ["tendencias", "estilo", "cuidados", "bastidores"];
 
 function minutesOf(readTime: string) {
   const n = parseInt(readTime.replace(/\D/g, ""), 10);
   return Number.isFinite(n) && n > 0 ? n : 8;
 }
 
-function IconSpark() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" />
-    </svg>
-  );
-}
-function IconPen() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-    </svg>
-  );
-}
-function IconGem() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M6 3h12l4 7-10 11L2 10Z" />
-    </svg>
-  );
-}
-function IconHeart() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M20 8.5c0 5-8 11-8 11S4 13.5 4 8.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8 2.5Z" />
-    </svg>
-  );
-}
-function IconClock() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v6l4 2" />
-    </svg>
-  );
-}
-function IconCal() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
-      <rect x="3" y="5" width="18" height="16" rx="2" />
-      <path d="M8 3v4M16 3v4M3 10h18" />
-    </svg>
-  );
-}
-
-const CAT_ICON: Record<BlogPost["category"], typeof IconSpark> = {
-  tendencias: IconSpark,
-  estilo: IconGem,
-  cuidados: IconHeart,
-  bastidores: IconPen,
-};
-
-function ArticleCard({ post, list }: { post: BlogPost; list?: boolean }) {
-  const t = useT();
-  const CatIcon = CAT_ICON[post.category];
-  return (
-    <CursorLink href={`/blog/${post.slug}`} className={cn("group block", list && "grid gap-5 sm:grid-cols-[220px_1fr]")}>
-      <div className={cn("relative overflow-hidden bg-[#121410]", list ? "aspect-[16/11] sm:aspect-[4/3]" : "aspect-[16/11]")}>
-        <MediaImage
-          src={post.cover}
-          alt={post.title}
-          fill
-          className="object-cover transition duration-700 group-hover:scale-[1.04]"
-          sizes={list ? "40vw" : "25vw"}
-        />
-        <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-[#c4b07a]">
-          <CatIcon />
-          <span className="hidden sm:inline">{t.blogCats[post.category]}</span>
-        </span>
-      </div>
-      <div className={cn(list ? "flex flex-col justify-center" : "pt-4")}>
-        <p className="flex flex-wrap items-center gap-3 text-[11px] text-ink-muted">
-          <span className="inline-flex items-center gap-1">
-            <IconClock /> {minutesOf(post.readTime)} {t.pages.blogMinRead}
-          </span>
-          {post.date ? (
-            <span className="inline-flex items-center gap-1">
-              <IconCal /> <LocalizedDate iso={post.date} />
-            </span>
-          ) : null}
-        </p>
-        <h3 className="font-display mt-3 text-[1.35rem] leading-tight text-ink transition group-hover:text-[#c4b07a] sm:text-[1.5rem]">
-          {post.title}
-        </h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-secondary">{post.excerpt}</p>
-        <div className="mt-4 flex items-center justify-between">
-          <span className="flex items-center gap-2 text-xs text-ink-muted">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#4c5634] font-mono text-[10px] text-[#e8e4dc]">
-              V
-            </span>
-            {t.pages.blogBy} {t.pages.blogAuthor}
-          </span>
-          <span className="text-ink-muted" aria-hidden>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-              <path d="M7 4h10v16l-5-3-5 3Z" />
-            </svg>
-          </span>
-        </div>
-      </div>
-    </CursorLink>
-  );
-}
-
-export function BlogLanding({ posts }: { posts: BlogPost[] }) {
-  const t = useT();
-  const [cat, setCat] = useState<"all" | BlogPost["category"]>("all");
+export function BlogLanding({
+  posts,
+  heroCover,
+  categories,
+}: {
+  posts: BlogPost[];
+  heroCover?: string;
+  categories: PublicBlogCategory[];
+}) {
+  const { t, locale } = useLanguage();
+  const [cat, setCat] = useState<"all" | string>("all");
   const [time, setTime] = useState<"all" | "short" | "long">("all");
   const [list, setList] = useState(false);
 
-  const counts = useMemo(() => {
-    const map = Object.fromEntries(CATS.map((c) => [c, 0])) as Record<BlogPost["category"], number>;
-    for (const p of posts) map[p.category] = (map[p.category] || 0) + 1;
-    return map;
-  }, [posts]);
-
+  const previewCats = categories.slice(0, 5);
   const featured = posts.slice(0, 4);
   const filtered = useMemo(() => {
     return posts.filter((p) => {
@@ -144,13 +44,28 @@ export function BlogLanding({ posts }: { posts: BlogPost[] }) {
   return (
     <div className="-mx-4 sm:-mx-5 md:-mx-8">
       <section className="relative overflow-hidden border-b border-line px-4 py-10 sm:px-5 sm:py-14 md:px-8 md:py-16">
-        <div
-          className="pointer-events-none absolute inset-y-0 right-0 w-[58%] opacity-[0.22]"
-          style={{
-            backgroundImage:
-              "radial-gradient(ellipse at 70% 45%, rgba(76,86,52,0.55), transparent 62%), linear-gradient(90deg, #0a0a0a 0%, transparent 28%)",
-          }}
-        />
+        {heroCover ? (
+          <div className="pointer-events-none absolute inset-0">
+            <MediaImage
+              src={heroCover}
+              alt=""
+              fill
+              priority
+              className="object-cover object-center opacity-[0.28] grayscale-[0.35]"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-black/55" />
+            <div className="absolute inset-0 bg-black/25" />
+          </div>
+        ) : (
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 w-[58%] opacity-[0.22]"
+            style={{
+              backgroundImage:
+                "radial-gradient(ellipse at 70% 45%, rgba(76,86,52,0.55), transparent 62%), linear-gradient(90deg, #0a0a0a 0%, transparent 28%)",
+            }}
+          />
+        )}
         <svg
           className="pointer-events-none absolute -right-16 top-0 hidden h-full w-[52%] text-[#4c5634] opacity-40 md:block"
           viewBox="0 0 400 520"
@@ -187,38 +102,26 @@ export function BlogLanding({ posts }: { posts: BlogPost[] }) {
           <aside>
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#c4b07a]">{t.pages.blogCatsTitle}</p>
             <ul className="mt-5 space-y-1">
-              {CATS.map((c) => {
-                const Icon = CAT_ICON[c];
-                return (
-                  <li key={c}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCat(c);
-                        document.getElementById("recentes")?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      className="flex w-full items-center gap-3 py-2.5 text-left text-sm text-ink-secondary transition hover:text-ink"
-                    >
-                      <span className="text-[#c4b07a]">
-                        <Icon />
-                      </span>
-                      <span className="flex-1">{t.blogCats[c]}</span>
-                      <span className="font-mono text-xs text-ink-muted">{counts[c]}</span>
-                    </button>
-                  </li>
-                );
-              })}
+              {previewCats.map((c) => (
+                <li key={c.slug}>
+                  <CursorLink
+                    href={`/blog/categories/${c.slug}`}
+                    className="flex w-full items-center gap-3 py-2.5 text-left text-sm text-ink-secondary transition hover:text-ink"
+                  >
+                    <span className="text-[#c4b07a]">
+                      <CategoryIcon slug={c.slug} />
+                    </span>
+                    <span className="flex-1">
+                      {labelForCategory(c.slug, locale, t.blogCats as Record<string, string>, c)}
+                    </span>
+                    <span className="font-mono text-xs text-ink-muted">{c.count}</span>
+                  </CursorLink>
+                </li>
+              ))}
             </ul>
-            <button
-              type="button"
-              onClick={() => {
-                setCat("all");
-                document.getElementById("recentes")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="mt-4 inline-flex items-center gap-1 text-sm text-[#c4b07a]"
-            >
+            <CursorLink href="/blog/categories" className="mt-4 inline-flex items-center gap-1 text-sm text-[#c4b07a]">
               {t.pages.blogAllCats} →
-            </button>
+            </CursorLink>
           </aside>
         </div>
       </section>
@@ -238,7 +141,7 @@ export function BlogLanding({ posts }: { posts: BlogPost[] }) {
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {featured.map((p) => (
-              <ArticleCard key={p.slug} post={p} />
+              <BlogPostCard key={p.slug} post={p} categories={categories} />
             ))}
           </div>
         )}
@@ -260,13 +163,13 @@ export function BlogLanding({ posts }: { posts: BlogPost[] }) {
             </button>
             <select
               value={cat === "all" ? "" : cat}
-              onChange={(e) => setCat((e.target.value || "all") as typeof cat)}
+              onChange={(e) => setCat(e.target.value || "all")}
               className="rounded-full border border-line bg-transparent px-3 py-1.5 text-sm text-ink-secondary"
             >
               <option value="">{t.pages.blogFilterCat}</option>
-              {CATS.map((c) => (
-                <option key={c} value={c}>
-                  {t.blogCats[c]}
+              {categories.map((c) => (
+                <option key={c.slug} value={c.slug}>
+                  {labelForCategory(c.slug, locale, t.blogCats as Record<string, string>, c)}
                 </option>
               ))}
             </select>
@@ -304,7 +207,7 @@ export function BlogLanding({ posts }: { posts: BlogPost[] }) {
         ) : (
           <div className={cn("gap-8", list ? "flex flex-col" : "grid sm:grid-cols-2 lg:grid-cols-4")}>
             {filtered.map((p) => (
-              <ArticleCard key={`r-${p.slug}`} post={p} list={list} />
+              <BlogPostCard key={`r-${p.slug}`} post={p} list={list} categories={categories} />
             ))}
           </div>
         )}

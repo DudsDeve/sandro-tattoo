@@ -70,24 +70,12 @@ export function Footer() {
             <p className="text-sm text-ink-secondary">{STUDIO.email}</p>
           </div>
           <div data-foot>
-            <p className="label-mono mb-4">{t.footer.newsletter}</p>
-            <form className="flex border-b border-line pb-2" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                required
-                placeholder={t.footer.emailPlaceholder}
-                className="w-full border-0 bg-transparent px-0 focus:outline-none"
-              />
-              <button type="submit" className="label-mono text-moss">
-                {t.footer.send}
-              </button>
-            </form>
-            <p className="mt-6 label-mono">Instagram</p>
+            <p className="label-mono mb-4">Instagram</p>
             <a
               href={`https://instagram.com/${STUDIO.instagram}`}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 inline-block text-sm text-moss"
+              className="inline-block text-sm text-moss"
             >
               @{STUDIO.instagram}
             </a>
@@ -103,23 +91,25 @@ export function Footer() {
           <p className="mt-4 text-sm text-ink-secondary">
             Created by: Eduardo Palhares — Website and app developer
           </p>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+          <div className="mx-auto mt-4 inline-flex max-w-full flex-wrap items-center justify-center gap-x-8 gap-y-2 bg-[#4c5634] px-6 py-3 text-sm text-white">
             <a
               href="https://wa.me/5531994375739"
               target="_blank"
               rel="noreferrer"
-              className="text-moss hover:text-ink"
+              className="hover:opacity-80"
             >
-              +55 31 994375739
+              Whatsapp +55 31 994375739
             </a>
-            <a href="mailto:duds.deve@gmail.com" className="text-moss hover:text-ink">
-              duds.deve@gmail.com
+            <a href="mailto:duds.deve@gmail.com" className="hover:opacity-80">
+              E-mail duds.deve@gmail.com
             </a>
+          </div>
+          <div className="mt-3">
             <a
               href="https://www.linkedin.com/in/eduardo-palhares-74054325b/"
               target="_blank"
               rel="noreferrer"
-              className="text-moss hover:text-ink"
+              className="text-sm text-moss hover:text-ink"
             >
               LinkedIn
             </a>
