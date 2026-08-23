@@ -5,7 +5,8 @@ import { persistGeneratedImage, persistMediaBytes } from "@/lib/media/storage";
 /**
  * Next unused SEO pillars (client keywords), never the same keyword twice in one batch.
  */
-export async function pickFreshTattooTopics(count = 2, _seed?: string): Promise<string[]> {
+export async function pickFreshTattooTopics(count = 2, seed?: string): Promise<string[]> {
+  void seed;
   const topics: string[] = [];
   const excludeIds: string[] = [];
   for (let i = 0; i < count; i++) {
@@ -17,8 +18,8 @@ export async function pickFreshTattooTopics(count = 2, _seed?: string): Promise<
 }
 
 /** @deprecated use pickFreshTattooTopics */
-export function pickDailyTopics(_seed: string, count = 2): string[] {
-  return Array.from({ length: count }, (_, i) => `tattoo ideas ${new Date().getFullYear()} ${i + 1}`);
+export function pickDailyTopics(_count = 2): string[] {
+  return Array.from({ length: _count }, (_, i) => `tattoo ideas ${new Date().getFullYear()} ${i + 1}`);
 }
 
 /** @deprecated Prefer buildCoverPrompt(subject). Kept for shared image helper. */
