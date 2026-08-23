@@ -43,6 +43,7 @@ export function TryonGate({ children }: { children: (auth: TryonAuthInfo) => Rea
           usesThisMonth: data.usesThisMonth ?? 0,
           isUnlimited: Boolean(data.isUnlimited),
           resetsAt: data.resetsAt ?? "",
+          refresh: checkSession,
         };
         setAuthInfo(info);
         setState(data.canUse ? "authorized" : "limit_reached");
@@ -87,6 +88,7 @@ export function TryonGate({ children }: { children: (auth: TryonAuthInfo) => Rea
         usesThisMonth: data.usesThisMonth ?? 0,
         isUnlimited: isUnlimitedEmail(submittedEmail),
         resetsAt: "",
+        refresh: checkSession,
       });
       setState(remaining > 0 || isUnlimitedEmail(submittedEmail) ? "authorized" : "limit_reached");
       return;

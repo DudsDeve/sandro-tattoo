@@ -1,4 +1,4 @@
-import type { DrawPath } from "@/lib/tryout/types";
+import { isMarkShape, type DrawPath } from "@/lib/tryout/types";
 
 function paintPaths(ctx: CanvasRenderingContext2D, paths: DrawPath[], fill: string, erase: string) {
   paths.forEach((path) => {
@@ -15,6 +15,7 @@ function paintPaths(ctx: CanvasRenderingContext2D, paths: DrawPath[], fill: stri
       return;
     }
     ctx.fillStyle = fill;
+    if (!isMarkShape(path)) return;
     if (path.type === "rectangle") {
       ctx.fillRect(path.x, path.y, path.width, path.height);
       return;
@@ -71,5 +72,7 @@ export function generateOpenAIMask(drawingPaths: DrawPath[], imageWidth: number,
 }
 
 export function hasMarkedArea(paths: DrawPath[]) {
-  return paths.some((p) => (p.type === "brush" || p.type === "eraser" ? p.points.length >= 4 : Math.abs(p.width) > 8 && Math.abs(p.height) > 8));
+  return paths.some((p) =>
+    p.type === "brush" || p.type === "eraser" ? p.points.length >= 4 : isMarkShape(p) && Math.abs(p.width) > 8 && Math.abs(p.height) > 8,
+  );
 }

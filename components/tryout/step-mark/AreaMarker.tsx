@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Ellipse, Image as KImage, Layer, Rect, Stage } from "react-konva";
-import type { DrawPath, Tool } from "@/lib/tryout/types";
+import { isMarkShape, type DrawPath, type Tool } from "@/lib/tryout/types";
 
 function shapeFrom(tool: Tool, start: { x: number; y: number }, p: { x: number; y: number }): DrawPath {
   const kind = tool === "ellipse" ? "ellipse" : "rectangle";
@@ -16,7 +16,7 @@ function shapeFrom(tool: Tool, start: { x: number; y: number }, p: { x: number; 
 }
 
 function MarkShape({ path }: { path: DrawPath }) {
-  if (path.type === "brush" || path.type === "eraser") return null;
+  if (!isMarkShape(path)) return null;
   if (path.type === "rectangle") {
     return (
       <Rect
@@ -126,12 +126,7 @@ export function AreaMarker({
       const current = draftRef.current;
       draftRef.current = null;
       setDraft(null);
-      const ok =
-        current &&
-        current.type !== "brush" &&
-        current.type !== "eraser" &&
-        Math.abs(current.width) > 8 &&
-        Math.abs(current.height) > 8;
+      const ok = current && isMarkShape(current) && Math.abs(current.width) > 8 && Math.abs(current.height) > 8;
       onSet(ok ? current : null);
     };
     window.addEventListener("mousemove", move);
@@ -196,6 +191,7 @@ export function scalePaths(paths: DrawPath[], fromW: number, fromH: number, toW:
         points: path.points.map((v, i) => (i % 2 === 0 ? v * sx : v * sy)),
       };
     }
+    if (!isMarkShape(path)) return path;
     return { ...path, x: path.x * sx, y: path.y * sy, width: path.width * sx, height: path.height * sy };
   });
 }

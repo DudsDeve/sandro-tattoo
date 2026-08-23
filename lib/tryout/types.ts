@@ -4,6 +4,12 @@ export type DrawPath =
   | { type: "brush" | "eraser"; points: number[]; brushSize: number }
   | { type: "rectangle" | "ellipse"; x: number; y: number; width: number; height: number };
 
+export function isMarkShape(
+  path: DrawPath,
+): path is Extract<DrawPath, { type: "rectangle" | "ellipse" }> {
+  return path.type === "rectangle" || path.type === "ellipse";
+}
+
 export type TryoutStep = "upload" | "mark" | "design" | "preview";
 
 export type TryoutDesign = {

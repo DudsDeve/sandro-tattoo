@@ -49,7 +49,7 @@ function TryoutPageInner() {
   const [design, setDesign] = useState<TryoutDesign | null>(null);
   const [custom, setCustom] = useState(false);
   const [preview, setPreview] = useState("");
-  const [modelUsed, setModelUsed] = useState(DEFAULT_TRYOUT_MODEL);
+  const [modelUsed, setModelUsed] = useState<string>(DEFAULT_TRYOUT_MODEL);
   const [authModal, setAuthModal] = useState<"email" | "sent" | "limit" | null>(null);
   const [gateEmail, setGateEmail] = useState("");
   const [devConfirmUrl, setDevConfirmUrl] = useState("");
