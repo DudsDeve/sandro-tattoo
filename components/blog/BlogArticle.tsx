@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { CursorLink } from "@/components/ui/CursorLink";
 import { LocalizedDate } from "@/components/ui/LocalizedDate";
 import { MediaImage } from "@/components/ui/MediaImage";
@@ -70,9 +70,54 @@ function ShareRow({ title }: { title: string }) {
   );
 }
 
+function formatInline(text: string) {
+  const nodes: ReactNode[] = [];
+  const pattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g;
+  let last = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+  while ((match = pattern.exec(text))) {
+    if (match.index > last) nodes.push(text.slice(last, match.index));
+    if (match[1] && match[2]) {
+      nodes.push(
+        <a
+          key={`l${key++}`}
+          href={match[2]}
+          target="_blank"
+          rel="noreferrer"
+          className="break-all text-[#c4b07a] underline-offset-2 hover:underline"
+        >
+          {match[1]}
+        </a>,
+      );
+    } else if (match[3]) {
+      let host = match[3];
+      try {
+        host = new URL(match[3]).hostname.replace(/^www\./, "");
+      } catch {
+        host = match[3].slice(0, 32);
+      }
+      nodes.push(
+        <a
+          key={`u${key++}`}
+          href={match[3]}
+          target="_blank"
+          rel="noreferrer"
+          className="break-all text-[#c4b07a] underline-offset-2 hover:underline"
+        >
+          {host}
+        </a>,
+      );
+    }
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
+
 function BodyBlocks({ body }: { body: string }) {
   return (
-    <div className="space-y-5 text-[15px] leading-[1.85] text-ink-secondary sm:text-base">
+    <div className="space-y-5 overflow-hidden text-[15px] leading-[1.85] break-words text-ink-secondary sm:text-base">
       {splitBlocks(body).map((block, i) => {
         if (isListBlock(block) || isBulletBlock(block)) {
           const items = listItems(block);
@@ -83,7 +128,7 @@ function BodyBlocks({ body }: { body: string }) {
                   {items.map((item) => (
                     <li key={item} className="flex gap-3 text-sm text-ink-secondary">
                       <span className="mt-0.5 text-[#c4b07a]">✦</span>
-                      <span>{item}</span>
+                      <span className="min-w-0 break-words">{formatInline(item)}</span>
                     </li>
                   ))}
                 </ul>
@@ -93,7 +138,9 @@ function BodyBlocks({ body }: { body: string }) {
           return (
             <ul key={i} className="list-disc space-y-2 pl-5">
               {items.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item} className="break-words">
+                  {formatInline(item)}
+                </li>
               ))}
             </ul>
           );
@@ -105,7 +152,11 @@ function BodyBlocks({ body }: { body: string }) {
             </h3>
           );
         }
-        return <p key={i}>{block}</p>;
+        return (
+          <p key={i} className="overflow-hidden break-words">
+            {formatInline(block)}
+          </p>
+        );
       })}
     </div>
   );
@@ -117,7 +168,9 @@ function ArticleSectionView({ section, index, asCard }: { section: ArticleSectio
       <article id={section.id} className="scroll-mt-28 rounded-xl border border-line bg-[#0c0c0a] p-5">
         <GoldIcon i={index} />
         <h3 className="font-display mt-4 text-xl text-ink">{section.title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-ink-secondary">{section.body.replace(/\n/g, " ")}</p>
+        <p className="mt-2 overflow-hidden text-sm leading-relaxed break-words text-ink-secondary">
+          {formatInline(section.body.replace(/\n/g, " "))}
+        </p>
       </article>
     );
   }
@@ -175,7 +228,7 @@ export function BlogArticle({
   return (
     <article className="page-shell">
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-16">
-        <div>
+        <div className="min-w-0 overflow-x-hidden">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#c4b07a]">
             {t.pages.blogLabel} · {catLabel(post.category)}
           </p>
