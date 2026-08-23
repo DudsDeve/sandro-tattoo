@@ -20,7 +20,14 @@ export async function POST(req: Request) {
     const firstRaw = str(body.firstTattoo, 8);
     const firstTattoo: "sim" | "nao" = firstRaw === "sim" ? "sim" : "nao";
 
-    if (name.length < 2 || !email.includes("@") || phone.length < 8 || idea.length < 8 || !artistSlug || !slot) {
+    if (
+      name.length < 2 ||
+      !email.includes("@") ||
+      phone.length < 8 ||
+      !artistSlug ||
+      !slot ||
+      (idea.length < 8 && !str(body.tryoutPreview, 2000))
+    ) {
       return NextResponse.json({ error: "Dados incompletos" }, { status: 400 });
     }
 

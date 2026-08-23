@@ -3,16 +3,24 @@ import type { GenerateInput } from "@/lib/tryout/types";
 export type { GenerateInput };
 
 export function buildTattooPrompt(input: GenerateInput): string {
-  return `You are editing a photo of real skin. A tattoo stencil/artwork is ALREADY placed exactly inside the masked (transparent) region.
+  return `PHOTO EDITING TASK — not image generation.
 
-CRITICAL:
-- Reproduce THAT artwork only — it is the client's design (may be a dragon, lettering, flash, etc.).
-- Do NOT invent a different tattoo. No substitute flowers, mandalas, or generic flash unless that is what the artwork shows.
-- Do NOT move the tattoo to the other limb or the other side of the body. Keep it in the masked pixels only.
-- Outside the mask, the photo must stay identical.
+You are given:
+1) the CLIENT'S original photograph (same person, same limb, same camera crop)
+2) a mask (transparent / white hole = the selected tattoo area)
+3) the tattoo artwork
+4) a coverage guide: the artwork already scaled to COVER the whole selected area
 
-Make the already-placed artwork look like a REAL HEALED tattoo (3–4 weeks old): ink in the skin, matte, following pores, lighting and muscle curvature.
-Style label: ${input.designStyle}. File/name: ${input.designName}.
+HARD RULES:
+- The output MUST be the same photograph. Same skin, hairs, lighting, background, framing, body side.
+- The tattoo MUST FILL the entire selected/masked area. Scale it up until it covers that region edge to edge.
+- Do NOT leave a pale empty rectangle, sticker border, or unused skin inside the selection.
+- Do NOT shrink the design to sit in the middle of the box. COVER the mask (crop artwork if needed).
+- Blend ink into surrounding skin at the mask edges so there is no visible box.
+- Outside the mask, the photo stays identical.
+- Do NOT generate a different arm or a stock tattoo photo.
+
+Style: ${input.designStyle}. Name: ${input.designName}.
 ${input.bodyPart ? `Body part: ${input.bodyPart}.` : ""}`;
 }
 

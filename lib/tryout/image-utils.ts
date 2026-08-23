@@ -48,7 +48,7 @@ export function makeSquare(dataUrl: string, size: number): Promise<string> {
       const ctx = c.getContext("2d")!;
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, size, size);
-      const { x, y, w, h } = coverRect(img.width, img.height, size);
+      const { x, y, w, h } = fitRect(img.width, img.height, size);
       ctx.drawImage(img, x, y, w, h);
       resolve(c.toDataURL("image/png"));
     };
@@ -68,7 +68,7 @@ export function makeSquareMask(dataUrl: string, size: number): Promise<string> {
       const ctx = c.getContext("2d")!;
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, size, size);
-      const { x, y, w, h } = coverRect(img.width, img.height, size);
+      const { x, y, w, h } = fitRect(img.width, img.height, size);
       ctx.clearRect(x, y, w, h);
       ctx.drawImage(img, x, y, w, h);
       resolve(c.toDataURL("image/png"));
@@ -78,8 +78,8 @@ export function makeSquareMask(dataUrl: string, size: number): Promise<string> {
   });
 }
 
-function coverRect(iw: number, ih: number, size: number) {
-  const scale = Math.max(size / iw, size / ih);
+function fitRect(iw: number, ih: number, size: number) {
+  const scale = Math.min(size / iw, size / ih);
   const w = iw * scale;
   const h = ih * scale;
   return { x: (size - w) / 2, y: (size - h) / 2, w, h };
@@ -131,10 +131,7 @@ export async function placeDesignInMask(bodyUrl: string, maskUrl: string, design
 
   const boxW = maxX - minX + 1;
   const boxH = maxY - minY + 1;
-  const pad = Math.round(Math.min(boxW, boxH) * 0.06);
-  const innerW = Math.max(8, boxW - pad * 2);
-  const innerH = Math.max(8, boxH - pad * 2);
-  const scale = Math.min(innerW / design.width, innerH / design.height);
+  const scale = Math.max(boxW / design.width, boxH / design.height);
   const dw = design.width * scale;
   const dh = design.height * scale;
   const dx = minX + (boxW - dw) / 2;

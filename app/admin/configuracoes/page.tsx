@@ -6,7 +6,6 @@ import { DEFAULT_TRYOUT_MODEL } from "@/lib/tryout/models";
 type ModelOption = { id: string; name: string; description: string };
 
 export default function AdminSettingsPage() {
-  const [openai, setOpenai] = useState(false);
   const [gemini, setGemini] = useState(false);
   const [tail, setTail] = useState("");
   const [key, setKey] = useState("");
@@ -18,13 +17,11 @@ export default function AdminSettingsPage() {
   async function load() {
     const res = await fetch("/api/admin/ai-keys");
     const data = (await res.json()) as {
-      openai?: boolean;
       gemini?: boolean;
       geminiTail?: string;
       tryoutModelId?: string;
       models?: ModelOption[];
     };
-    setOpenai(Boolean(data.openai));
     setGemini(Boolean(data.gemini));
     setTail(data.geminiTail || "");
     setModels(data.models ?? []);
@@ -97,10 +94,6 @@ export default function AdminSettingsPage() {
         <button type="button" disabled={busy} onClick={() => void saveModel()} className="bg-[#4c5634] px-4 py-3 text-sm text-white disabled:opacity-40">
           Salvar modelo
         </button>
-      </div>
-      <div className="space-y-3 border border-[#1a1a1a] bg-[#111] p-5">
-        <p className="font-mono text-[0.65rem] tracking-[0.18em] text-[#8b9a6b]">OPENAI</p>
-        <p className="text-sm">{openai ? "OPENAI_API_KEY configurada no ambiente." : "Ausente no .env / Vercel."}</p>
       </div>
       <div className="space-y-3 border border-[#1a1a1a] bg-[#111] p-5">
         <p className="font-mono text-[0.65rem] tracking-[0.18em] text-[#8b9a6b]">GEMINI</p>

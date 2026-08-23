@@ -146,6 +146,8 @@ export const pt: Messages = {
     pickArtist: "Com quem você quer tatuar?",
     helpQuiz: "Não sei — me ajuda no quiz",
     describeIdea: "Descreva a ideia",
+    attachedTryout: "Virtual try-on anexado",
+    attachedQuiz: "Find your style anexado",
     ideaPlaceholder: "Motivo, referências, o que não quer...",
     ideaHintQuiz: "quiz de estilo",
     ideaHintSim: "simulador",

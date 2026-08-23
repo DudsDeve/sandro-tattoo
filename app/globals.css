@@ -90,43 +90,24 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
-html {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-bg-accent) var(--color-bg-primary);
-}
-
+html,
+body,
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-bg-accent) var(--color-bg-primary);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-bg-accent);
-  border: 2px solid var(--color-bg-primary);
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-accent);
-}
-
-::-webkit-scrollbar-corner {
-  background: var(--color-bg-primary);
-}
-
-::-webkit-scrollbar-button {
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-button,
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
   display: none;
   width: 0;
   height: 0;
+  background: transparent;
 }
 
 .font-display {

@@ -144,6 +144,8 @@ export const en = {
     pickArtist: "Who do you want to tattoo with?",
     helpQuiz: "Not sure — help me with the quiz",
     describeIdea: "Describe the idea",
+    attachedTryout: "Virtual try-on attached",
+    attachedQuiz: "Find your style attached",
     ideaPlaceholder: "Motive, references, what you don’t want…",
     ideaHintQuiz: "style quiz",
     ideaHintSim: "simulator",

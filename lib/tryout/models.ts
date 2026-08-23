@@ -13,41 +13,6 @@ export const AI_MODELS = [
     endpoint: "gemini",
     badge: null,
   },
-  {
-    id: "imagen-4.0-generate-001",
-    name: "Imagen 4",
-    description: "Google Imagen — gera a partir da descrição (menos fiel à máscara)",
-    endpoint: "imagen",
-    badge: null,
-  },
-  {
-    id: "gpt-image-1",
-    name: "GPT Image 1",
-    description: "Best quality and instruction following — edits the marked area",
-    endpoint: "images",
-    badge: null,
-  },
-  {
-    id: "dall-e-3",
-    name: "DALL·E 3",
-    description: "Strong prompt adherence, HD output, creative interpretation",
-    endpoint: "images",
-    badge: null,
-  },
-  {
-    id: "dall-e-2",
-    name: "DALL·E 2 (Inpainting)",
-    description: "Native mask support — edits only the masked region",
-    endpoint: "edits",
-    badge: "Inpainting",
-  },
-  {
-    id: "gpt-4o",
-    name: "GPT-4o Vision + Image",
-    description: "Sees body, mask and design, then generates with that context",
-    endpoint: "chat",
-    badge: null,
-  },
 ] as const;
 
 export type ModelId = (typeof AI_MODELS)[number]["id"];

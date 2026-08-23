@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { getTryoutFromSession } from "@/lib/tryout/session-storage";
-import { buildQuizIdeaText, getQuizFromSession } from "@/lib/quiz/session-storage";
+import { buildQuizIdeaText, getQuizFromSession, type QuizSession } from "@/lib/quiz/session-storage";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ImagePlus, Link2 } from "lucide-react";
@@ -43,7 +43,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
     () =>
       z.object({
         artist: z.string().min(1, t.booking.errArtist),
-        idea: z.string().min(12, t.booking.errIdea),
+        idea: z.string(),
         ideaLink: z
           .string()
           .trim()
@@ -80,6 +80,10 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
     mode: "onChange",
   });
   const [tryoutPreview, setTryoutPreview] = useState("");
+  const [quizSession, setQuizSession] = useState<QuizSession | null>(null);
+  const [tryoutMeta, setTryoutMeta] = useState<{ designName: string; designStyle: string; modelUsed: string } | null>(
+    null,
+  );
   const [uploadingRefs, setUploadingRefs] = useState(false);
   const [showLinkField, setShowLinkField] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -126,9 +130,8 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
     const fromArtist = params.get("artista");
     if (fromArtist) form.setValue("artist", fromArtist);
 
-    let idea = "";
     if (quiz?.answers?.length) {
-      idea = buildQuizIdeaText(quiz, locale);
+      setQuizSession(quiz);
       if (quiz.artistSlug) form.setValue("artist", fromArtist || quiz.artistSlug);
       setStep(1);
     }
@@ -136,14 +139,13 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
       if (tryout.designArtistSlug && !fromArtist && !quiz?.artistSlug) {
         form.setValue("artist", tryout.designArtistSlug);
       }
-      const tryoutLine =
-        locale === "en"
-          ? `Virtual Try-On: ${tryout.designName} (${tryout.designStyle}). AI model: ${tryout.modelUsed}. Preview attached.`
-          : `Virtual Try-On: ${tryout.designName} (${tryout.designStyle}). Modelo IA: ${tryout.modelUsed}. Preview anexada na sessão.`;
-      idea = idea ? `${idea}\n\n${tryoutLine}` : tryoutLine;
       setTryoutPreview(tryout.previewImageUrl);
+      setTryoutMeta({
+        designName: tryout.designName,
+        designStyle: tryout.designStyle,
+        modelUsed: tryout.modelUsed,
+      });
     }
-    if (idea) form.setValue("idea", idea, { shouldValidate: true });
   }, [form, locale, params]);
 
   const values = form.watch();
@@ -161,14 +163,34 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
       [],
     ];
     const ok = await form.trigger(fields[step]);
+    if (step === 1) {
+      const notes = form.getValues("idea").trim();
+      if (notes.length < 12 && !tryoutPreview && !quizSession) {
+        form.setError("idea", { type: "min", message: t.booking.errIdea });
+        return;
+      }
+    }
     if (ok) setStep((s) => Math.min(s + 1, steps.length - 1));
   };
 
   const submit = form.handleSubmit(async (data) => {
+    const notes = data.idea.trim();
+    const parts = [notes];
+    if (quizSession?.answers?.length) {
+      parts.push(buildQuizIdeaText(quizSession, locale));
+    }
+    if (tryoutMeta) {
+      parts.push(
+        locale === "en"
+          ? `Virtual Try-On: ${tryoutMeta.designName} (${tryoutMeta.designStyle}). AI model: ${tryoutMeta.modelUsed}. Preview attached.`
+          : `Virtual Try-On: ${tryoutMeta.designName} (${tryoutMeta.designStyle}). Modelo IA: ${tryoutMeta.modelUsed}. Preview anexada.`,
+      );
+    }
+    const idea = parts.filter(Boolean).join("\n\n") || notes || "Referência anexada.";
     await fetch("/api/booking", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...data, tryoutPreview }),
+      body: JSON.stringify({ ...data, idea, tryoutPreview }),
     });
     setDone(true);
   });
@@ -293,14 +315,23 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
               {tryoutPreview && (
                 <div className="mt-4 flex items-center gap-4 border border-line-accent bg-bg-secondary p-3">
                   <img src={tryoutPreview} alt="" className="h-20 w-16 object-cover" />
-                  <p className="label-mono text-[10px] text-moss">Virtual try-on anexado</p>
+                  <div>
+                    <p className="label-mono text-[10px] text-moss">{t.booking.attachedTryout}</p>
+                    {tryoutMeta ? (
+                      <p className="mt-1 text-sm text-ink-secondary">
+                        {tryoutMeta.designName} · {tryoutMeta.designStyle}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
               )}
-              {(values.idea || "").startsWith("★ FIND YOUR STYLE") && (
-                <p className="label-mono mt-4 text-[#8b9a6b]">Find your style</p>
-              )}
+              {quizSession?.answers?.length ? (
+                <div className="mt-4 border border-line bg-bg-secondary p-3">
+                  <p className="label-mono text-[10px] text-moss">{t.booking.attachedQuiz}</p>
+                </div>
+              ) : null}
               <textarea
-                rows={12}
+                rows={8}
                 className="mt-6 w-full p-4 font-medium"
                 placeholder={t.booking.ideaPlaceholder}
                 {...form.register("idea")}

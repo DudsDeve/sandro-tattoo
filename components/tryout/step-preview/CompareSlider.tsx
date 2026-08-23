@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useT } from "@/lib/i18n/LanguageProvider";
 
 export function CompareSlider({ before, after }: { before: string; after: string }) {
   const t = useT();
-  const [pct, setPct] = useState(52);
+  const [pct, setPct] = useState(98);
+
+  useEffect(() => {
+    setPct(98);
+  }, [after, before]);
+
   return (
     <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] border border-line bg-black">
       <img src={before} alt={t.tryout.before} className="absolute inset-0 h-full w-full object-cover object-center" />

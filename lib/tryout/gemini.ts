@@ -24,9 +24,14 @@ function inlineMime(part: GeminiPart) {
 
 export async function generateWithGeminiImage(model: string, input: GenerateInput): Promise<string> {
   const key = await geminiKey();
+  const original = input.originalBodyImage || input.bodyImage;
+  const coverage = input.bodyImage;
   const prompt = `${buildTattooPrompt(input)}
 
-You receive: (1) body photo with the design already placed in the marked region, (2) the original tattoo artwork. Output a photorealistic edited photo. Keep the tattoo on the same side of the body.`;
+Image A = original client photo (keep this identity).
+Image B = mask of the selected area — fill ALL of it.
+Image C = tattoo artwork.
+Image D = coverage guide (artwork already covering the selection). Match that coverage, then blend into skin.`;
 
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
@@ -45,13 +50,25 @@ You receive: (1) body photo with the design already placed in the marked region,
               {
                 inlineData: {
                   mimeType: "image/png",
-                  data: stripDataUrl(input.bodyImage),
+                  data: stripDataUrl(original),
+                },
+              },
+              {
+                inlineData: {
+                  mimeType: "image/png",
+                  data: stripDataUrl(input.maskImage),
                 },
               },
               {
                 inlineData: {
                   mimeType: "image/png",
                   data: stripDataUrl(input.designImage),
+                },
+              },
+              {
+                inlineData: {
+                  mimeType: "image/png",
+                  data: stripDataUrl(coverage),
                 },
               },
             ],

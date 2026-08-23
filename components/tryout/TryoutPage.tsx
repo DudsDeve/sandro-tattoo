@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { StepIndicator } from "@/components/tryout/StepIndicator";
 import { TryoutDisclaimer, TryoutHeader } from "@/components/tryout/shared/TryoutHeader";
 import { BodyUpload } from "@/components/tryout/step-upload/BodyUpload";
-import { BrushSettings, DrawingTools } from "@/components/tryout/step-mark/DrawingTools";
+import { DrawingTools } from "@/components/tryout/step-mark/DrawingTools";
 import { DesignPicker } from "@/components/tryout/step-design/DesignPicker";
 import { GeneratingAnimation } from "@/components/tryout/step-generate/ModelSelector";
 import { CompareSlider } from "@/components/tryout/step-preview/CompareSlider";
@@ -57,6 +57,17 @@ function TryoutPageInner() {
   const [usage, setUsage] = useState<{ remaining: number; used: number; unlimited: boolean } | null>(null);
   const pendingGenerate = useRef(false);
   const pendingDesign = useRef<TryoutDesign | null>(null);
+
+  useEffect(() => {
+    const reset = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    reset();
+    const frame = requestAnimationFrame(reset);
+    return () => cancelAnimationFrame(frame);
+  }, [flow.step]);
 
   async function refreshUsage() {
     const res = await fetch("/api/tryon-auth/check", { cache: "no-store" });
@@ -161,15 +172,16 @@ function TryoutPageInner() {
     const bodySq = await makeSquare(bodyFit, 1024);
     const maskSq = await makeSquareMask(mask, 1024);
     const designData = await urlToDataUrl(chosen.imageUrl);
-    const placed = await placeDesignInMask(bodySq, maskSq, designData);
+    const covered = await placeDesignInMask(bodySq, maskSq, designData);
     try {
       const result = await gen.generate({
-        bodyImage: placed,
+        bodyImage: covered,
+        originalBodyImage: bodySq,
         maskImage: maskSq,
         designImage: designData,
         designName: chosen.name,
         designStyle: chosen.style,
-        bodyPart: "only the masked region — do not switch legs or sides",
+        bodyPart: "fill the entire masked selection edge to edge",
       });
       setPreview(result.imageUrl);
       if (result.model) setModelUsed(result.model);
@@ -214,22 +226,30 @@ function TryoutPageInner() {
             onSize={setStage}
           />
           <aside className="border border-line bg-bg-secondary p-5">
-            <p className="label-mono mb-4">{t.tryout.materials}</p>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <p className="label-mono">{t.tryout.materials}</p>
+              <button
+                type="button"
+                onClick={draw.clear}
+                aria-label={t.tryout.clear}
+                className="-mr-1 flex h-8 w-8 items-center justify-center text-error"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                  <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
+                </svg>
+              </button>
+            </div>
             <p className="mb-4 text-sm text-ink-secondary">{t.tryout.markHint}</p>
             <DrawingTools tool={draw.tool} onTool={draw.setTool} />
-            <BrushSettings
-              onUndo={draw.undo}
-              onRedo={draw.redo}
-              onClear={draw.clear}
-              canUndo={draw.canUndo}
-              canRedo={draw.canRedo}
-            />
             <div className="mt-8 flex flex-col gap-3">
               <button
                 type="button"
                 disabled={!hasMarkedArea(draw.paths)}
                 className="min-h-11 bg-bg-accent px-5 py-3 text-sm disabled:opacity-40"
-                onClick={() => flow.go("design")}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                  flow.go("design");
+                }}
               >
                 {t.tryout.continue}
               </button>
@@ -244,12 +264,6 @@ function TryoutPageInner() {
       {flow.step === "design" && (
         <div>
           <DesignPicker
-            selectedId={design?.id}
-            onSelect={(d) => {
-              pendingDesign.current = d;
-              setDesign(d);
-              setCustom(false);
-            }}
             onCustom={(url, name) => {
               const customDesign: TryoutDesign = {
                 id: "custom",

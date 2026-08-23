@@ -51,11 +51,11 @@ export function BlogLanding({
               alt=""
               fill
               priority
-              className="object-cover object-center opacity-[0.28] grayscale-[0.35]"
+              className="object-cover object-center opacity-[0.52] grayscale-[0.15]"
               sizes="100vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-black/55" />
-            <div className="absolute inset-0 bg-black/25" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/25" />
+            <div className="absolute inset-0 bg-black/10" />
           </div>
         ) : (
           <div
@@ -66,23 +66,6 @@ export function BlogLanding({
             }}
           />
         )}
-        <svg
-          className="pointer-events-none absolute -right-16 top-0 hidden h-full w-[52%] text-[#4c5634] opacity-40 md:block"
-          viewBox="0 0 400 520"
-          fill="none"
-          aria-hidden
-        >
-          <ellipse cx="250" cy="270" rx="90" ry="210" stroke="currentColor" strokeWidth="1.2" />
-          <path d="M220 80c40 40 70 90 55 160-20 90-10 150 40 210" stroke="currentColor" strokeWidth="1" />
-          <path
-            d="M260 120c30 20 40 70 10 110M240 200c45 15 50 80 8 130M200 240c50 40 80 70 70 140"
-            stroke="currentColor"
-            strokeWidth="0.8"
-          />
-          <circle cx="248" cy="168" r="14" stroke="currentColor" />
-          <path d="M248 154c10 8 12 22 0 28-12-6-10-20 0-28Z" stroke="currentColor" />
-        </svg>
-
         <div className="relative mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[1fr_280px] lg:gap-16">
           <div className="max-w-xl">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#c4b07a]">{t.pages.blogLabel}</p>

@@ -1,10 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateWithGptImage1 } from "@/app/api/tryout/models/gpt-image-1";
-import { generateWithDalle3 } from "@/app/api/tryout/models/dall-e-3";
-import { generateWithDalle2 } from "@/app/api/tryout/models/dall-e-2";
-import { generateWithGpt4o } from "@/app/api/tryout/models/gpt-4o";
 import { generateWithGemini20, generateWithGemini25 } from "@/app/api/tryout/models/gemini";
-import { generateWithImagen } from "@/lib/tryout/gemini";
 import { getTryoutModelId } from "@/lib/tryout/keys";
 import type { GenerateInput } from "@/lib/tryout/types";
 import { findUserByEmail, logUsage, usageSnapshot } from "@/lib/tryon-auth/db";
@@ -42,31 +37,14 @@ export async function POST(req: Request) {
       designName: body.designName || "custom",
       designStyle: body.designStyle || "custom",
       bodyPart: body.bodyPart,
+      originalBodyImage: body.originalBodyImage || body.bodyImage,
     };
 
     let imageUrl: string;
-    switch (model) {
-      case "gemini-2.5-flash-image":
-        imageUrl = await generateWithGemini25(input);
-        break;
-      case "gemini-2.0-flash-preview-image-generation":
-        imageUrl = await generateWithGemini20(input);
-        break;
-      case "imagen-4.0-generate-001":
-        imageUrl = await generateWithImagen(input);
-        break;
-      case "gpt-image-1":
-        imageUrl = await generateWithGptImage1(input);
-        break;
-      case "dall-e-3":
-        imageUrl = await generateWithDalle3(input);
-        break;
-      case "dall-e-2":
-        imageUrl = await generateWithDalle2(input);
-        break;
-      case "gpt-4o":
-        imageUrl = await generateWithGpt4o(input);
-        break;
+    if (model === "gemini-2.0-flash-preview-image-generation") {
+      imageUrl = await generateWithGemini20(input);
+    } else {
+      imageUrl = await generateWithGemini25(input);
     }
 
     await logUsage(user.id, model, input.designName);

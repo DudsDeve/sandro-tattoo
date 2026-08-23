@@ -28,6 +28,8 @@ export type GenerateInput = {
   designName: string;
   designStyle: string;
   bodyPart?: string;
+  /** Unedited client photo — models must keep this identity. */
+  originalBodyImage?: string;
 };
 
 export type TryoutSession = {
