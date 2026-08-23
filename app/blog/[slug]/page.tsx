@@ -13,15 +13,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "Article" };
-  const cover = post.cover?.startsWith("http") ? post.cover : undefined;
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      ...(cover ? { images: [{ url: cover }] } : {}),
-    },
   };
 }
 

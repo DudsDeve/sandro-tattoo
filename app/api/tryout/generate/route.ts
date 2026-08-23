@@ -9,6 +9,7 @@ import { getTryoutModelId } from "@/lib/tryout/keys";
 import type { GenerateInput } from "@/lib/tryout/types";
 import { findUserByEmail, logUsage, usageSnapshot } from "@/lib/tryon-auth/db";
 import { persistGeneratedImage } from "@/lib/media/storage";
+import { readSessionEmail } from "@/lib/tryon-auth/session";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
