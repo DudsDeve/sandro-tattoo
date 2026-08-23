@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { AssistantWidget } from "@/components/ai/AssistantWidget";
 import { GlobeZoom } from "@/components/home/GlobeZoom";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -11,6 +11,11 @@ import { Preloader } from "@/components/ui/Preloader";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
+
+const AssistantWidget = dynamic(
+  () => import("@/components/ai/AssistantWidget").then((m) => m.AssistantWidget),
+  { ssr: false },
+);
 
 function LocateSection() {
   const ref = useRef<HTMLDivElement>(null);
