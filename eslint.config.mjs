@@ -13,6 +13,13 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
   {
     ignores: ["node_modules/**", ".next/**", "sanity/**"],
+    rules: {
+      "@next/next/no-img-element": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", ignoreRestSiblings: true },
+      ],
+    },
   },
 ];
 
