@@ -7,24 +7,37 @@ import { ReadingProgress } from "@/components/ui/ReadingProgress";
 import { CursorLink } from "@/components/ui/CursorLink";
 import { MediaImage } from "@/components/ui/MediaImage";
 
-export async function generateStaticParams() {
-  const posts = await getPosts();
-  return posts.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "Article" };
+  const cover = post.cover?.startsWith("http") ? post.cover : undefined;
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: post.cover ? [{ url: post.cover }] : undefined,
+      ...(cover ? { images: [{ url: cover }] } : {}),
     },
   };
+}
+
+function renderBody(content: string) {
+  return content.split(/\n{2,}/).map((block, i) => {
+    const text = block.trim();
+    if (!text) return null;
+    if (text.startsWith("## ")) {
+      return (
+        <h2 key={i} className="font-display pt-4 text-3xl text-ink">
+          {text.replace(/^##\s+/, "")}
+        </h2>
+      );
+    }
+    return <p key={i}>{text}</p>;
+  });
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -43,20 +56,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <div className="relative my-12 aspect-[16/10] max-w-5xl overflow-hidden sm:aspect-[16/8]">
         <MediaImage src={post.cover} alt="" fill className="object-cover" priority />
       </div>
-      <div className="max-w-2xl space-y-6 text-base text-ink-secondary sm:text-lg">
-        {post.content.split("\n\n").map((block, i) => {
-          const text = block.trim();
-          if (!text) return null;
-          if (text.startsWith("## ")) {
-            return (
-              <h2 key={i} className="font-display pt-4 text-3xl text-ink">
-                {text.replace(/^##\s+/, "")}
-              </h2>
-            );
-          }
-          return <p key={i}>{text}</p>;
-        })}
-      </div>
+      <div className="max-w-2xl space-y-6 text-base text-ink-secondary sm:text-lg">{renderBody(post.content || "")}</div>
       {related.length > 0 && (
         <aside className="mt-24 max-w-2xl border-t border-line pt-10">
           <ContinuesLabel />

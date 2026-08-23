@@ -26,11 +26,13 @@ export function formatBRL(value: number) {
 }
 
 export function formatDate(iso: string, locale = "en-IE") {
+  const d = iso ? new Date(iso) : new Date();
+  if (Number.isNaN(d.getTime())) return iso || "";
   return new Intl.DateTimeFormat(locale, {
     day: "2-digit",
     month: "long",
     year: "numeric",
-  }).format(new Date(iso));
+  }).format(d);
 }
 
 export const WHATSAPP_INTRO =

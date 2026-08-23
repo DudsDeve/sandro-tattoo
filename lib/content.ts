@@ -95,12 +95,12 @@ export async function getPosts(): Promise<BlogPost[]> {
       .map((p) => ({
         slug: p.slug,
         title: p.title,
-        excerpt: p.excerpt,
+        excerpt: p.excerpt || "",
         category: p.category,
-        date: p.date,
-        readTime: p.readTime,
-        cover: p.cover,
-        content: p.content,
+        date: p.date || "",
+        readTime: p.readTime || "",
+        cover: p.cover || "",
+        content: typeof p.content === "string" ? p.content : "",
         seoTitle: p.seoTitle,
         seoDescription: p.seoDescription,
       }));
