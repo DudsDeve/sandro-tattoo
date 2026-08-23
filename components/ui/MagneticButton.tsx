@@ -10,6 +10,7 @@ interface MagneticButtonProps {
   as?: "button" | "span";
   type?: "button" | "submit";
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 export function MagneticButton({
@@ -19,6 +20,7 @@ export function MagneticButton({
   as = "button",
   type = "button",
   onClick,
+  disabled,
 }: MagneticButtonProps) {
   const styles = {
     solid: "bg-bg-accent text-ink hover:bg-bg-accent-light border border-line-accent",
@@ -29,6 +31,7 @@ export function MagneticButton({
   const classes = cn(
     "relative inline-flex min-h-11 items-center justify-center gap-2 px-5 py-3 text-sm font-medium tracking-wide transition-colors duration-300 sm:px-7 sm:py-3.5",
     styles[variant],
+    disabled && "opacity-40",
     className,
   );
 
@@ -41,7 +44,7 @@ export function MagneticButton({
   }
 
   return (
-    <button type={type} className={classes} onClick={onClick}>
+    <button type={type} className={classes} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );

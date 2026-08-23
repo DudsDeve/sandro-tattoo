@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { ChatLeadGate } from "@/components/ai/ChatLeadGate";
 import { AssistantChat } from "@/components/ai/AssistantChat";
 import { ConceptChat } from "@/components/ai/ConceptChat";
 import { useT } from "@/lib/i18n/LanguageProvider";
@@ -68,7 +69,9 @@ export function AssistantWidget() {
               </button>
             </div>
             <div className="min-h-0 flex-1">
-              {tab === "faq" ? <AssistantChat /> : <ConceptChat compact />}
+              <ChatLeadGate>
+                {tab === "faq" ? <AssistantChat /> : <ConceptChat compact />}
+              </ChatLeadGate>
             </div>
           </motion.aside>
         )}

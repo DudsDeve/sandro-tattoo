@@ -22,6 +22,7 @@ export function Footer() {
     { href: "/virtual-tryout", label: t.nav.tryOn },
     { href: "/processo", label: t.nav.process },
     { href: "/blog", label: t.nav.blog },
+    { href: "/wishlist", label: t.nav.wishlist },
   ];
   useGSAP(
     () => {
@@ -88,31 +89,37 @@ export function Footer() {
           <p className="text-xs text-ink-muted">
             © {new Date().getFullYear()} {STUDIO.name}. {t.footer.copyright}
           </p>
-          <p className="mt-4 text-sm text-ink-secondary">
-            Created by: Eduardo Palhares — Website and app developer
-          </p>
-          <div className="mx-auto mt-4 inline-flex max-w-full flex-wrap items-center justify-center gap-x-8 gap-y-2 bg-[#4c5634] px-6 py-3 text-sm text-white">
-            <a
-              href="https://wa.me/5531994375739"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:opacity-80"
-            >
-              Whatsapp +55 31 994375739
-            </a>
-            <a href="mailto:duds.deve@gmail.com" className="hover:opacity-80">
-              E-mail duds.deve@gmail.com
-            </a>
-          </div>
-          <div className="mt-3">
-            <a
-              href="https://www.linkedin.com/in/eduardo-palhares-74054325b/"
-              target="_blank"
-              rel="noreferrer"
-              className="text-sm text-moss hover:text-ink"
-            >
-              LinkedIn
-            </a>
+          <div className="mx-auto mt-4 max-w-3xl bg-[#4c5634] px-6 py-5 text-white">
+            <p className="text-sm">Created by: Eduardo Palhares — Website and app developer</p>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm">
+              <a
+                href="https://wa.me/5531994375739"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:opacity-80"
+              >
+                Whatsapp +55 31 994375739
+              </a>
+              <a href="mailto:duds.deve@gmail.com" className="hover:opacity-80">
+                E-mail duds.deve@gmail.com
+              </a>
+              <a
+                href={`https://instagram.com/${STUDIO.instagram}`}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:opacity-80"
+              >
+                Instagram @{STUDIO.instagram}
+              </a>
+              <a
+                href="https://www.linkedin.com/in/eduardo-palhares-74054325b/"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:opacity-80"
+              >
+                LinkedIn
+              </a>
+            </div>
           </div>
         </div>
       </div>

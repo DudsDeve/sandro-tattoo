@@ -12,6 +12,7 @@ export type MediaFolder =
   | "site"
   | "booking"
   | "tryout"
+  | "wishlist"
   | "uploads";
 
 const FOLDERS = new Set<string>([
@@ -23,6 +24,7 @@ const FOLDERS = new Set<string>([
   "site",
   "booking",
   "tryout",
+  "wishlist",
   "uploads",
 ]);
 

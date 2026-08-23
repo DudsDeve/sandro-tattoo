@@ -6,6 +6,7 @@ import {
 import { getCmsStore } from "@/lib/cms/store";
 import { sanityClient } from "@/lib/sanity/client";
 import { artistsQuery, postsQuery, productsQuery, tattoosQuery } from "@/lib/sanity/queries";
+import type { CmsWishlistItem } from "@/lib/cms/types";
 import type { Artist, BlogPost, Product, Specialty, TattooWork, Testimonial } from "@/lib/types";
 
 async function fromCms() {
@@ -66,6 +67,14 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         youtubeUrl: t.youtubeUrl,
       };
     });
+}
+
+export async function getWishlistItems(): Promise<CmsWishlistItem[]> {
+  const cms = await fromCms();
+  if (!cms?.wishlistItems?.length) return [];
+  return [...cms.wishlistItems]
+    .filter((item) => item.visible !== false && item.image)
+    .sort((a, b) => a.order - b.order);
 }
 
 export async function getArtist(slug: string): Promise<Artist | undefined> {

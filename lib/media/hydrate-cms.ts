@@ -40,6 +40,9 @@ export async function hydrateCmsMedia(store: CmsStore): Promise<CmsStore> {
     if (t.image) t.image = await hydrate(t.image, "testimonials");
     if (t.video) t.video = await hydrate(t.video, "testimonials");
   }
+  for (const w of next.wishlistItems || []) {
+    if (w.image) w.image = await hydrate(w.image, "wishlist");
+  }
   for (const c of next.clients) {
     c.ideaImages = await Promise.all(c.ideaImages.map((url) => hydrate(url, "booking")));
   }

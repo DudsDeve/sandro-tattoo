@@ -13,6 +13,7 @@ import { ImagePlus, Link2 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CtaLink } from "@/components/ui/CursorLink";
 import { MediaImage } from "@/components/ui/MediaImage";
+import { PinterestSearch } from "@/components/pinterest/PinterestSearch";
 import { cn } from "@/lib/utils";
 import { useT, useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Artist } from "@/lib/types";
@@ -339,6 +340,26 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
               {form.formState.errors.idea && (
                 <p className="mt-2 text-sm text-error">{form.formState.errors.idea.message}</p>
               )}
+
+              <PinterestSearch
+                selected={values.ideaImages || []}
+                onToggle={(pin) => {
+                  const current = form.getValues("ideaImages") || [];
+                  if (current.includes(pin.imageUrl)) {
+                    form.setValue(
+                      "ideaImages",
+                      current.filter((u) => u !== pin.imageUrl),
+                      { shouldDirty: true },
+                    );
+                    return;
+                  }
+                  if (current.length >= 5) return;
+                  form.setValue("ideaImages", [...current, pin.imageUrl], { shouldDirty: true });
+                  if (!form.getValues("ideaLink")) {
+                    form.setValue("ideaLink", pin.url, { shouldDirty: true, shouldValidate: true });
+                  }
+                }}
+              />
 
               {(values.ideaImages || []).length > 0 && (
                 <div className="mt-4 grid grid-cols-5 gap-2">

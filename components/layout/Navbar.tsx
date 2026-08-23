@@ -22,6 +22,7 @@ export function Navbar() {
     { href: "/virtual-tryout", label: t.nav.tryOn },
     { href: "/processo", label: t.nav.process },
     { href: "/blog", label: t.nav.blog },
+    { href: "/wishlist", label: t.nav.wishlist },
   ];
 
   useEffect(() => {

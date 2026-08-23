@@ -74,6 +74,16 @@ export type CmsTestimonial = {
   order: number;
 };
 
+export type CmsWishlistItem = {
+  id: string;
+  title: string;
+  image: string;
+  discountPercent: number;
+  note?: string;
+  visible: boolean;
+  order: number;
+};
+
 export type CmsClient = {
   id: string;
   createdAt: string;
@@ -90,6 +100,8 @@ export type CmsClient = {
   size: string;
   firstTattoo: "sim" | "nao";
   slot: string;
+  /** booking | chat */
+  source?: string;
 };
 
 export type CmsStore = {
@@ -102,6 +114,7 @@ export type CmsStore = {
   blogCategories: CmsBlogCategory[];
   testimonials: CmsTestimonial[];
   clients: CmsClient[];
+  wishlistItems: CmsWishlistItem[];
   /** Visual site editor overrides: fieldId → value */
   siteContent?: Record<string, string>;
 };
@@ -117,6 +130,7 @@ export function emptyStore(): CmsStore {
     blogCategories: [],
     testimonials: [],
     clients: [],
+    wishlistItems: [],
     siteContent: {},
   };
 }

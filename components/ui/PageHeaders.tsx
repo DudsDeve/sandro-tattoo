@@ -45,6 +45,23 @@ export function ShopPageHeader() {
   );
 }
 
+export function WishlistPageHeader() {
+  const t = useT();
+  return (
+    <>
+      <EditableText id="page.wishlist.label" as="p" className="label-mono">
+        {t.pages.wishlistLabel}
+      </EditableText>
+      <EditableText id="page.wishlist.title" as="h1" className="display-section mt-4">
+        {t.pages.wishlistTitle}
+      </EditableText>
+      <EditableText id="page.wishlist.lead" as="p" className="mt-4 mb-12 max-w-xl text-ink-secondary">
+        {t.pages.wishlistLead}
+      </EditableText>
+    </>
+  );
+}
+
 export function BlogPageHeader() {
   const t = useT();
   return (

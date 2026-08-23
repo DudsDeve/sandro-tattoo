@@ -33,6 +33,7 @@ export function seedFromLocal(): CmsStore {
     blogCategories: [],
     testimonials: [],
     clients: [],
+    wishlistItems: [],
     siteContent: {},
   };
 }
@@ -88,6 +89,7 @@ function normalizeStore(store: CmsStore): CmsStore {
     blogCategories: Array.isArray(store.blogCategories) ? store.blogCategories : [],
     testimonials: Array.isArray(store.testimonials) ? store.testimonials : [],
     clients: Array.isArray(store.clients) ? store.clients : [],
+    wishlistItems: Array.isArray(store.wishlistItems) ? store.wishlistItems : [],
     siteContent: store.siteContent && typeof store.siteContent === "object" ? store.siteContent : {},
   });
 }

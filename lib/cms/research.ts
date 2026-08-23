@@ -1,3 +1,5 @@
+import { isPinterestConfigured, searchPinterestPins } from "@/lib/pinterest/search";
+
 export type ResearchHit = {
   title: string;
   url: string;
@@ -33,6 +35,21 @@ const LOCALE_US: LocaleOpts = {
 export function isEventTopic(topicHint?: string) {
   const t = (topicHint || "").toLowerCase();
   return /festival|convention|expo|ink.?fest|tattoo.?week/i.test(t);
+}
+
+async function fromPinterest(query: string): Promise<ResearchHit[]> {
+  if (!isPinterestConfigured()) return [];
+  try {
+    const pins = await searchPinterestPins(`${query} tattoo`, 6);
+    return pins.map((p) => ({
+      title: p.title,
+      url: p.url,
+      snippet: p.description,
+      source: "Pinterest",
+    }));
+  } catch {
+    return [];
+  }
 }
 
 async function fromGoogleNews(query: string, locale: LocaleOpts): Promise<ResearchHit[]> {
@@ -131,8 +148,16 @@ async function searchQueries(
 ): Promise<ResearchHit[]> {
   const all: ResearchHit[] = [];
   for (const q of queries) {
-    const [serper, news] = await Promise.all([fromSerper(q, locale), fromGoogleNews(q, locale)]);
-    all.push(...serper.map((h) => ({ ...h, region })), ...news.map((h) => ({ ...h, region })));
+    const [serper, news, pins] = await Promise.all([
+      fromSerper(q, locale),
+      fromGoogleNews(q, locale),
+      fromPinterest(q),
+    ]);
+    all.push(
+      ...serper.map((h) => ({ ...h, region })),
+      ...news.map((h) => ({ ...h, region })),
+      ...pins.map((h) => ({ ...h, region })),
+    );
   }
   return dedupeHits(all, 12);
 }

@@ -40,7 +40,7 @@ export default function AdminClientsPage() {
       <div>
         <h1 className="font-serif text-4xl">Clientes</h1>
         <p className="mt-2 text-[#a09b95]">
-          Cada envio de Book a session aparece aqui, com contato, artista, ideia e referências.
+          Cada envio de Book a session e cada lead do chat de atendimento aparece aqui.
         </p>
       </div>
 
@@ -93,7 +93,7 @@ function ClientCard({
           </p>
         </div>
         <div className="text-right text-sm text-[#a09b95]">
-          <p>{c.artistName}</p>
+          <p>{c.artistName || (c.source === "chat" ? "Chat de atendimento" : "—")}</p>
           <p className="mt-1 font-mono text-xs">{when}</p>
         </div>
       </button>

@@ -68,6 +68,16 @@ export const SITE_PAGES: SitePageDef[] = [
     ],
   },
   {
+    path: "/wishlist",
+    label: "Wishlist",
+    description: "Cabeçalho da wishlist",
+    fields: [
+      { id: "page.wishlist.label", label: "Label", type: "text", defaultValue: "Wishlist", section: "Header" },
+      { id: "page.wishlist.title", label: "Title", type: "text", defaultValue: "Projects with a studio discount.", section: "Header" },
+      { id: "page.wishlist.lead", label: "Lead", type: "textarea", defaultValue: "Pieces we want to tattoo — claim the discount when you book.", section: "Header" },
+    ],
+  },
+  {
     path: "/blog",
     label: "Blog",
     description: "Cabeçalho do blog",
