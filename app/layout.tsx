@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Caveat, DM_Sans, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import { SiteProviders } from "@/components/layout/SiteProviders";
 import { RootShell } from "@/components/layout/RootShell";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { STUDIO } from "@/lib/data/studio";
 import "./globals.css";
 
@@ -48,9 +49,12 @@ export const metadata: Metadata = {
   },
   description:
     "Authorial tattoo studio in Dublin. Realism, blackwork, fine line and one-of-a-kind pieces — from concept to healing.",
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
   icons: {
-    icon: [{ url: "/brand/versus-mark.png", type: "image/png" }],
-    apple: "/brand/versus-mark.png",
+    icon: [{ url: "/brand/versus-logo.png", type: "image/png" }],
+    apple: "/brand/versus-logo.png",
   },
   openGraph: {
     title: STUDIO.name,
@@ -70,6 +74,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${jetbrains.variable} ${caveat.variable}`}>
       <body className="bg-bg-primary text-ink antialiased">
+        <GoogleAnalytics />
         <SiteProviders>
           <RootShell>{children}</RootShell>
         </SiteProviders>

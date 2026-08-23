@@ -66,8 +66,8 @@ export default function ProcessoPage() {
       : processSteps;
 
   return (
-    <div className="pt-16">
-      <div className="px-4 pb-10 pt-16 sm:px-5 md:px-16">
+    <div>
+      <div className="page-shell pb-6">
         <p className="label-mono">{t.nav.process}</p>
         <EditableText id="page.process.title" as="h1" className="display-section mt-4">
           {t.pages.processTitle}

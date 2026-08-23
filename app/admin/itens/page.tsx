@@ -1,18 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MediaField } from "@/components/admin/MediaField";
 import { useAdminStore } from "@/components/admin/AdminStoreProvider";
 import type { CmsWorkItem } from "@/lib/cms/types";
 
-const blank = (categoryId = ""): Partial<CmsWorkItem> => ({
+const blank = (categoryId = "", artistId = ""): Partial<CmsWorkItem> => ({
   title: "",
   categoryId,
-  artistId: "",
+  artistId,
   image: "",
   video: "",
-  bodyPart: "",
-  hours: 4,
 });
 
 export default function AdminItemsPage() {
@@ -21,6 +19,12 @@ export default function AdminItemsPage() {
   const [editing, setEditing] = useState<CmsWorkItem | null>(null);
   const [filter, setFilter] = useState("all");
   const [busy, setBusy] = useState(false);
+  const firstArtistId = store?.artists[0]?.id ?? "";
+
+  useEffect(() => {
+    if (!firstArtistId) return;
+    setDraft((d) => (d.artistId ? d : { ...d, artistId: firstArtistId }));
+  }, [firstArtistId]);
 
   const items = useMemo(() => {
     if (!store) return [];
@@ -40,7 +44,7 @@ export default function AdminItemsPage() {
     setBusy(false);
     if (res.ok) {
       setStore(await res.json());
-      setDraft(blank(draft.categoryId));
+      setDraft(blank(draft.categoryId, firstArtistId));
       setEditing(null);
     }
   }
@@ -80,38 +84,23 @@ export default function AdminItemsPage() {
           </select>
           <select
             className="w-full border border-[#1a1a1a] bg-black px-3 py-3"
-            value={draft.artistId || ""}
+            value={draft.artistId || firstArtistId}
             onChange={(e) => setDraft((d) => ({ ...d, artistId: e.target.value }))}
+            disabled={store.artists.length === 0}
           >
-            <option value="">Artista (opcional)</option>
             {store.artists.map((a) => (
               <option key={a.id} value={a.id}>
                 {a.name}
               </option>
             ))}
           </select>
-          <div className="grid grid-cols-2 gap-3">
-            <input
-              className="border border-[#1a1a1a] bg-black px-3 py-3"
-              placeholder="Parte do corpo"
-              value={draft.bodyPart || ""}
-              onChange={(e) => setDraft((d) => ({ ...d, bodyPart: e.target.value }))}
-            />
-            <input
-              type="number"
-              className="border border-[#1a1a1a] bg-black px-3 py-3"
-              placeholder="Horas"
-              value={draft.hours ?? 4}
-              onChange={(e) => setDraft((d) => ({ ...d, hours: Number(e.target.value) }))}
-            />
-          </div>
-          <button type="button" disabled={busy} onClick={() => void save()} className="bg-[#4c5634] px-4 py-3 text-sm text-white">
+          <button type="button" disabled={busy || !draft.artistId} onClick={() => void save()} className="bg-[#4c5634] px-4 py-3 text-sm text-white disabled:opacity-40">
             {editing ? "Atualizar" : "Adicionar trabalho"}
           </button>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <MediaField label="Foto" value={draft.image} accept="image/*" onChange={(url) => setDraft((d) => ({ ...d, image: url }))} />
-          <MediaField label="Vídeo" value={draft.video} accept="video/*" onChange={(url) => setDraft((d) => ({ ...d, video: url }))} />
+          <MediaField label="Foto" value={draft.image} accept="image/*" folder="gallery" onChange={(url) => setDraft((d) => ({ ...d, image: url }))} />
+          <MediaField label="Vídeo" value={draft.video} accept="video/*" folder="gallery" onChange={(url) => setDraft((d) => ({ ...d, video: url }))} />
         </div>
       </div>
 

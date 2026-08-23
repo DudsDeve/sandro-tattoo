@@ -33,12 +33,14 @@ export function formatDate(iso: string, locale = "en-IE") {
   }).format(new Date(iso));
 }
 
-export function whatsappLink(message?: string) {
+export const WHATSAPP_INTRO =
+  "Hi, I was looking at your website and would like to ask a few questions.";
+
+export function whatsappLink(extra?: string) {
   const phone = process.env.NEXT_PUBLIC_WHATSAPP ?? "5511988880000";
-  const text = encodeURIComponent(
-    message ?? "Hi! I came from the VERSUS website and want to talk about a session.",
-  );
-  return `https://wa.me/${phone}?text=${text}`;
+  const extraText = extra?.trim();
+  const body = extraText ? `${WHATSAPP_INTRO}\n\n${extraText}` : WHATSAPP_INTRO;
+  return `https://wa.me/${phone}?text=${encodeURIComponent(body)}`;
 }
 
 export function getMessageText(parts: Array<{ type: string; text?: string }>) {
@@ -62,6 +64,22 @@ export function normalizeInstagramHandle(raw: string) {
     /* fall through */
   }
   return value.replace(/^@/, "").replace(/\/+$/, "").split(/[/?#]/)[0] || "";
+}
+
+export function youtubeVideoId(url: string): string | null {
+  const value = url.trim();
+  if (!value) return null;
+  const match = value.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
+  );
+  if (match?.[1]) return match[1];
+  if (/^[A-Za-z0-9_-]{11}$/.test(value)) return value;
+  return null;
+}
+
+export function youtubeEmbedUrl(url: string): string | null {
+  const id = youtubeVideoId(url);
+  return id ? `https://www.youtube.com/embed/${id}` : null;
 }
 
 export function instagramUrl(handleOrUrl: string) {

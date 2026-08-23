@@ -1,7 +1,6 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { useMagneticEffect } from "@/hooks/useMagneticEffect";
 import { cn } from "@/lib/utils";
 
 interface MagneticButtonProps {
@@ -21,8 +20,6 @@ export function MagneticButton({
   type = "button",
   onClick,
 }: MagneticButtonProps) {
-  const ref = useMagneticEffect(0.28);
-
   const styles = {
     solid: "bg-bg-accent text-ink hover:bg-bg-accent-light border border-line-accent",
     outline: "border border-line-accent text-ink magnetic-fill bg-transparent",
@@ -37,14 +34,14 @@ export function MagneticButton({
 
   if (as === "span") {
     return (
-      <span ref={ref} className={classes} onClick={onClick}>
+      <span className={classes} onClick={onClick}>
         {children}
       </span>
     );
   }
 
   return (
-    <button ref={ref} type={type} className={classes} onClick={onClick}>
+    <button type={type} className={classes} onClick={onClick}>
       {children}
     </button>
   );

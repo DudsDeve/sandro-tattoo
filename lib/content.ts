@@ -6,7 +6,7 @@ import {
 import { getCmsStore } from "@/lib/cms/store";
 import { sanityClient } from "@/lib/sanity/client";
 import { artistsQuery, postsQuery, productsQuery, tattoosQuery } from "@/lib/sanity/queries";
-import type { Artist, BlogPost, Product, Specialty, TattooWork } from "@/lib/types";
+import type { Artist, BlogPost, Product, Specialty, TattooWork, Testimonial } from "@/lib/types";
 
 async function fromCms() {
   try {
@@ -21,7 +21,15 @@ export async function getSpecialties(): Promise<Specialty[]> {
   if (!cms?.categories?.length) return [];
   return [...cms.categories]
     .sort((a, b) => a.order - b.order)
-    .map(categoryToSpecialty);
+    .map((c) =>
+      categoryToSpecialty({
+        ...c,
+        image:
+          c.image ||
+          cms.items.find((item) => item.categoryId === c.id && item.image)?.image ||
+          "",
+      }),
+    );
 }
 
 export async function getArtists(): Promise<Artist[]> {
@@ -36,6 +44,28 @@ export async function getArtists(): Promise<Artist[]> {
   } catch {
     return [];
   }
+}
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  const cms = await fromCms();
+  if (!cms?.testimonials?.length) return [];
+  return [...cms.testimonials]
+    .sort((a, b) => a.order - b.order)
+    .map((t) => {
+      const artist = cms.artists.find((a) => a.id === t.artistId);
+      return {
+        id: t.id,
+        title: t.title,
+        description: t.description,
+        name: t.name,
+        artistId: t.artistId,
+        artistSlug: artist?.slug,
+        artistName: artist?.name,
+        image: t.image,
+        video: t.video,
+        youtubeUrl: t.youtubeUrl,
+      };
+    });
 }
 
 export async function getArtist(slug: string): Promise<Artist | undefined> {

@@ -31,6 +31,8 @@ export async function POST(req: Request) {
       content: body.content!,
       seoTitle: body.seoTitle || body.title,
       seoDescription: body.seoDescription || body.excerpt || "",
+      seoKeyword: body.seoKeyword,
+      tags: body.tags || [],
       published: body.published ?? true,
       sources: body.sources || [],
     });

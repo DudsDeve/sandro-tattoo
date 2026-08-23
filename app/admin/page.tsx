@@ -31,6 +31,9 @@ export default function AdminHomePage() {
     { href: "/admin/categorias", label: "Categorias", count: store.categories.length, hint: "Estilos / seções visuais" },
     { href: "/admin/itens", label: "Trabalhos", count: store.items.length, hint: "Fotos e vídeos por categoria" },
     { href: "/admin/artistas", label: "Artistas", count: store.artists.length, hint: "Equipe + portfólio" },
+    { href: "/admin/depoimentos", label: "Depoimentos", count: store.testimonials?.length ?? 0, hint: "Texto, foto e YouTube" },
+    { href: "/admin/clientes", label: "Clientes", count: store.clients?.length ?? 0, hint: "Pedidos de Book a session" },
+    { href: "/admin/configuracoes", label: "Configurações", count: "IA", hint: "Chaves OpenAI e Gemini" },
     { href: "/admin/blog", label: "Posts", count: store.posts.length, hint: "Blog com IA e SEO" },
   ];
 

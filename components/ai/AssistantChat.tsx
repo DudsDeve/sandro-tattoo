@@ -70,11 +70,7 @@ export function AssistantChat() {
       </div>
       {messages.length >= 4 && (
         <a
-          href={whatsappLink(
-            locale === "pt"
-              ? "Vim do assistente do site e preciso de um humano."
-              : "I came from the site assistant and need a human.",
-          )}
+          href={whatsappLink("I'd like a quote and a few questions from the website FAQ.")}
           className="mb-3 text-center text-xs text-moss underline"
           target="_blank"
           rel="noreferrer"

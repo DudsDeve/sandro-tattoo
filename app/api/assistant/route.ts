@@ -1,5 +1,5 @@
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
-import { ASSISTANT_SYSTEM, languageRule } from "@/lib/ai/prompts";
+import { ASSISTANT_SYSTEM, languageRule, quoteCtaMarkdown } from "@/lib/ai/prompts";
 import { retrieveRelevant } from "@/lib/ai/knowledge-base";
 import { hasLlmKey, llmModel } from "@/lib/ai/llm";
 import { mockUiStream } from "@/lib/ai/mock-stream";
@@ -13,14 +13,14 @@ function localAnswer(q: string, locale?: string) {
   const pt = locale === "pt";
   if (/pre[cç]o|custa|valor|price|cost/.test(s))
     return pt
-      ? `Valores fecham na consulta. Mínimo de sessão: ${STUDIO.minPrice}. Complexidade, tamanho e artista mudam o número. Quer agendar? /agendar`
-      : `Prices are set in consultation. Session minimum: ${STUDIO.minPrice}. Complexity, size and artist change the number. Want to book? /agendar`;
+      ? `Valores fecham na consulta. Mínimo de sessão: ${STUDIO.minPrice}. Complexidade, tamanho e artista mudam o número.\n\n${quoteCtaMarkdown()}`
+      : `Prices are set in consultation. Session minimum: ${STUDIO.minPrice}. Complexity, size and artist change the number.\n\n${quoteCtaMarkdown()}`;
   if (/hora|funciona|abre|hours|open/.test(s))
     return STUDIO.hours.map((h) => `${h.days}: ${h.time}`).join(" · ");
   if (/agenda|marca|book/.test(s))
     return pt
-      ? `Pelo site em /agendar, ou WhatsApp ${STUDIO.phone}. Depósito ${STUDIO.deposit}`
-      : `Via the site at /agendar, or WhatsApp ${STUDIO.phone}. Deposit ${STUDIO.deposit}`;
+      ? `Pelo site ou WhatsApp. Depósito ${STUDIO.deposit}.\n\n${quoteCtaMarkdown()}`
+      : `Via the site or WhatsApp. Deposit ${STUDIO.deposit}.\n\n${quoteCtaMarkdown()}`;
   if (/walk/.test(s)) return STUDIO.walkIn;
   if (/cuidad|cicatriz|aftercare|heal/.test(s))
     return pt
@@ -28,8 +28,8 @@ function localAnswer(q: string, locale?: string) {
       : "Film for 24h, then wash, pat dry, thin ointment. No sun, pool or gym until we clear you.";
   if (/endere[cç]o|fica|onde|where|address/.test(s)) return STUDIO.address.full;
   return pt
-    ? `Posso falar de horários, preços, cuidados, artistas e agendamento. Se for muito específico, o WhatsApp é ${STUDIO.phone}.`
-    : `I can help with hours, pricing, aftercare, artists and booking. For something very specific, WhatsApp is ${STUDIO.phone}.`;
+    ? `Posso falar de horários, preços, cuidados e artistas. Para um orçamento fechado:\n\n${quoteCtaMarkdown()}`
+    : `I can help with hours, pricing, aftercare and artists. For a quote:\n\n${quoteCtaMarkdown()}`;
 }
 
 export async function POST(req: Request) {

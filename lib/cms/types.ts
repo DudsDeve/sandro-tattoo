@@ -50,6 +50,38 @@ export type CmsPost = BlogPost & {
   seoDescription?: string;
   published: boolean;
   sources?: string[];
+  seoKeyword?: string;
+  tags?: string[];
+};
+
+export type CmsTestimonial = {
+  id: string;
+  title: string;
+  description: string;
+  name: string;
+  artistId: string;
+  image?: string;
+  video?: string;
+  youtubeUrl?: string;
+  order: number;
+};
+
+export type CmsClient = {
+  id: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  phone: string;
+  instagram: string;
+  artistSlug: string;
+  artistName: string;
+  idea: string;
+  ideaLink: string;
+  ideaImages: string[];
+  bodyPart: string;
+  size: string;
+  firstTattoo: "sim" | "nao";
+  slot: string;
 };
 
 export type CmsStore = {
@@ -59,6 +91,8 @@ export type CmsStore = {
   items: CmsWorkItem[];
   artists: CmsArtist[];
   posts: CmsPost[];
+  testimonials: CmsTestimonial[];
+  clients: CmsClient[];
   /** Visual site editor overrides: fieldId → value */
   siteContent?: Record<string, string>;
 };
@@ -71,6 +105,8 @@ export function emptyStore(): CmsStore {
     items: [],
     artists: [],
     posts: [],
+    testimonials: [],
+    clients: [],
     siteContent: {},
   };
 }
@@ -113,7 +149,7 @@ export function cmsItemToTattoo(
     title: item.title,
     artistSlug: artist?.slug ?? "estudio",
     artistName: artist?.name ?? "Estúdio",
-    style: (category?.slug ?? "blackwork") as TattooWork["style"],
+    style: (category?.slug || "") as TattooWork["style"],
     image: item.image,
     hours: item.hours ?? 4,
     bodyPart: item.bodyPart ?? "—",

@@ -36,6 +36,22 @@ export function MediaImage({
     );
   }
 
+  const skipOptimizer =
+    unoptimized ??
+    (src.startsWith("/uploads/") || src.includes("supabase") || src.includes("blob.vercel-storage"));
+
+  if (skipOptimizer) {
+    return (
+      // User CMS uploads: avoid next/image remote-pattern errors that blank the card.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={alt}
+        className={cn(fill && "absolute inset-0 h-full w-full object-cover object-center", className)}
+      />
+    );
+  }
+
   return (
     <Image
       src={src}
@@ -44,7 +60,7 @@ export function MediaImage({
       className={className}
       sizes={sizes}
       priority={priority}
-      unoptimized={unoptimized ?? (src.startsWith("/uploads/") || src.includes("supabase"))}
+      unoptimized={unoptimized}
     />
   );
 }

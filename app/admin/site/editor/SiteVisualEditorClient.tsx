@@ -279,6 +279,7 @@ export default function SiteVisualEditorPage() {
                   <MediaField
                     label={selection.fieldType === "video" ? "Vídeo" : "Imagem"}
                     value={draft}
+                    folder="site"
                     accept={selection.fieldType === "video" ? "video/*" : "image/*"}
                     onChange={(url) => {
                       applyLive(url);

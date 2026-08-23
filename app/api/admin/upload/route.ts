@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { uploadMedia } from "@/lib/cms/store";
+import { normalizeMediaFolder } from "@/lib/media/storage";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -26,7 +27,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Arquivo até 12MB. Comprima a foto e tente de novo." }, { status: 400 });
     }
 
-    const url = await uploadMedia(file);
+    const folder = normalizeMediaFolder(String(form.get("folder") || "uploads"));
+    const url = await uploadMedia(file, folder);
     return NextResponse.json({ url });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Falha no upload";

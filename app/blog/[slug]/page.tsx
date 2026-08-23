@@ -34,7 +34,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const related = (await getPosts()).filter((p) => p.slug !== post.slug).slice(0, 2);
 
   return (
-    <article className="px-4 pb-28 pt-28 sm:px-5 md:px-12">
+    <article className="page-shell prose-invert">
       <ReadingProgress />
       <p className="label-mono">
         <LocalizedDate iso={post.date} /> · {post.readTime}
@@ -43,7 +43,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <div className="relative my-12 aspect-[16/10] max-w-5xl overflow-hidden sm:aspect-[16/8]">
         <MediaImage src={post.cover} alt="" fill className="object-cover" priority />
       </div>
-      <div className="max-w-2xl space-y-6 text-lg text-ink-secondary">
+      <div className="max-w-2xl space-y-6 text-base text-ink-secondary sm:text-lg">
         {post.content.split("\n\n").map((block, i) => {
           const text = block.trim();
           if (!text) return null;

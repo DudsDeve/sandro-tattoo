@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CtaLink } from "@/components/ui/CursorLink";
 import { BookWithArtist } from "@/components/ui/BookWithArtist";
-import { getArtist, getArtists, getGallery } from "@/lib/content";
+import { getArtist, getArtists, getGallery, getSpecialties } from "@/lib/content";
 import { ArtistGallery } from "@/components/artists/ArtistGallery";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { instagramUrl } from "@/lib/utils";
@@ -22,11 +22,12 @@ export default async function ArtistPage({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   const artist = await getArtist(slug);
   if (!artist) notFound();
-  const works = (await getGallery()).filter((w) => w.artistSlug === artist.slug);
+  const [gallery, specialties] = await Promise.all([getGallery(), getSpecialties()]);
+  const works = gallery.filter((w) => w.artistSlug === artist.slug);
 
   return (
-    <div className="pb-28 pt-28">
-      <div className="grid items-end gap-10 px-4 sm:px-5 md:grid-cols-2 md:px-12">
+    <div className="page-shell">
+      <div className="grid items-end gap-8 md:grid-cols-2 md:gap-10">
         <div className="relative aspect-[3/4] overflow-hidden">
           <MediaImage src={artist.image} alt={artist.name} fill className="object-cover" priority sizes="50vw" />
         </div>
@@ -52,7 +53,9 @@ export default async function ArtistPage({ params }: { params: Promise<{ slug: s
           </div>
         </div>
       </div>
-      <ArtistGallery works={works.length ? works : artist.works.map((image, i) => ({
+      <ArtistGallery
+        specialties={specialties}
+        works={works.length ? works : artist.works.map((image, i) => ({
         id: `${artist.slug}-${i}`,
         title: `Work ${i + 1}`,
         artistSlug: artist.slug,

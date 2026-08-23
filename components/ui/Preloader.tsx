@@ -62,7 +62,7 @@ export function Preloader() {
         transition: "clip-path 0.55s cubic-bezier(0.76, 0, 0.24, 1)",
       }}
     >
-      <LogoMark className="h-40 w-40 sm:h-48 sm:w-48" animate />
+      <LogoMark className="h-40 w-auto sm:h-48" animate />
       <div className="mt-10 h-[1px] w-40 overflow-hidden bg-line">
         <div className="h-full bg-bg-accent-light" style={{ width: `${progress}%` }} />
       </div>

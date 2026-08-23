@@ -62,13 +62,13 @@ export function Lightbox({
           >
             <ChevronRight size={32} />
           </button>
-          <div className="relative mx-10 aspect-[3/4] h-[min(68svh,calc(100vw-4rem))] w-auto max-w-[min(92vw,28rem)] overflow-hidden md:aspect-[4/5]">
+          <div className="relative mx-10 aspect-[3/4] h-[min(62svh,calc(100vw-5rem))] w-full max-w-[min(92vw,28rem)] overflow-hidden md:aspect-[4/5]">
             <MediaImage src={item.image} alt={item.title} fill className="object-cover" />
           </div>
           <div className="mt-4 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
             <p className="font-display text-xl sm:text-2xl">{item.title}</p>
             <p className="label-mono mt-2">
-              {item.artistName} · {item.style} · ~{item.hours}h · {item.bodyPart}
+              {item.artistName} · {item.style}
             </p>
           </div>
         </motion.div>

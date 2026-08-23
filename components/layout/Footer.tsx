@@ -16,18 +16,13 @@ export function Footer() {
   const t = useT();
   const ref = useRef<HTMLElement>(null);
   const navLinks = [
+    { href: "/", label: t.nav.home },
     { href: "/artistas", label: t.nav.artists },
     { href: "/galeria", label: t.nav.gallery },
+    { href: "/virtual-tryout", label: t.nav.tryOn },
     { href: "/processo", label: t.nav.process },
-    { href: "/loja", label: t.nav.shop },
     { href: "/blog", label: t.nav.blog },
   ];
-  const hours = [
-    { days: t.studio.hoursWeek, time: "11:00 — 20:00" },
-    { days: t.studio.hoursSat, time: "10:00 — 18:00" },
-    { days: t.studio.hoursSun, time: t.studio.closed },
-  ];
-
   useGSAP(
     () => {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -54,7 +49,7 @@ export function Footer() {
             backgroundSize: "22px 22px",
           }}
         />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-5 md:grid-cols-4 md:px-8 md:py-20">
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-5 sm:py-16 md:grid-cols-2 md:px-8 md:py-20 lg:grid-cols-3">
           <div data-foot>
             <p className="font-display text-3xl">{STUDIO.name}</p>
             <p className="mt-3 max-w-xs text-sm text-ink-secondary">
@@ -73,15 +68,6 @@ export function Footer() {
             <p className="text-sm">{t.studio.fullAddress}</p>
             <p className="mt-2 text-sm text-ink-secondary">{STUDIO.phone}</p>
             <p className="text-sm text-ink-secondary">{STUDIO.email}</p>
-          </div>
-          <div data-foot>
-            <p className="label-mono mb-4">{t.footer.hours}</p>
-            {hours.map((h) => (
-              <p key={h.days} className="flex justify-between gap-4 text-sm text-ink-secondary">
-                <span>{h.days}</span>
-                <span className="text-ink">{h.time}</span>
-              </p>
-            ))}
           </div>
           <div data-foot>
             <p className="label-mono mb-4">{t.footer.newsletter}</p>
@@ -109,10 +95,36 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="relative bg-black px-4 py-8 pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-5 md:px-8">
-        <p className="mx-auto max-w-7xl text-xs text-ink-muted">
-          © {new Date().getFullYear()} {STUDIO.name}. {t.footer.copyright}
-        </p>
+      <div className="relative z-10 bg-black px-4 py-8 pb-[max(3.5rem,env(safe-area-inset-bottom))] sm:px-5 md:px-8">
+        <div className="mx-auto max-w-7xl text-center">
+          <p className="text-xs text-ink-muted">
+            © {new Date().getFullYear()} {STUDIO.name}. {t.footer.copyright}
+          </p>
+          <p className="mt-4 text-sm text-ink-secondary">
+            Created by: Eduardo Palhares — Website and app developer
+          </p>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+            <a
+              href="https://wa.me/5531994375739"
+              target="_blank"
+              rel="noreferrer"
+              className="text-moss hover:text-ink"
+            >
+              +55 31 994375739
+            </a>
+            <a href="mailto:duds.deve@gmail.com" className="text-moss hover:text-ink">
+              duds.deve@gmail.com
+            </a>
+            <a
+              href="https://www.linkedin.com/in/eduardo-palhares-74054325b/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-moss hover:text-ink"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );

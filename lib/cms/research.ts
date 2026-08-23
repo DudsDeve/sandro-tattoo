@@ -8,7 +8,6 @@ export type ResearchHit = {
 
 export type ResearchResult = {
   hits: ResearchHit[];
-  /** Escopo geográfico usado quando o tema é de eventos */
   eventScope?: "dublin" | "ireland" | "europe" | null;
   isEventTopic: boolean;
 };
@@ -16,34 +15,24 @@ export type ResearchResult = {
 type LocaleOpts = { hl: string; gl: string; ceid: string; serperGl: string; serperHl: string };
 
 const LOCALE_IE: LocaleOpts = {
-  hl: "en-IE",
+  hl: "en",
   gl: "IE",
   ceid: "IE:en",
   serperGl: "ie",
   serperHl: "en",
 };
 
-const LOCALE_EU: LocaleOpts = {
+const LOCALE_US: LocaleOpts = {
   hl: "en",
-  gl: "GB",
-  ceid: "GB:en",
-  serperGl: "uk",
+  gl: "US",
+  ceid: "US:en",
+  serperGl: "us",
   serperHl: "en",
-};
-
-const LOCALE_BR: LocaleOpts = {
-  hl: "pt-BR",
-  gl: "BR",
-  ceid: "BR:pt-419",
-  serperGl: "br",
-  serperHl: "pt-br",
 };
 
 export function isEventTopic(topicHint?: string) {
   const t = (topicHint || "").toLowerCase();
-  return /evento|event|festival|convention|feira|congresso|ink.?fest|tattoo.?week|expo|encontro|convention/i.test(
-    t,
-  );
+  return /festival|convention|expo|ink.?fest|tattoo.?week/i.test(t);
 }
 
 async function fromGoogleNews(query: string, locale: LocaleOpts): Promise<ResearchHit[]> {
@@ -91,7 +80,7 @@ async function fromSerper(query: string, locale: LocaleOpts): Promise<ResearchHi
       q: query,
       gl: locale.serperGl,
       hl: locale.serperHl,
-      num: 8,
+      num: 10,
     }),
   });
   if (!res.ok) return [];
@@ -123,7 +112,7 @@ async function fromSerper(query: string, locale: LocaleOpts): Promise<ResearchHi
   return hits.slice(0, 10);
 }
 
-function dedupe(hits: ResearchHit[], limit = 12): ResearchHit[] {
+function dedupeHits(hits: ResearchHit[], limit = 12): ResearchHit[] {
   const seen = new Set<string>();
   return hits
     .filter((h) => {
@@ -145,77 +134,30 @@ async function searchQueries(
     const [serper, news] = await Promise.all([fromSerper(q, locale), fromGoogleNews(q, locale)]);
     all.push(...serper.map((h) => ({ ...h, region })), ...news.map((h) => ({ ...h, region })));
   }
-  return dedupe(all, 12);
+  return dedupeHits(all, 12);
 }
 
-/** Pesquisa em cascata só para posts de eventos: Dublin → Irlanda → Europa. */
-export async function researchTattooEvents(topicHint?: string): Promise<ResearchResult> {
-  const year = new Date().getFullYear();
-  const base = topicHint?.trim() || "tattoo festival convention event";
-
-  const tiers: Array<{
-    scope: "dublin" | "ireland" | "europe";
-    locale: LocaleOpts;
-    queries: string[];
-  }> = [
-    {
-      scope: "dublin",
-      locale: LOCALE_IE,
-      queries: [
-        `${base} Dublin Ireland ${year}`,
-        `tattoo festival Dublin ${year}`,
-        `tattoo convention Dublin ${year}`,
-        `Dublin tattoo expo event ${year}`,
-      ],
-    },
-    {
-      scope: "ireland",
-      locale: LOCALE_IE,
-      queries: [
-        `${base} Ireland ${year}`,
-        `tattoo festival Ireland ${year}`,
-        `tattoo convention Ireland Cork Galway ${year}`,
-        `Irish tattoo event expo ${year}`,
-      ],
-    },
-    {
-      scope: "europe",
-      locale: LOCALE_EU,
-      queries: [
-        `${base} Europe ${year}`,
-        `tattoo festival Europe ${year}`,
-        `tattoo convention Europe London Berlin Paris ${year}`,
-        `European tattoo expo ${year}`,
-      ],
-    },
-  ];
-
-  for (const tier of tiers) {
-    const hits = await searchQueries(tier.queries, tier.locale, tier.scope);
-    if (hits.length >= 2) {
-      return { hits, eventScope: tier.scope, isEventTopic: true };
-    }
+/** Client-focused English research (Ireland locale, US fallback for global trends). */
+export async function researchClientQueries(queries: string[]): Promise<ResearchResult> {
+  const q = queries.map((s) => s.trim()).filter(Boolean);
+  if (!q.length) {
+    return { hits: [], eventScope: null, isEventTopic: false };
   }
 
-  // Última tentativa: junta o que houver no último tier (mesmo que poucas)
-  const last = tiers[tiers.length - 1]!;
-  const hits = await searchQueries(last.queries, last.locale, last.scope);
-  return { hits, eventScope: hits.length ? last.scope : null, isEventTopic: true };
+  let hits = await searchQueries(q, LOCALE_IE, "ireland");
+  if (hits.length < 3) {
+    const us = await searchQueries(q, LOCALE_US, "general");
+    hits = dedupeHits([...hits, ...us], 12);
+  }
+
+  return { hits, eventScope: null, isEventTopic: false };
 }
 
 export async function researchTattooTrends(topicHint?: string): Promise<ResearchResult> {
-  if (isEventTopic(topicHint)) {
-    return researchTattooEvents(topicHint);
-  }
-
   const year = new Date().getFullYear();
-  const queries = [
-    topicHint?.trim() || `tattoo trends ${year}`,
-    `tendências tatuagem ${year}`,
-    `tattoo aftercare news ${year}`,
-    `estilos de tatuagem em alta ${year}`,
-  ];
-
-  const hits = await searchQueries(queries, LOCALE_BR, "general");
-  return { hits, eventScope: null, isEventTopic: false };
+  const hint = topicHint?.trim();
+  const queries = hint
+    ? [hint, `${hint} tattoo ideas ${year}`, `${hint} tattoo inspiration`]
+    : [`tattoo ideas ${year}`, `first tattoo tips`, `tattoo aftercare tips`];
+  return researchClientQueries(queries);
 }

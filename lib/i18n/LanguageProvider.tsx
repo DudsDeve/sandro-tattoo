@@ -24,32 +24,47 @@ type Ctx = {
 
 const LanguageContext = createContext<Ctx | null>(null);
 
-function readStoredLocale(): Locale {
-  if (typeof window === "undefined") return DEFAULT_LOCALE;
-  const saved = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-  return saved === "en" || saved === "pt" ? saved : DEFAULT_LOCALE;
+function parseLocale(raw: string | null, fallback: Locale): Locale {
+  return raw === "en" || raw === "pt" ? raw : fallback;
 }
 
-function persistLocale(locale: Locale) {
+function readStoredLocale(storageKey: string, fallback: Locale): Locale {
+  if (typeof window === "undefined") return fallback;
+  return parseLocale(window.localStorage.getItem(storageKey), fallback);
+}
+
+function persistLocale(locale: Locale, storageKey: string, persistHtml: boolean) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
-  document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
-  window.dispatchEvent(new Event(LOCALE_EVENT));
+  window.localStorage.setItem(storageKey, locale);
+  if (persistHtml) {
+    document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
+    window.dispatchEvent(new Event(LOCALE_EVENT));
+  }
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+export function LanguageProvider({
+  children,
+  storageKey = LOCALE_STORAGE_KEY,
+  defaultLocale = DEFAULT_LOCALE,
+  persistHtml = true,
+}: {
+  children: ReactNode;
+  storageKey?: string;
+  defaultLocale?: Locale;
+  persistHtml?: boolean;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setLocaleState(readStoredLocale());
+    setLocaleState(readStoredLocale(storageKey, defaultLocale));
     setReady(true);
-  }, []);
+  }, [storageKey, defaultLocale]);
 
   useEffect(() => {
     if (!ready) return;
-    persistLocale(locale);
-  }, [locale, ready]);
+    persistLocale(locale, storageKey, persistHtml);
+  }, [locale, ready, storageKey, persistHtml]);
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
@@ -73,7 +88,7 @@ export function useLanguage() {
 
   useEffect(() => {
     if (ctx) return;
-    const sync = () => setLocaleState(readStoredLocale());
+    const sync = () => setLocaleState(readStoredLocale(LOCALE_STORAGE_KEY, DEFAULT_LOCALE));
     sync();
     window.addEventListener(LOCALE_EVENT, sync);
     window.addEventListener("storage", sync);
@@ -89,7 +104,7 @@ export function useLanguage() {
     locale,
     setLocale: (next: Locale) => {
       setLocaleState(next);
-      persistLocale(next);
+      persistLocale(next, LOCALE_STORAGE_KEY, true);
     },
     t: DICTS[locale] ?? en,
   };

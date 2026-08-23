@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GalleryExperience } from "@/components/gallery/GalleryExperience";
 import { GalleryPageHeader } from "@/components/ui/PageHeaders";
-import { getGallery, getSpecialties } from "@/lib/content";
+import { getArtists, getGallery, getSpecialties } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -12,12 +12,12 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function GaleriaPage() {
-  const [works, specialties] = await Promise.all([getGallery(), getSpecialties()]);
+  const [works, specialties, artists] = await Promise.all([getGallery(), getSpecialties(), getArtists()]);
   return (
-    <div className="px-4 pb-24 pt-28 sm:px-5 md:px-12 md:pt-32">
+    <div className="page-shell">
       <GalleryPageHeader />
       <Suspense>
-        <GalleryExperience works={works} specialties={specialties} />
+        <GalleryExperience works={works} specialties={specialties} artists={artists} />
       </Suspense>
     </div>
   );

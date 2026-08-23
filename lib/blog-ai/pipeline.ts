@@ -1,17 +1,13 @@
 import { generateText } from "ai";
 import { hasLlmKey, llmModel } from "@/lib/ai/llm";
-import { RESEARCH_SYSTEM_PROMPT } from "@/lib/blog-ai/research-prompt";
-import { WRITER_SYSTEM_PROMPT } from "@/lib/blog-ai/writer-prompt";
+import { buildResearchPrompt, WRITER_PROMPT_CLIENT_SEO } from "@/lib/cms/blog-prompts";
+import { isDuplicate, mapCategoryToCms } from "@/lib/cms/dedup";
 import { buildCoverPrompt } from "@/lib/blog-ai/cover-prompt-builder";
-import {
-  getExistingTopics,
-  isDuplicateTitle,
-  leastUsedCategory,
-  mapCategoryToCms,
-} from "@/lib/blog-ai/dedup";
 import { generateCoverImage } from "@/lib/cms/generate-post";
-import { getCmsStore, mutateCmsStore, newId } from "@/lib/cms/store";
-import { isEventTopic, researchTattooTrends } from "@/lib/cms/research";
+import { mutateCmsStore, newId } from "@/lib/cms/store";
+import { researchClientQueries } from "@/lib/cms/research";
+import { selectTopic } from "@/lib/cms/topic-engine";
+import type { ContentPillar } from "@/lib/cms/seo-keywords";
 import type { CmsPost } from "@/lib/cms/types";
 
 export type BlogResearchPayload = {
@@ -24,8 +20,10 @@ export type BlogResearchPayload = {
   suggestedCategory: string;
   suggestedTags: string[];
   imageSubject: string;
+  seoKeyword: string;
   eventScope?: string | null;
   rawResearch?: string;
+  pillarId?: string;
 };
 
 export type BlogGeneratedPost = {
@@ -46,20 +44,8 @@ function parseJson<T>(text: string): T {
   return JSON.parse(clean) as T;
 }
 
-export async function runBlogResearch(manualTopic?: string): Promise<BlogResearchPayload> {
-  if (!hasLlmKey()) {
-    throw new Error("Configure OPENAI_API_KEY or ANTHROPIC_API_KEY.");
-  }
-
-  const store = await getCmsStore();
-  const existing = await getExistingTopics();
-  const preferred = leastUsedCategory(store.posts);
-  const topicHint =
-    manualTopic?.trim() ||
-    (Math.random() > 0.7 ? "tattoo festival convention events" : `tattoo trends ${new Date().getFullYear()}`);
-
-  const research = await researchTattooTrends(manualTopic?.trim() || topicHint);
-
+async function researchOnePillar(pillar: ContentPillar, existingTitles: string) {
+  const research = await researchClientQueries(pillar.searchQueries);
   if (!research.hits.length) {
     throw new Error("Web research returned no results. Try again in a moment.");
   }
@@ -73,18 +59,9 @@ export async function runBlogResearch(manualTopic?: string): Promise<BlogResearc
 
   const { text } = await generateText({
     model: llmModel(),
-    temperature: 0.6,
-    system: RESEARCH_SYSTEM_PROMPT(
-      existing.titles.map((t) => `- ${t}`).join("\n"),
-      existing.categories.join(", "),
-      preferred,
-      manualTopic,
-    ),
-    prompt: `WEB RESEARCH RESULTS:\n${researchBlock}\n\n${
-      manualTopic
-        ? `Admin topic direction: "${manualTopic}". Pick a fresh current angle.`
-        : "Pick the strongest fresh tattoo topic for our Dublin studio blog."
-    }\nPrefer CMS category bucket: ${preferred}.\nEvent scope from search cascade: ${research.eventScope || "n/a"}.\nIs event topic: ${isEventTopic(manualTopic) || isEventTopic(topicHint)}.`,
+    temperature: 0.55,
+    system: buildResearchPrompt(existingTitles, pillar),
+    prompt: `WEB RESEARCH RESULTS:\n${researchBlock}\n\nWrite the JSON brief for keyword "${pillar.primaryKeyword}".`,
   });
 
   const parsed = parseJson<BlogResearchPayload>(text);
@@ -92,22 +69,53 @@ export async function runBlogResearch(manualTopic?: string): Promise<BlogResearc
     throw new Error("Research model returned an incomplete topic.");
   }
 
-  if (isDuplicateTitle(parsed.headline, existing.titles) || isDuplicateTitle(parsed.selectedTopic, existing.titles)) {
-    throw new Error("Selected topic looks too similar to an existing post. Try again.");
+  return {
+    parsed: {
+      ...parsed,
+      seoKeyword: parsed.seoKeyword || pillar.primaryKeyword,
+      sources: parsed.sources?.length
+        ? parsed.sources
+        : research.hits.slice(0, 6).map((h) => ({
+            title: h.title,
+            url: h.url,
+            snippet: h.snippet,
+          })),
+      eventScope: research.eventScope,
+      rawResearch: researchBlock,
+      pillarId: pillar.id,
+    },
+  };
+}
+
+export async function runBlogResearch(manualTopic?: string): Promise<BlogResearchPayload> {
+  if (!hasLlmKey()) {
+    throw new Error("Configure OPENAI_API_KEY or ANTHROPIC_API_KEY.");
   }
 
-  return {
-    ...parsed,
-    sources: parsed.sources?.length
-      ? parsed.sources
-      : research.hits.slice(0, 6).map((h) => ({
-          title: h.title,
-          url: h.url,
-          snippet: h.snippet,
-        })),
-    eventScope: research.eventScope,
-    rawResearch: researchBlock,
-  };
+  const excludeIds: string[] = [];
+  let lastError = "Could not find a unique topic.";
+
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const selection = await selectTopic(manualTopic, excludeIds);
+    const existingTitles = selection.existingPosts.map((p) => `- ${p.title}`).join("\n");
+
+    try {
+      const { parsed } = await researchOnePillar(selection.pillar, existingTitles);
+      const dup = isDuplicate(parsed.headline, parsed.seoKeyword, selection.existingPosts);
+      const dupTopic = isDuplicate(parsed.selectedTopic, parsed.seoKeyword, selection.existingPosts);
+      if (dup.duplicate || dupTopic.duplicate) {
+        lastError = dup.reason || dupTopic.reason;
+        excludeIds.push(selection.pillar.id);
+        continue;
+      }
+      return parsed;
+    } catch (e) {
+      lastError = e instanceof Error ? e.message : lastError;
+      excludeIds.push(selection.pillar.id);
+    }
+  }
+
+  throw new Error(lastError);
 }
 
 export async function runBlogWrite(research: BlogResearchPayload): Promise<BlogGeneratedPost> {
@@ -118,8 +126,8 @@ export async function runBlogWrite(research: BlogResearchPayload): Promise<BlogG
   const { text } = await generateText({
     model: llmModel(),
     temperature: 0.7,
-    system: WRITER_SYSTEM_PROMPT,
-    prompt: `Write a complete blog post based on this research:\n\n${JSON.stringify(research)}\n\nRemember: write in ENGLISH, make it current and authoritative, follow all formatting rules exactly.`,
+    system: WRITER_PROMPT_CLIENT_SEO,
+    prompt: `Write a complete blog post based on this research brief:\n\n${JSON.stringify(research)}\n\nPrimary keyword: ${research.seoKeyword}. Write in ENGLISH. Follow all SEO and FAQ rules exactly.`,
   });
 
   const post = parseJson<BlogGeneratedPost>(text);
@@ -127,9 +135,10 @@ export async function runBlogWrite(research: BlogResearchPayload): Promise<BlogG
     throw new Error("Writer returned incomplete article.");
   }
 
-  const existing = await getExistingTopics();
-  if (isDuplicateTitle(post.title, existing.titles)) {
-    throw new Error("Generated title overlaps an existing post. Re-run research.");
+  const selection = await selectTopic();
+  const dup = isDuplicate(post.title, post.seoKeyword || research.seoKeyword, selection.existingPosts);
+  if (dup.duplicate) {
+    throw new Error(`Generated title overlaps an existing post (${dup.reason}). Re-run research.`);
   }
 
   const slug =
@@ -145,9 +154,10 @@ export async function runBlogWrite(research: BlogResearchPayload): Promise<BlogG
   return {
     ...post,
     slug,
-    excerpt: (post.excerpt || "").slice(0, 160),
+    excerpt: (post.excerpt || "").slice(0, 155),
     readingTime: post.readingTime || "6 min",
     tags: post.tags || research.suggestedTags || [],
+    seoKeyword: post.seoKeyword || research.seoKeyword,
     seoTitle: post.seoTitle || post.title,
     imageSubject: post.imageSubject || research.imageSubject,
   };
@@ -187,6 +197,8 @@ export async function publishBlogDraft(input: {
       content: post.body,
       seoTitle: post.seoTitle || post.title,
       seoDescription: post.excerpt,
+      seoKeyword: post.seoKeyword,
+      tags: post.tags,
       published,
       sources,
     };
@@ -198,7 +210,6 @@ export async function publishBlogDraft(input: {
   return saved;
 }
 
-/** Full pipeline for cron / one-shot. */
 export async function runFullBlogPipeline(options?: {
   manualTopic?: string;
   published?: boolean;

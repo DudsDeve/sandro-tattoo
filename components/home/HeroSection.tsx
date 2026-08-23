@@ -114,7 +114,7 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-black/35" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/20" />
-      <div className="relative z-10 flex h-full flex-col justify-end px-4 pb-28 pt-28 sm:px-5 sm:pb-24 sm:pt-32 md:px-12">
+      <div className="relative z-10 flex h-full flex-col justify-end px-4 pb-[max(7.5rem,calc(env(safe-area-inset-bottom)+5.5rem))] pt-24 sm:px-5 sm:pb-24 sm:pt-32 md:px-12">
         <EditableText id="home.hero.eyebrow" as="p" className="label-mono mb-6">
           {t.hero.eyebrow}
         </EditableText>
@@ -155,7 +155,7 @@ export function HeroSection() {
           </CtaLink>
         </div>
       </div>
-      <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
+      <div className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 sm:block">
         <span className="label-mono block animate-bounce text-[10px]">scroll</span>
         <span className="mx-auto mt-2 block h-8 w-px bg-ink/50" />
       </div>

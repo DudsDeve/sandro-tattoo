@@ -1,3 +1,4 @@
+import { persistMediaBytes } from "@/lib/media/storage";
 import type { CmsStore } from "@/lib/cms/types";
 import { getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/admin";
 import { getPgPool, isDatabaseConfigured } from "@/lib/supabase/pg";
@@ -20,6 +21,8 @@ function normalizePayload(payload: unknown): CmsStore | null {
     items: Array.isArray(data.items) ? data.items : [],
     artists: Array.isArray(data.artists) ? data.artists : [],
     posts: Array.isArray(data.posts) ? data.posts : [],
+    testimonials: Array.isArray(data.testimonials) ? data.testimonials : [],
+    clients: Array.isArray(data.clients) ? data.clients : [],
     siteContent: data.siteContent || {},
   };
 }
@@ -130,30 +133,10 @@ export async function uploadMediaToSupabase(
   filename: string,
   contentType: string,
 ): Promise<{ url: string } | { error: string }> {
-  if (!isSupabaseConfigured()) {
-    return {
-      error:
-        "Upload no Storage precisa de SUPABASE_SERVICE_ROLE_KEY (Settings → API no painel do Supabase). Tabelas já estão no Postgres.",
-    };
+  try {
+    const url = await persistMediaBytes(bytes, filename, contentType, "uploads");
+    return { url };
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : "Falha no upload" };
   }
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return { error: "supabase-off" };
-
-  const bucket = process.env.SUPABASE_MEDIA_BUCKET || "media";
-  const path = `uploads/${filename}`;
-
-  const { error } = await supabase.storage.from(bucket).upload(path, bytes, {
-    contentType,
-    upsert: true,
-  });
-
-  if (error) {
-    console.error("[supabase] upload media:", error.message);
-    return {
-      error: `Supabase Storage: ${error.message}. Confira o bucket público "${bucket}".`,
-    };
-  }
-
-  const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-  return { url: data.publicUrl };
 }

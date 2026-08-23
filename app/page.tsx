@@ -7,7 +7,8 @@ import { CTASection } from "@/components/home/CTASection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { SpecialtiesSection } from "@/components/home/SpecialtiesSection";
 import { STUDIO } from "@/lib/data/studio";
-import type { Artist, Specialty } from "@/lib/types";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import type { Artist, Specialty, Testimonial } from "@/lib/types";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -26,13 +27,15 @@ const jsonLd = {
 export default function HomePage() {
   const [specialties, setSpecialties] = useState<Specialty[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
     void fetch("/api/home")
       .then((r) => r.json())
-      .then((d: { specialties?: Specialty[]; artists?: Artist[] }) => {
+      .then((d: { specialties?: Specialty[]; artists?: Artist[]; testimonials?: Testimonial[] }) => {
         setSpecialties(Array.isArray(d.specialties) ? d.specialties : []);
         setArtists(Array.isArray(d.artists) ? d.artists : []);
+        setTestimonials(Array.isArray(d.testimonials) ? d.testimonials : []);
       })
       .catch(() => undefined);
   }, []);
@@ -44,6 +47,7 @@ export default function HomePage() {
       <AboutSection />
       <SpecialtiesSection specialties={specialties} />
       <ArtistsCarousel artists={artists} />
+      <TestimonialsSection testimonials={testimonials} />
       <CTASection />
     </>
   );

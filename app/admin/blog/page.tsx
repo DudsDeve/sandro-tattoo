@@ -189,8 +189,9 @@ export default function AdminBlogPage() {
       <div>
         <h1 className="font-serif text-4xl">Blog + AI</h1>
         <p className="mt-2 max-w-2xl text-[#a09b95]">
-          Research current tattoo news → write a full English article → generate an isometric moss-green
-          cover → save as draft for review. Daily automation still publishes 2 posts at random hours.
+          Picks the next unused client SEO keyword, researches in English (Ireland), writes for people
+          booking a tattoo (not industry news), then generates an isometric cover. Daily cron still
+          publishes 2 posts.
         </p>
       </div>
 
@@ -332,7 +333,7 @@ export default function AdminBlogPage() {
           </div>
 
           <div className="space-y-4">
-            <MediaField label="Cover" value={cover} accept="image/*" onChange={setCover} />
+            <MediaField label="Cover" value={cover} accept="image/*" folder="blog" onChange={setCover} />
             <button
               type="button"
               disabled={busy}

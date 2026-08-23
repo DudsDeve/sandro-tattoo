@@ -65,6 +65,13 @@ export const post = defineType({
     defineField({ name: "readTime", type: "string" }),
     defineField({ name: "cover", type: "image" }),
     defineField({ name: "content", type: "text" }),
+    defineField({
+      name: "seoKeyword",
+      title: "SEO Primary Keyword",
+      type: "string",
+      description: "The main keyword this post targets for Google ranking",
+    }),
+    defineField({ name: "tags", type: "array", of: [{ type: "string" }] }),
   ],
 });
 

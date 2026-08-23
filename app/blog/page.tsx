@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function BlogPage() {
   const posts = await getPosts();
   return (
-    <div className="px-4 pb-28 pt-28 sm:px-5 md:px-12 md:pt-32">
+    <div className="page-shell">
       <BlogPageHeader />
       {!posts.length ? (
         <p className="text-sm text-ink-muted">Nenhum post ainda. Gere no admin em Blog + IA.</p>

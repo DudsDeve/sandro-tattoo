@@ -86,6 +86,7 @@ export function GlobeZoom() {
   const [hud, setHud] = useState<Hud>(null);
   const [stageIndex, setStageIndex] = useState(-1);
   const [mapZoom, setMapZoom] = useState<number>(6);
+  const zoomInRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const el = containerRef.current;
@@ -104,6 +105,7 @@ export function GlobeZoom() {
     renderer.setSize(w, h);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 1);
+    renderer.domElement.style.cursor = "pointer";
     el.appendChild(renderer.domElement);
 
     const globe = new THREE.Group();
@@ -344,7 +346,14 @@ export function GlobeZoom() {
     }
     window.addEventListener("resize", onResize);
 
+    function onGlobeClick() {
+      if (anim.current.zoomed || anim.current.animating) return;
+      zoomInRef.current();
+    }
+    renderer.domElement.addEventListener("click", onGlobeClick);
+
     return () => {
+      renderer.domElement.removeEventListener("click", onGlobeClick);
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(frameId);
       renderer.dispose();
@@ -421,6 +430,8 @@ export function GlobeZoom() {
     window.setTimeout(() => setZoomed(false), 1400);
   }, []);
 
+  zoomInRef.current = handleZoomIn;
+
   const latHem = LAT >= 0 ? "N" : "S";
   const lngHem = LNG >= 0 ? "E" : "W";
 
@@ -448,7 +459,10 @@ export function GlobeZoom() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-[35%] bg-gradient-to-b from-black/85 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[35%] bg-gradient-to-t from-black/85 to-transparent" />
 
-      <div className="pointer-events-none absolute left-1/2 top-[max(4.5rem,calc(env(safe-area-inset-top)+2.5rem))] z-[6] w-[min(92vw,640px)] -translate-x-1/2 px-3 text-center">
+      <div
+        className="pointer-events-none absolute left-1/2 top-[max(5.75rem,calc(env(safe-area-inset-top)+4.25rem))] z-[7] w-[min(92vw,640px)] -translate-x-1/2 px-3 text-center transition-opacity duration-300"
+        style={{ opacity: zoomed || mapOn ? 0 : 1 }}
+      >
         <span className="label-mono text-[0.65rem]">{i18n.globe.studioLabel}</span>
         <h2 className="font-display mt-2 text-[clamp(1.15rem,4.6vw,2.4rem)] tracking-[0.1em] text-ink sm:tracking-[0.18em]">
           {i18n.globe.findUs}
@@ -463,7 +477,7 @@ export function GlobeZoom() {
       )}
 
       <div
-        className="absolute bottom-[max(5.5rem,calc(env(safe-area-inset-bottom)+4.25rem))] left-1/2 z-[6] w-[min(calc(100%-2rem),22rem)] -translate-x-1/2 transition-opacity duration-500 md:bottom-[11%] md:w-auto"
+        className="absolute bottom-[max(6.75rem,calc(env(safe-area-inset-bottom)+5.5rem))] left-1/2 z-[6] w-[min(calc(100%-2rem),22rem)] -translate-x-1/2 pt-8 transition-opacity duration-500 md:bottom-[8%] md:w-auto md:pt-12"
         style={{ opacity: zoomed || loading ? 0 : 1, pointerEvents: zoomed || loading ? "none" : "auto" }}
       >
         <button
@@ -481,11 +495,11 @@ export function GlobeZoom() {
       </div>
 
       {hud && zoomed && !showCard && (
-        <div className="pointer-events-none absolute left-1/2 top-[28%] z-[7] w-[min(92vw,640px)] -translate-x-1/2 px-3 text-center md:top-[22%]">
+        <div className="pointer-events-none absolute left-1/2 top-[max(5.75rem,calc(env(safe-area-inset-top)+4.25rem))] z-[7] w-[min(92vw,560px)] -translate-x-1/2 px-3 text-center">
           <p className="label-mono">{hud.kicker}</p>
-          <p className="font-display mt-2 text-3xl text-ink md:text-5xl">{hud.label}</p>
+          <p className="font-display mt-3 text-2xl text-ink sm:text-4xl">{hud.label}</p>
           {stageIndex >= 0 && (
-            <div className="mx-auto mt-5 flex max-w-md justify-center gap-1.5">
+            <div className="mx-auto mt-4 flex max-w-xs justify-center gap-1.5">
               {ARRIVAL.map((s, i) => (
                 <span
                   key={`${s.kicker}-${i}`}

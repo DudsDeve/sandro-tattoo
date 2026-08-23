@@ -4,7 +4,7 @@ import { artists, specialties } from "@/lib/data/content";
 export const knowledgeBase = {
   agendamento: {
     como_agendar:
-      "Agende pelo site em /agendar, pelo assistente, ou WhatsApp. Consulta prévia é obrigatória para peças médias e grandes.",
+      "Book at /agendar or WhatsApp for a quote. Consultation is required for medium and large pieces. Quotes are confirmed in consultation.",
     walk_in: STUDIO.walkIn,
     cancelamento:
       "Cancelamentos e remarcações com 48h de antecedência. Abaixo disso, o depósito não é reembolsável.",

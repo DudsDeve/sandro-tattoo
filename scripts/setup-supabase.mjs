@@ -51,6 +51,18 @@ async function main() {
     }
   }
 
+  console.log("Aplicando 003_tryon_auth.sql…");
+  const sql003 = readFileSync(path.join(process.cwd(), "supabase/migrations/003_tryon_auth.sql"), "utf8");
+  await client.query(sql003);
+
+  console.log("Aplicando 004_media_bucket.sql…");
+  const sql004 = readFileSync(path.join(process.cwd(), "supabase/migrations/004_media_bucket.sql"), "utf8");
+  try {
+    await client.query(sql004);
+  } catch (e) {
+    console.warn("004 (storage):", e instanceof Error ? e.message : e);
+  }
+
   const email = process.env.ADMIN_EMAIL || "admin@versus.studio";
   const password = process.env.ADMIN_PASSWORD || "sandroadmin";
 
@@ -107,7 +119,7 @@ async function main() {
   console.log("Buckets:", buckets.map((b) => `${b.id}(public=${b.public})`).join(", "));
 
   const { rows: tables } = await client.query(
-    `select tablename from pg_tables where schemaname = 'public' and tablename in ('cms_store','cms_blog_cron','site_content','profiles') order by 1`,
+    `select tablename from pg_tables where schemaname = 'public' and tablename in ('cms_store','cms_blog_cron','site_content','profiles','tryon_users','tryon_usage') order by 1`,
   );
   console.log("Tabelas:", tables.map((t) => t.tablename).join(", "));
 

@@ -40,6 +40,8 @@ export interface BlogPost {
   content: string;
   seoTitle?: string;
   seoDescription?: string;
+  seoKeyword?: string;
+  tags?: string[];
 }
 
 export interface Product {
@@ -55,10 +57,15 @@ export interface Product {
 
 export interface Testimonial {
   id: string;
+  title: string;
+  description: string;
   name: string;
-  text: string;
-  rating: number;
-  workImage?: string;
+  artistId?: string;
+  artistSlug?: string;
+  artistName?: string;
+  image?: string;
+  video?: string;
+  youtubeUrl?: string;
 }
 
 export interface Specialty {

@@ -14,8 +14,13 @@ export function CursorLink({
   className?: string;
   kind?: "hover" | "cta" | "drag";
 }) {
+  const external = href.startsWith("http");
   return (
-    <Link href={href} className={className}>
+    <Link
+      href={href}
+      className={className}
+      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+    >
       {children}
     </Link>
   );

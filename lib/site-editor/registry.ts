@@ -86,7 +86,7 @@ export const SITE_PAGES: SitePageDef[] = [
     ],
   },
   {
-    path: "/simular",
+    path: "/virtual-tryout",
     label: "Simulador",
     description: "Cabeçalho do simulador",
     fields: [

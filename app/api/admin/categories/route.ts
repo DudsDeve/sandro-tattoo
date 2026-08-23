@@ -41,7 +41,18 @@ export async function PUT(req: Request) {
   const store = await mutateCmsStore((s) => {
     const i = s.categories.findIndex((c) => c.id === body.id);
     if (i < 0) throw new Error("NOT_FOUND");
-    s.categories[i] = { ...s.categories[i], ...body };
+    const prev = s.categories[i];
+    s.categories[i] = {
+      ...prev,
+      ...body,
+      id: prev.id,
+      slug: body.slug?.trim() || prev.slug,
+      name: body.name?.trim() || prev.name,
+      description: body.description ?? prev.description,
+      image: body.image ?? prev.image,
+      video: body.video ?? prev.video,
+      order: body.order ?? prev.order,
+    };
     return s;
   });
 

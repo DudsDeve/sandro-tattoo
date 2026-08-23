@@ -23,7 +23,7 @@ Uploads de foto/vídeo no Storage ainda precisam da **service_role** (Settings �
 | CMS completo (categorias, artistas, itens, posts, siteContent) | `cms_store` (JSONB) |
 | Estado do cron do blog | `cms_blog_cron` |
 | Campos do editor Site (espelho flat) | `site_content` |
-| Uploads de imagem/vídeo | Storage bucket `media` |
+| Uploads de imagem/vídeo | Storage bucket `media` (URL pública no CMS) |
 
 ## Prioridade de persistência
 

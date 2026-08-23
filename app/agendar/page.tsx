@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function AgendarPage() {
   const artists = await getArtists();
   return (
-    <div className="px-4 pb-28 pt-28 sm:px-5 md:px-12 md:pt-32">
+    <div className="page-shell">
       <BookPageHeader />
       <Suspense>
         <BookingForm artists={artists} />

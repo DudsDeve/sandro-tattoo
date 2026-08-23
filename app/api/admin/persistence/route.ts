@@ -10,7 +10,7 @@ export async function GET() {
     ready: supabase.configured,
     hint: supabase.configured
       ? supabase.hasServiceRole
-        ? "Salvamentos e uploads vão para o Supabase."
+        ? "Textos no banco. Arquivos de imagem/vídeo no bucket Storage `media`; o site só guarda a URL."
         : "CMS no Postgres. Para fotos/vídeos, cole SUPABASE_SERVICE_ROLE_KEY (Settings → API)."
       : "Configure DATABASE_URL ou SUPABASE_SERVICE_ROLE_KEY.",
   });

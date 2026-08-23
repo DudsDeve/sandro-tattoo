@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { put, list, del } from "@vercel/blob";
+import { put, list } from "@vercel/blob";
 import {
   type CmsStore,
 } from "@/lib/cms/types";
@@ -8,9 +8,10 @@ import { isSupabaseConfigured } from "@/lib/supabase/admin";
 import { isDatabaseConfigured } from "@/lib/supabase/pg";
 import {
   readCmsFromSupabase,
-  uploadMediaToSupabase,
   writeCmsToSupabase,
 } from "@/lib/supabase/cms";
+import { persistMediaFile, deleteStoredMedia, type MediaFolder } from "@/lib/media/storage";
+import { hydrateCmsMedia } from "@/lib/media/hydrate-cms";
 
 const LOCAL_PATH = path.join(process.cwd(), "content", "cms.json");
 const BLOB_KEY = "cms/store.json";
@@ -28,6 +29,8 @@ export function seedFromLocal(): CmsStore {
     items: [],
     artists: [],
     posts: [],
+    testimonials: [],
+    clients: [],
     siteContent: {},
   };
 }
@@ -80,6 +83,8 @@ function normalizeStore(store: CmsStore): CmsStore {
     items: Array.isArray(store.items) ? store.items : [],
     artists: Array.isArray(store.artists) ? store.artists : [],
     posts: Array.isArray(store.posts) ? store.posts : [],
+    testimonials: Array.isArray(store.testimonials) ? store.testimonials : [],
+    clients: Array.isArray(store.clients) ? store.clients : [],
     siteContent: store.siteContent && typeof store.siteContent === "object" ? store.siteContent : {},
   };
 }
@@ -99,8 +104,22 @@ export async function getCmsStore(): Promise<CmsStore> {
   if (memoryCache) return memoryCache;
 
   const fromSupabase = await readCmsFromSupabase();
-  if (isValidStore(fromSupabase)) {
-    memoryCache = normalizeStore(fromSupabase);
+  const fromLocal = await readLocal();
+  const remote = isValidStore(fromSupabase) ? normalizeStore(fromSupabase) : null;
+  const local = isValidStore(fromLocal) ? normalizeStore(fromLocal) : null;
+
+  const pick =
+    remote && local
+      ? new Date(local.updatedAt).getTime() > new Date(remote.updatedAt).getTime()
+        ? local
+        : remote
+      : remote || local;
+
+  if (pick) {
+    memoryCache = pick;
+    if ((isSupabaseConfigured() || isDatabaseConfigured()) && pick === local && remote !== local) {
+      await writeCmsToSupabase(pick);
+    }
     return memoryCache;
   }
 
@@ -114,23 +133,13 @@ export async function getCmsStore(): Promise<CmsStore> {
     return normalized;
   }
 
-  const fromLocal = await readLocal();
-  if (isValidStore(fromLocal)) {
-    const normalized = normalizeStore(fromLocal);
-    memoryCache = normalized;
-    if (isSupabaseConfigured() || isDatabaseConfigured()) {
-      await writeCmsToSupabase(normalized);
-    }
-    return normalized;
-  }
-
   const seeded = seedFromLocal();
   await saveCmsStore(seeded);
   return seeded;
 }
 
 export async function saveCmsStore(store: CmsStore) {
-  const next = normalizeStore({ ...store, updatedAt: new Date().toISOString() });
+  const next = await hydrateCmsMedia(normalizeStore({ ...store, updatedAt: new Date().toISOString() }));
   memoryCache = next;
 
   const wroteSupabase = await writeCmsToSupabase(next);
@@ -167,49 +176,10 @@ export function getCmsPersistenceMode(): "supabase" | "postgres" | "blob" | "loc
   return "local";
 }
 
-export async function uploadMedia(file: File): Promise<string> {
-  const bytes = Buffer.from(await file.arrayBuffer());
-  const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
-  const safe = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const contentType = file.type || "application/octet-stream";
-  const onVercel = Boolean(process.env.VERCEL);
-
-  if (isSupabaseConfigured()) {
-    const fromSupabase = await uploadMediaToSupabase(bytes, safe, contentType);
-    if ("url" in fromSupabase) return fromSupabase.url;
-    if (fromSupabase.error !== "supabase-off" && !process.env.BLOB_READ_WRITE_TOKEN) {
-      throw new Error(fromSupabase.error);
-    }
-  }
-
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const blob = await put(`uploads/${safe}`, bytes, {
-      access: "public",
-      contentType,
-    });
-    return blob.url;
-  }
-
-  if (onVercel) {
-    throw new Error(
-      "Em produção o disco é somente leitura. Configure BLOB_READ_WRITE_TOKEN (Vercel Blob) ou Supabase Storage (bucket público “media”).",
-    );
-  }
-
-  const dir = path.join(process.cwd(), "public", "uploads");
-  await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(path.join(dir, safe), bytes);
-  return `/uploads/${safe}`;
+export async function uploadMedia(file: File, folder: MediaFolder = "uploads"): Promise<string> {
+  return persistMediaFile(file, folder);
 }
 
 export async function removeMedia(url: string) {
-  if (!url) return;
-  if (url.includes("vercel-storage.com") && process.env.BLOB_READ_WRITE_TOKEN) {
-    try {
-      await del(url);
-    } catch {
-      /* ignore */
-    }
-  }
-  // Supabase Storage delete can be added when needed (keep file history for now)
+  await deleteStoredMedia(url);
 }

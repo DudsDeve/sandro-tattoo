@@ -141,7 +141,7 @@ export default function AdminArtistsPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-3 border border-[#1a1a1a] bg-[#111] p-5">
-          <MediaField label="Foto do artista" value={draft.image} accept="image/*" onChange={(url) => setDraft((d) => ({ ...d, image: url }))} />
+          <MediaField label="Foto do artista" value={draft.image} accept="image/*" folder="artists" onChange={(url) => setDraft((d) => ({ ...d, image: url }))} />
           <input className="w-full border border-[#1a1a1a] bg-black px-3 py-3" placeholder="Nome" value={draft.name || ""} onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))} />
           <div className="grid gap-3 sm:grid-cols-2">
             <input className="border border-[#1a1a1a] bg-black px-3 py-3" placeholder="Função" value={draft.role || ""} onChange={(e) => setDraft((d) => ({ ...d, role: e.target.value }))} />
@@ -268,7 +268,7 @@ export default function AdminArtistsPage() {
             <div className="border border-[#1a1a1a] bg-[#111] p-4">
               <p className="font-mono text-[0.65rem] tracking-[0.18em] text-[#8b9a6b]">TRABALHOS DE {editing.name.toUpperCase()}</p>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <MediaField label="Nova foto" value={workImage} accept="image/*" onChange={setWorkImage} />
+                <MediaField label="Nova foto" value={workImage} accept="image/*" folder="gallery" onChange={setWorkImage} />
                 <div className="space-y-3">
                   <input className="w-full border border-[#1a1a1a] bg-black px-3 py-3" placeholder="Título do trabalho" value={workTitle} onChange={(e) => setWorkTitle(e.target.value)} />
                   <button type="button" disabled={busy || !workImage} onClick={() => void addWork()} className="bg-[#4c5634] px-4 py-3 text-sm text-white">

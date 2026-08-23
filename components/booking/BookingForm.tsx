@@ -4,19 +4,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { getTryoutFromSession } from "@/lib/tryout/session-storage";
+import { buildQuizIdeaText, getQuizFromSession } from "@/lib/quiz/session-storage";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { ImagePlus, Link2 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CtaLink } from "@/components/ui/CursorLink";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { cn } from "@/lib/utils";
-import { useT } from "@/lib/i18n/LanguageProvider";
+import { useT, useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Artist } from "@/lib/types";
 
 type Form = {
   artist: string;
   idea: string;
+  ideaLink: string;
+  ideaImages: string[];
   bodyPart: string;
   size: string;
   firstTattoo: "sim" | "nao";
@@ -29,6 +34,7 @@ type Form = {
 
 export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
   const t = useT();
+  const { locale } = useLanguage();
   const params = useSearchParams();
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
@@ -38,6 +44,11 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
       z.object({
         artist: z.string().min(1, t.booking.errArtist),
         idea: z.string().min(12, t.booking.errIdea),
+        ideaLink: z
+          .string()
+          .trim()
+          .refine((s) => !s || /^https?:\/\/.+/i.test(s), t.booking.errLink),
+        ideaImages: z.array(z.string()).max(5),
         bodyPart: z.string().min(2),
         size: z.string().min(1),
         firstTattoo: z.enum(["sim", "nao"]),
@@ -55,6 +66,8 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
     defaultValues: {
       artist: params.get("artista") ?? "",
       idea: "",
+      ideaLink: "",
+      ideaImages: [],
       bodyPart: "",
       size: "media",
       firstTattoo: "nao",
@@ -66,6 +79,72 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
     },
     mode: "onChange",
   });
+  const [tryoutPreview, setTryoutPreview] = useState("");
+  const [uploadingRefs, setUploadingRefs] = useState(false);
+  const [showLinkField, setShowLinkField] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const refsInput = useRef<HTMLInputElement>(null);
+
+  async function addReferenceFiles(files: FileList | null) {
+    if (!files?.length) return;
+    const current = form.getValues("ideaImages") || [];
+    const room = 5 - current.length;
+    if (room <= 0) return;
+    setUploadingRefs(true);
+    setUploadError("");
+    const next = [...current];
+    try {
+      for (const file of Array.from(files).slice(0, room)) {
+        if (!file.type.startsWith("image/")) continue;
+        const fd = new FormData();
+        fd.set("file", file);
+        const res = await fetch("/api/booking/upload", { method: "POST", body: fd });
+        const data = (await res.json()) as { url?: string; error?: string };
+        if (!res.ok || !data.url) throw new Error(data.error || "Upload failed");
+        next.push(data.url);
+      }
+      form.setValue("ideaImages", next, { shouldDirty: true });
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setUploadingRefs(false);
+      if (refsInput.current) refsInput.current.value = "";
+    }
+  }
+
+  function removeReference(url: string) {
+    form.setValue(
+      "ideaImages",
+      (form.getValues("ideaImages") || []).filter((u) => u !== url),
+      { shouldDirty: true },
+    );
+  }
+
+  useEffect(() => {
+    const quiz = getQuizFromSession();
+    const tryout = getTryoutFromSession();
+    const fromArtist = params.get("artista");
+    if (fromArtist) form.setValue("artist", fromArtist);
+
+    let idea = "";
+    if (quiz?.answers?.length) {
+      idea = buildQuizIdeaText(quiz, locale);
+      if (quiz.artistSlug) form.setValue("artist", fromArtist || quiz.artistSlug);
+      setStep(1);
+    }
+    if (tryout) {
+      if (tryout.designArtistSlug && !fromArtist && !quiz?.artistSlug) {
+        form.setValue("artist", tryout.designArtistSlug);
+      }
+      const tryoutLine =
+        locale === "en"
+          ? `Virtual Try-On: ${tryout.designName} (${tryout.designStyle}). AI model: ${tryout.modelUsed}. Preview attached.`
+          : `Virtual Try-On: ${tryout.designName} (${tryout.designStyle}). Modelo IA: ${tryout.modelUsed}. Preview anexada na sessão.`;
+      idea = idea ? `${idea}\n\n${tryoutLine}` : tryoutLine;
+      setTryoutPreview(tryout.previewImageUrl);
+    }
+    if (idea) form.setValue("idea", idea, { shouldValidate: true });
+  }, [form, locale, params]);
 
   const values = form.watch();
   const artist = useMemo(() => artists.find((a) => a.slug === values.artist), [artists, values.artist]);
@@ -75,7 +154,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
   const next = async () => {
     const fields: Array<keyof Form>[] = [
       ["artist"],
-      ["idea"],
+      ["idea", "ideaLink"],
       ["bodyPart", "size", "firstTattoo"],
       ["name", "email", "phone"],
       ["slot"],
@@ -89,7 +168,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
     await fetch("/api/booking", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, tryoutPreview }),
     });
     setDone(true);
   });
@@ -101,7 +180,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
         <h2 className="display-section mt-4">{t.booking.doneTitle}</h2>
         <p className="mx-auto mt-4 max-w-md text-ink-secondary">{t.booking.doneBody}</p>
         <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
-          <CtaLink href="/simular">{t.booking.simulate}</CtaLink>
+          <CtaLink href="/virtual-tryout">{t.booking.simulate}</CtaLink>
           <CtaLink href="/" variant="outline">
             {t.booking.goHome}
           </CtaLink>
@@ -116,7 +195,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
     .split(/(___QUIZ___|___SIM___)/);
 
   return (
-    <form onSubmit={submit} className="mx-auto max-w-3xl">
+    <form onSubmit={submit} className="mx-auto w-full min-w-0 max-w-3xl">
       <div className="mb-8 md:mb-12">
         <p className="label-mono mb-3 md:hidden">
           {step + 1}/{steps.length} · {steps[step]}
@@ -178,15 +257,90 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
 
           {step === 1 && (
             <div>
-              <h2 className="font-display text-3xl sm:text-4xl">{t.booking.describeIdea}</h2>
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+                <h2 className="font-display text-3xl sm:text-4xl">{t.booking.describeIdea}</h2>
+                <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+                  <button
+                    type="button"
+                    disabled={uploadingRefs || (values.ideaImages || []).length >= 5}
+                    onClick={() => refsInput.current?.click()}
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-line px-3 py-2 text-sm text-ink-secondary hover:border-line-accent hover:text-ink disabled:opacity-40 sm:w-auto"
+                  >
+                    <ImagePlus size={16} />
+                    {t.booking.attachImage}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowLinkField(true);
+                      requestAnimationFrame(() => document.getElementById("booking-idea-link")?.focus());
+                    }}
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-line px-3 py-2 text-sm text-ink-secondary hover:border-line-accent hover:text-ink sm:w-auto"
+                  >
+                    <Link2 size={16} />
+                    {t.booking.attachLink}
+                  </button>
+                </div>
+              </div>
+              <input
+                ref={refsInput}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => void addReferenceFiles(e.target.files)}
+              />
+              {tryoutPreview && (
+                <div className="mt-4 flex items-center gap-4 border border-line-accent bg-bg-secondary p-3">
+                  <img src={tryoutPreview} alt="" className="h-20 w-16 object-cover" />
+                  <p className="label-mono text-[10px] text-moss">Virtual try-on anexado</p>
+                </div>
+              )}
+              {(values.idea || "").startsWith("★ FIND YOUR STYLE") && (
+                <p className="label-mono mt-4 text-[#8b9a6b]">Find your style</p>
+              )}
               <textarea
-                rows={6}
-                className="mt-6 w-full p-4"
+                rows={12}
+                className="mt-6 w-full p-4 font-medium"
                 placeholder={t.booking.ideaPlaceholder}
                 {...form.register("idea")}
               />
               {form.formState.errors.idea && (
                 <p className="mt-2 text-sm text-error">{form.formState.errors.idea.message}</p>
+              )}
+
+              {(values.ideaImages || []).length > 0 && (
+                <div className="mt-4 grid grid-cols-5 gap-2">
+                  {(values.ideaImages || []).map((url) => (
+                    <div key={url} className="relative aspect-square overflow-hidden rounded-md border border-line">
+                      <img src={url} alt="" className="h-full w-full object-cover" />
+                      <button
+                        type="button"
+                        className="absolute right-1 top-1 bg-black/70 px-1.5 text-xs text-white"
+                        onClick={() => removeReference(url)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {uploadError && <p className="mt-2 text-sm text-error">{uploadError}</p>}
+              {uploadingRefs && <p className="mt-2 text-xs text-ink-muted">…</p>}
+
+              {(showLinkField || values.ideaLink) && (
+                <label className="mt-4 block">
+                  <span className="label-mono">{t.booking.ideaLink}</span>
+                  <input
+                    id="booking-idea-link"
+                    className="mt-2 w-full p-4"
+                    placeholder={t.booking.ideaLinkPlaceholder}
+                    {...form.register("ideaLink")}
+                  />
+                </label>
+              )}
+              {form.formState.errors.ideaLink && (
+                <p className="mt-2 text-sm text-error">{form.formState.errors.ideaLink.message}</p>
               )}
               <p className="mt-4 text-sm text-ink-secondary">
                 {ideaHint.map((part, i) => {
@@ -199,7 +353,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
                   }
                   if (part === "___SIM___") {
                     return (
-                      <Link key={i} href="/simular" className="text-moss underline">
+                      <Link key={i} href="/virtual-tryout" className="text-moss underline">
                         {t.booking.ideaHintSim}
                       </Link>
                     );
@@ -272,6 +426,21 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
                 <li>
                   {t.booking.summaryIdea}: {values.idea}
                 </li>
+                {values.ideaLink ? (
+                  <li>
+                    {t.booking.summaryLink}: {values.ideaLink}
+                  </li>
+                ) : null}
+                {(values.ideaImages || []).length ? (
+                  <li>
+                    <p className="mb-2">{t.booking.summaryRefs}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {values.ideaImages.map((url) => (
+                        <img key={url} src={url} alt="" className="h-16 w-16 rounded-md object-cover" />
+                      ))}
+                    </div>
+                  </li>
+                ) : null}
                 <li>
                   {values.bodyPart} · {values.size} · {t.booking.summaryFirst}: {values.firstTattoo}
                 </li>

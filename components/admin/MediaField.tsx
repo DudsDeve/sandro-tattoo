@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 
 async function compressImage(file: File): Promise<File> {
   if (!file.type.startsWith("image/") || file.type === "image/gif") return file;
@@ -45,11 +44,13 @@ export function MediaField({
   label,
   value,
   accept = "image/*,video/*",
+  folder = "uploads",
   onChange,
 }: {
   label: string;
   value?: string;
   accept?: string;
+  folder?: string;
   onChange: (url: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
@@ -63,6 +64,7 @@ export function MediaField({
       const prepared = file.type.startsWith("image/") ? await compressImage(file) : file;
       const fd = new FormData();
       fd.set("file", prepared);
+      fd.set("folder", folder);
       const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
       const data = await readUploadResponse(res);
       if (!res.ok || !data.url) throw new Error(data.error || "Falha no upload");
@@ -84,7 +86,7 @@ export function MediaField({
           isVideo ? (
             <video src={value} className="h-full w-full object-cover" controls muted />
           ) : (
-            <Image src={value} alt="" fill className="object-cover" unoptimized sizes="400px" />
+            <img src={value} alt="" className="absolute inset-0 h-full w-full object-cover" />
           )
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-[#5c5955]">Sem mídia</div>

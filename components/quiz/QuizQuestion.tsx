@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import type { QuizQuestion, StyleVector } from "@/lib/types";
+import type { QuizQuestion, QuizOption } from "@/lib/types";
 
 export function QuizQuestionView({
   question,
   onPick,
 }: {
   question: QuizQuestion;
-  onPick: (weights: StyleVector) => void;
+  onPick: (option: QuizOption) => void;
 }) {
   return (
     <motion.div
@@ -25,7 +25,7 @@ export function QuizQuestionView({
           question.type === "image" && opt.image ? (
             <button
               key={opt.id}
-              onClick={() => onPick(opt.weights)}
+              onClick={() => onPick(opt)}
               className="group relative aspect-[3/4] overflow-hidden border border-transparent hover:border-line-accent"
             >
               <Image src={opt.image} alt={opt.label} fill className="object-cover transition duration-500 group-hover:scale-105" />
@@ -36,7 +36,7 @@ export function QuizQuestionView({
           ) : (
             <button
               key={opt.id}
-              onClick={() => onPick(opt.weights)}
+              onClick={() => onPick(opt)}
               className="border border-line p-8 text-left transition hover:border-line-accent hover:bg-bg-accent/20"
             >
               <span className="font-display text-4xl text-moss">{opt.icon}</span>

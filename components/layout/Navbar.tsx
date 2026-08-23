@@ -16,10 +16,11 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   const navLinks = [
+    { href: "/", label: t.nav.home },
     { href: "/artistas", label: t.nav.artists },
     { href: "/galeria", label: t.nav.gallery },
+    { href: "/virtual-tryout", label: t.nav.tryOn },
     { href: "/processo", label: t.nav.process },
-    { href: "/loja", label: t.nav.shop },
     { href: "/blog", label: t.nav.blog },
   ];
 
@@ -52,18 +53,12 @@ export function Navbar() {
           scrolled && "border-line bg-black/80 backdrop-blur-[12px]",
         )}
       >
-        <div className="mx-auto flex h-[64px] max-w-7xl items-center justify-between gap-3 px-4 sm:h-[72px] sm:px-5 md:px-8">
-          <CursorLink href="/" className="flex min-w-0 items-center">
-            <LogoMark
-              compact={scrolled}
-              className={cn(
-                "shrink-0",
-                scrolled ? "h-9 w-9 sm:h-10 sm:w-10" : "h-12 w-12 sm:h-14 sm:w-14",
-              )}
-            />
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:h-[72px] sm:gap-3 sm:px-5 md:px-8">
+          <CursorLink href="/" className="relative block h-8 w-[6.75rem] shrink-0 overflow-hidden sm:h-11 sm:w-[10rem]">
+            <LogoMark className="absolute inset-0 h-full w-full max-h-full max-w-full object-contain object-left" />
           </CursorLink>
 
-          <nav className="hidden items-center gap-8 lg:flex">
+          <nav className="hidden min-w-0 items-center gap-4 overflow-x-auto lg:flex xl:gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {navLinks.map((link) => (
               <CursorLink
                 key={link.href}
@@ -121,7 +116,7 @@ export function Navbar() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.08 * i, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <CursorLink href={link.href} className="font-display text-[clamp(2rem,10vw,3.5rem)] leading-none">
+                  <CursorLink href={link.href} className="font-display text-[clamp(1.45rem,6vw,2.15rem)] leading-tight">
                     <span onClick={() => setOpen(false)}>{link.label}</span>
                   </CursorLink>
                 </motion.div>

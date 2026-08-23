@@ -22,7 +22,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
       <span className="text-base leading-none" aria-hidden>
         {locale === "en" ? "🇬🇧" : "🇧🇷"}
       </span>
-      <span className="font-mono text-[0.65rem]">{locale.toUpperCase()}</span>
+      <span className="hidden font-mono text-[0.65rem] min-[380px]:inline">{locale.toUpperCase()}</span>
     </button>
   );
 }

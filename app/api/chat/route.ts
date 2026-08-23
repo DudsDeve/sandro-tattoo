@@ -1,5 +1,5 @@
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
-import { CONCEPT_SYSTEM, languageRule } from "@/lib/ai/prompts";
+import { CONCEPT_SYSTEM, languageRule, quoteCtaMarkdown } from "@/lib/ai/prompts";
 import { hasLlmKey, llmModel } from "@/lib/ai/llm";
 import { mockUiStream } from "@/lib/ai/mock-stream";
 import { artists } from "@/lib/data/content";
@@ -18,14 +18,15 @@ export async function POST(req: Request) {
 
   if (!hasLlmKey()) {
     const artist = artists[0];
+    const cta = `\n\n${quoteCtaMarkdown()}`;
     const text =
       locale === "pt"
         ? lastText.length < 40
           ? "Curti o começo. Você imagina isso mais geométrico e limpo, ou orgânico com textura — tipo pele, escama, folha?"
-          : `Conceito: composição em ${lastText.slice(0, 80)}. Centro visual claro, hierarquia de pretos, respiro para a anatomia. Paleta black & grey com um acento se fizer sentido.\n\nArtista sugerido: ${artist.name} (${artist.specialty}).\n\n[GENERATE_IMAGE: blackwork tattoo design of ${lastText}, high contrast ink drawing on white paper, no skin, studio flash sheet style]`
+          : `Conceito: composição em ${lastText.slice(0, 80)}. Centro visual claro, hierarquia de pretos, respiro para a anatomia. Paleta black & grey com um acento se fizer sentido.\n\nArtista sugerido: ${artist?.name ?? "VERSUS"} (${artist?.specialty ?? ""}).${cta}\n\n[GENERATE_IMAGE: blackwork tattoo design of ${lastText}, high contrast ink drawing on white paper, no skin, studio flash sheet style]`
         : lastText.length < 40
           ? "Nice start. Do you picture this more geometric and clean, or organic with texture — skin, scale, leaf?"
-          : `Concept: composition around ${lastText.slice(0, 80)}. Clear visual centre, black hierarchy, room for anatomy. Black & grey palette with an accent if it fits.\n\nSuggested artist: ${artist.name} (${artist.specialty}).\n\n[GENERATE_IMAGE: blackwork tattoo design of ${lastText}, high contrast ink drawing on white paper, no skin, studio flash sheet style]`;
+          : `Concept: composition around ${lastText.slice(0, 80)}. Clear visual centre, black hierarchy, room for anatomy. Black & grey palette with an accent if it fits.\n\nSuggested artist: ${artist?.name ?? "VERSUS"} (${artist?.specialty ?? ""}).${cta}\n\n[GENERATE_IMAGE: blackwork tattoo design of ${lastText}, high contrast ink drawing on white paper, no skin, studio flash sheet style]`;
     return mockUiStream(text);
   }
 

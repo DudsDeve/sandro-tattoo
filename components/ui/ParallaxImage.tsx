@@ -37,8 +37,8 @@ export function ParallaxImage({
 
   return (
     <div ref={ref} className={cn("relative overflow-hidden", className)}>
-      <motion.div style={{ y }} className="absolute inset-[-18%] h-[136%] w-full">
-        <MediaImage src={src} alt={alt} fill className="object-cover" sizes="100vw" priority={priority} />
+      <motion.div style={{ y }} className="absolute inset-[-18%]">
+        <MediaImage src={src} alt={alt} fill className="object-cover object-center" sizes="100vw" priority={priority} />
       </motion.div>
     </div>
   );

@@ -1,41 +1,114 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-22T23:01:58.554Z",
+  "updatedAt": "2026-08-23T05:44:52.534Z",
   "categories": [
     {
       "id": "cat_o97ewtgn",
-      "slug": "blackwork",
       "name": "Blackwork",
-      "description": "Bold, solid ink work that uses pure black to create striking contrast. From geometric patterns to large-scale coverage, blackwork turns skin into graphic art — no gray areas, no hesitation.",
+      "slug": "blackwork",
       "image": "",
-      "order": 0
+      "order": 0,
+      "description": "Bold, solid ink work that uses pure black to create striking contrast. From geometric patterns to large-scale coverage, blackwork turns skin into graphic art — no gray areas, no hesitation."
     },
     {
       "id": "cat_8hql3qro",
-      "slug": "realism",
       "name": "Realism",
-      "description": "Skin becomes canvas. Portraits, nature, objects rendered with photographic precision — every shadow, every highlight placed to trick the eye into seeing depth where there's only ink.",
+      "slug": "realism",
       "image": "",
-      "order": 1
+      "order": 1,
+      "description": "Skin becomes canvas. Portraits, nature, objects rendered with photographic precision — every shadow, every highlight placed to trick the eye into seeing depth where there's only ink."
     },
     {
       "id": "cat_l4lwq30n",
-      "slug": "fine-line",
       "name": "Fine Line",
-      "description": "Delicate, single-needle precision. Thin, clean strokes that create intricate detail without weight. Subtle enough to feel like a whisper on the skin, sharp enough to last.",
+      "slug": "fine-line",
       "image": "",
-      "order": 2
+      "order": 2,
+      "description": "Delicate, single-needle precision. Thin, clean strokes that create intricate detail without weight. Subtle enough to feel like a whisper on the skin, sharp enough to last."
     },
     {
       "id": "cat_gamyxl40",
-      "slug": "custom-design",
       "name": "Custom Design",
-      "description": "Your story, built from zero. No flash, no repeats — every piece is drawn for your body, your idea, your intention. The artist interprets, you approve, and the result exists only once.",
+      "slug": "custom-design",
       "image": "",
-      "order": 3
+      "order": 3,
+      "description": "Your story, built from zero. No flash, no repeats — every piece is drawn for your body, your idea, your intention. The artist interprets, you approve, and the result exists only once."
     }
   ],
-  "items": [],
+  "items": [
+    {
+      "id": "item_qhzphj2f",
+      "image": "/uploads/1787457834909-j8j8ng.jpg",
+      "title": "Lion",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_o97ewtgn"
+    },
+    {
+      "id": "item_bjudmpr5",
+      "image": "/uploads/1787456530632-l75fs5.jpg",
+      "title": "Tiger Eyes",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_o97ewtgn"
+    },
+    {
+      "id": "item_slx9lg1o",
+      "image": "/uploads/1787456502989-vsoxfc.jpg",
+      "title": "Bulldog",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_o97ewtgn"
+    },
+    {
+      "id": "item_aumoasm2",
+      "image": "/uploads/1787456478595-0c9dym.jpg",
+      "title": "Wolf",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_o97ewtgn"
+    },
+    {
+      "id": "item_g39c6od2",
+      "image": "/uploads/1787456454091-0fcbf6.jpg",
+      "title": "Jesus",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_o97ewtgn"
+    },
+    {
+      "id": "item_0dzy5z6e",
+      "image": "/uploads/1787456390726-pnlu8e.jpg",
+      "title": "Ladybird",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_l4lwq30n"
+    },
+    {
+      "id": "item_u30p7f2h",
+      "image": "/uploads/1787456374635-qvzgrr.jpg",
+      "title": "Meduza",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_o97ewtgn"
+    },
+    {
+      "id": "item_rljjmc7g",
+      "image": "/uploads/1787456331397-25kkpy.jpg",
+      "title": "Poseidon",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_o97ewtgn"
+    },
+    {
+      "id": "item_4g7bcmf8",
+      "image": "/uploads/1787443147275-0zmabi.jpg",
+      "title": "Spider Man",
+      "video": "",
+      "artistId": "art_14ss9dds",
+      "categoryId": "cat_gamyxl40"
+    }
+  ],
   "artists": [
     {
       "id": "art_14ss9dds",
@@ -73,8 +146,50 @@
       "specialtyIds": []
     }
   ],
-  "posts": [],
+  "posts": [
+    {
+      "id": "post_zefjernf",
+      "slug": "travel-tattoo-ideas-commemorate-your-adventures",
+      "title": "Travel Tattoo Ideas: Commemorate Your Adventures",
+      "excerpt": "Discover travel tattoo ideas to capture your wanderlust and commemorate your adventures.",
+      "category": "tendencias",
+      "date": "2026-08-23",
+      "readTime": "6 min",
+      "cover": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/uploads/1787463869075-m43dfq.png",
+      "content": "## Introduction\n\nThinking about immortalizing your wanderlust with some ink? Travel tattoo ideas offer a unique way to carry your adventures with you, wherever you go. Whether you're a seasoned globetrotter or planning your first big trip, a travel tattoo can be the ultimate souvenir that captures the essence of your journey.\n\n## Popular Travel Tattoo Designs\n\nWhen it comes to travel tattoos, some designs have become favorites among adventure lovers. Consider a **compass tattoo**, symbolizing guidance and direction. It's a classic choice that resonates with the spirit of exploration.\n\nAnother popular design is the **map tattoo**, which can be as detailed or as minimal as you like. Some opt for a world map, while others choose specific continents or countries that hold special memories.\n\nFor those who prefer a more symbolic approach, **adventure-themed tattoos** like mountains, airplanes, or even a simple arrow can effectively capture your travel experiences. These designs not only look great but also tell a personal story of your travels.\n\n## Placement Ideas for Travel Tattoos\n\nWhere you place your travel tattoo can be just as meaningful as the design itself. Consider locations like your **wrist, ankle, or forearm**—these areas are perfect for keeping your travel memories close.\n\nA tattoo on the wrist or forearm can be a constant reminder of your journeys, visible every time you glance at your arm. Ankles and calves are great for those who prefer a more discreet placement, yet still want to carry a piece of their travels with them.\n\n## Current Trends: Minimalist and Watercolor Styles\n\nMinimalist tattoos are trending, offering a clean and simple aesthetic. A fine line drawing of an airplane or a tiny world map can be a subtle yet powerful tribute to your adventures.\n\n**Watercolor tattoos** add a splash of color and creativity, transforming simple designs into vibrant works of art. This style is perfect for those who want their tattoo to not just tell a story but do so with flair and personality.\n\n## Choosing a Design That Reflects Your Travels\n\nChoosing the right design is all about reflecting on your personal journey. Think about the places that have left a mark on you, the cultures that inspired you, and the moments that took your breath away.\n\nConsult with a tattoo artist to brainstorm ideas that capture these experiences. At VERSUS Tattoo Studio, we can help you translate your travel memories into a meaningful design. [INTERNAL LINK: How to Choose the Perfect Tattoo Design]\n\n## Caring for Your Travel Tattoo On the Go\n\nOnce you've got your travel tattoo, proper care is essential, especially if you're continuing your travels. Always keep the tattoo clean and moisturized. According to the **Mayo Clinic**, using unscented lotion can help with healing.\n\nIf you'll be in the sun, remember that sunscreen is your tattoo's best friend. Protect your ink to prevent fading and keep it looking fresh. [EXTERNAL LINK: NBC News on sunscreen for tattoos]\n\n## Frequently Asked Questions\n\n### Q: What are some popular travel tattoo designs?\nPopular designs include compasses, maps, mountains, and airplanes. These symbols capture the essence of travel and exploration.\n\n### Q: Where should I place my travel tattoo?\nConsider placing it on your wrist, ankle, or forearm. These areas are visible and meaningful, keeping your travel memories close.\n\n### Q: What style should I choose for my travel tattoo?\nMinimalist and watercolor styles are popular right now. Choose a style that resonates with you and complements your design.\n\n### Q: How do I care for my travel tattoo while traveling?\nKeep it clean and moisturized. Use sunscreen to protect it from the sun. Follow aftercare instructions from your tattoo artist.\n\n### Q: Why are tattoos considered the ultimate travel souvenir?\nTattoos are personal and permanent, capturing memories and experiences in a way that other souvenirs can't.\n\n## Conclusion\n\nReady to commemorate your adventures with a travel tattoo? At VERSUS Tattoo Studio in Dublin, we're here to help you bring your travel stories to life. Book a consultation with us today, or try out our virtual try-on tool to explore different designs. Your next adventure—and tattoo—awaits!\n",
+      "seoTitle": "Travel Tattoo Ideas: Commemorate Your Adventures",
+      "seoDescription": "Discover travel tattoo ideas to capture your wanderlust and commemorate your adventures.",
+      "seoKeyword": "travel tattoo ideas",
+      "tags": [
+        "travel tattoos",
+        "wanderlust",
+        "compass tattoo",
+        "map tattoo",
+        "adventure tattoo"
+      ],
+      "published": true,
+      "sources": [
+        "https://news.google.com/rss/articles/CBMibEFVX3lxTFBaTFA2anBmcHZvMnpJTkNVVVRIX1N0WDdhRFhUdl82UlZ4dzhRY2VSREw3Y3JHV0k2cHpVVllXbVRMTlhXWkd3NUJaV3ZrbjhMRFA3NVRfYkd0OWxhU09nVnVEX3ZzRVJES05PMA?oc=5",
+        "https://news.google.com/rss/articles/CBMib0FVX3lxTE5QTXJSdjhzYkdJeW44R3REMXhjVElrZTdXRTNaUFYxWUJyNTBZZkRtNmNJRUE1X2Fma25UMWFjWEtCYUJ2X21wN3lRZ196TDZGYWhic1hYMkF3a1paQk0wS3JPV0dxaTZiVWpGSFZKNA?oc=5",
+        "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5Td196ZXNmZFRHcDU1M1pNcUFQRHNmTS1QWGdsM0xpY1k3YkRZRGIyVmtwTEVfa0g5MzRTdmFHcVJHRUdMcmdmVmRhMldKRFdBMkNERHh5ZnBFd2s?oc=5"
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "dep_udab9esu",
+      "name": "pablo escobar",
+      "image": "",
+      "order": 0,
+      "title": "gostei muito",
+      "video": "",
+      "youtubeUrl": "",
+      "description": "gostei muito do trampo dele"
+    }
+  ],
+  "clients": [],
   "siteContent": {
-    "home.about.image": "/uploads/1787439341168-duxg8d.jpg"
+    "home.about.image": "/uploads/1787439341168-duxg8d.jpg",
+    "home.hero.subtitle": "An authorial studio. Two artists. Pieces that age with you — from the first line to a beautiful heal."
   }
 }

@@ -5,72 +5,125 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Lightbox } from "@/components/ui/Lightbox";
 import { MediaImage } from "@/components/ui/MediaImage";
+import { PortfolioWorkCard } from "@/components/gallery/PortfolioWorkCard";
 import { useT } from "@/lib/i18n/LanguageProvider";
-import type { SpecialtySlug, TattooWork } from "@/lib/types";
+import type { Artist, SpecialtySlug, TattooWork } from "@/lib/types";
 
 export function GalleryExperience({
   works,
   specialties,
+  artists,
 }: {
   works: TattooWork[];
-  specialties: Array<{ slug: SpecialtySlug; name: string }>;
+  specialties: Array<{ slug: SpecialtySlug; name: string; image?: string }>;
+  artists: Artist[];
 }) {
   const t = useT();
   const params = useSearchParams();
-  const initial = (params.get("estilo") as SpecialtySlug | null) ?? "todos";
-  const [filter, setFilter] = useState<SpecialtySlug | "todos">(
-    specialties.some((s) => s.slug === initial) ? initial : "todos",
+  const initialStyle = (params.get("estilo") as SpecialtySlug | null) ?? "todos";
+  const initialArtist = params.get("artista") ?? "todos";
+
+  const artistOptions = useMemo(() => {
+    const bySlug = new Map<string, string>();
+    for (const a of artists) bySlug.set(a.slug, a.name);
+    for (const w of works) {
+      if (w.artistSlug && !bySlug.has(w.artistSlug)) bySlug.set(w.artistSlug, w.artistName || w.artistSlug);
+    }
+    return Array.from(bySlug, ([slug, name]) => ({ slug, name })).sort((a, b) => a.name.localeCompare(b.name));
+  }, [artists, works]);
+
+  const [styleFilter, setStyleFilter] = useState<SpecialtySlug | "todos">(
+    specialties.some((s) => s.slug === initialStyle) ? initialStyle : "todos",
+  );
+  const [artistFilter, setArtistFilter] = useState(
+    artistOptions.some((a) => a.slug === initialArtist) ? initialArtist : "todos",
   );
   const [index, setIndex] = useState<number | null>(null);
 
-  const filtered = useMemo(
-    () => (filter === "todos" ? works : works.filter((w) => w.style === filter)),
-    [filter, works],
-  );
+  const filtered = useMemo(() => {
+    return works.filter((w) => {
+      const styleOk = styleFilter === "todos" || w.style === styleFilter || w.style === String(styleFilter);
+      const artistOk = artistFilter === "todos" || w.artistSlug === artistFilter;
+      return styleOk && artistOk;
+    });
+  }, [artistFilter, styleFilter, works]);
 
-  const chips: Array<{ slug: SpecialtySlug | "todos"; name: string }> = [
+  const activeSpecialty = specialties.find((s) => s.slug === styleFilter);
+
+  const styleChips: Array<{ slug: SpecialtySlug | "todos"; name: string }> = [
     { slug: "todos", name: t.gallery.all },
     ...specialties.map((s) => ({ slug: s.slug, name: s.name })),
   ];
 
+  const artistChips: Array<{ slug: string; name: string }> = [
+    { slug: "todos", name: t.gallery.allArtists },
+    ...artistOptions,
+  ];
+
   return (
     <div>
-      <div className="mb-10 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {chips.map((chip) => (
-          <button
-            key={chip.slug}
-            onClick={() => setFilter(chip.slug)}
-            className={`label-mono shrink-0 border px-4 py-2 ${
-              filter === chip.slug ? "border-line-accent bg-bg-accent text-ink" : "border-line text-ink-secondary"
-            }`}
-          >
-            {chip.name}
-          </button>
-        ))}
+      <div className="mb-8 space-y-6">
+        <div>
+          <p className="label-mono mb-3 text-ink-muted">{t.gallery.byStyle}</p>
+          <div className="flex flex-wrap gap-2">
+            {styleChips.map((chip) => (
+              <button
+                key={`style-${chip.slug}`}
+                type="button"
+                onClick={() => setStyleFilter(chip.slug)}
+                className={`label-mono min-h-10 shrink-0 border px-3 py-2 sm:px-4 ${
+                  styleFilter === chip.slug ? "border-line-accent bg-bg-accent text-ink" : "border-line text-ink-secondary"
+                }`}
+              >
+                {chip.name}
+              </button>
+            ))}
+          </div>
+        </div>
+        {artistOptions.length > 0 ? (
+          <div>
+            <p className="label-mono mb-3 text-ink-muted">{t.gallery.byArtist}</p>
+            <div className="flex flex-wrap gap-2">
+              {artistChips.map((chip) => (
+                <button
+                  key={`artist-${chip.slug}`}
+                  type="button"
+                  onClick={() => setArtistFilter(chip.slug)}
+                  className={`label-mono min-h-10 shrink-0 border px-3 py-2 sm:px-4 ${
+                    artistFilter === chip.slug
+                      ? "border-line-accent bg-bg-accent text-ink"
+                      : "border-line text-ink-secondary"
+                  }`}
+                >
+                  {chip.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
-      <motion.div className="snap-x-row pb-8">
-        {!filtered.length && (
-          <p className="text-sm text-ink-muted">Nenhum trabalho na galeria ainda. Adicione no admin.</p>
-        )}
+      {styleFilter !== "todos" && activeSpecialty?.image ? (
+        <div className="relative mb-10 aspect-[21/9] max-h-64 overflow-hidden">
+          <MediaImage src={activeSpecialty.image} alt={activeSpecialty.name} fill className="object-cover" sizes="100vw" />
+        </div>
+      ) : null}
+      <motion.div className="grid grid-cols-2 gap-x-3 gap-y-8 pb-8 sm:grid-cols-3 lg:grid-cols-5">
+        {!filtered.length && <p className="col-span-full text-sm text-ink-muted">{t.gallery.empty}</p>}
         <AnimatePresence mode="popLayout">
           {filtered.map((work, i) => (
-            <motion.button
+            <motion.div
               layout
               key={work.id}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="group relative h-[min(62vh,32rem)] w-[min(78vw,22rem)] shrink-0 overflow-hidden sm:h-[70vh] sm:w-[min(70vw,420px)]"
-              onClick={() => setIndex(i)}
             >
-              <MediaImage src={work.image} alt={work.title} fill className="object-cover" sizes="420px" />
-              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/75 via-black/20 to-transparent p-4 opacity-100 sm:p-6 md:bg-black/0 md:opacity-0 md:transition md:group-hover:bg-black/55 md:group-hover:opacity-100">
-                <p className="font-display text-2xl">{work.artistName}</p>
-                <p className="label-mono mt-1">
-                  {work.style} · ~{work.hours}h · {work.bodyPart}
-                </p>
-              </div>
-            </motion.button>
+              <PortfolioWorkCard
+                work={work}
+                categoryLabel={specialties.find((s) => s.slug === work.style)?.name || work.style}
+                onClick={() => setIndex(i)}
+              />
+            </motion.div>
           ))}
         </AnimatePresence>
       </motion.div>

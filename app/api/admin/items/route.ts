@@ -4,8 +4,8 @@ import type { CmsWorkItem } from "@/lib/cms/types";
 
 export async function POST(req: Request) {
   const body = (await req.json()) as Partial<CmsWorkItem>;
-  if (!body.title?.trim() || !body.categoryId || !body.image) {
-    return NextResponse.json({ error: "Título, categoria e imagem são obrigatórios" }, { status: 400 });
+  if (!body.title?.trim() || !body.categoryId || !body.image || !body.artistId) {
+    return NextResponse.json({ error: "Título, categoria, artista e imagem são obrigatórios" }, { status: 400 });
   }
 
   const store = await mutateCmsStore((s) => {

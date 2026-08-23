@@ -35,9 +35,9 @@ export const STUDIO = {
 } as const;
 
 export const NAV_LINKS = [
+  { href: "/", label: "Home" },
   { href: "/artistas", label: "Artistas" },
   { href: "/galeria", label: "Galeria" },
   { href: "/processo", label: "Processo" },
-  { href: "/loja", label: "Loja" },
   { href: "/blog", label: "Blog" },
 ] as const;

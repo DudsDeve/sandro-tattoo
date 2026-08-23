@@ -11,6 +11,9 @@ const LINKS = [
   { href: "/admin/categorias", label: "Categorias" },
   { href: "/admin/itens", label: "Trabalhos" },
   { href: "/admin/artistas", label: "Artistas" },
+  { href: "/admin/depoimentos", label: "Depoimentos" },
+  { href: "/admin/clientes", label: "Clientes" },
+  { href: "/admin/configuracoes", label: "Configurações" },
   { href: "/admin/blog", label: "Blog + IA" },
 ];
 

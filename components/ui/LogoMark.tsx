@@ -2,10 +2,9 @@
 
 import { cn } from "@/lib/utils";
 
-const LOGO = "/brand/versus-logo.png";
-const MARK = "/brand/versus-mark.png";
+const LOGO = "/brand/versus-logo.png?v=4";
 
-/** Logomarca VERSUS (PNG) ou monograma VS compacto. */
+/** Logomarca VERSUS (PNG). */
 export function LogoMark({
   className,
   compact = false,
@@ -17,9 +16,9 @@ export function LogoMark({
 }) {
   return (
     <img
-      src={compact ? MARK : LOGO}
+      src={LOGO}
       alt="VERSUS"
-      className={cn("select-none object-contain", animate && "origin-center", className)}
+      className={cn("select-none object-contain", animate && "origin-center", compact && "origin-center", className)}
       draggable={false}
     />
   );

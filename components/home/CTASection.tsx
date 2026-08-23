@@ -4,6 +4,7 @@ import { CtaLink } from "@/components/ui/CursorLink";
 import { ParallaxImage } from "@/components/ui/ParallaxImage";
 import { EditableMedia, EditableText } from "@/components/site-editor/Editable";
 import { useT } from "@/lib/i18n/LanguageProvider";
+import { whatsappLink } from "@/lib/utils";
 
 export function CTASection() {
   const t = useT();
@@ -26,7 +27,7 @@ export function CTASection() {
               {t.cta.book}
             </EditableText>
           </CtaLink>
-          <CtaLink href="/quiz" variant="outline" className="w-full sm:w-auto">
+          <CtaLink href={whatsappLink()} variant="outline" className="w-full sm:w-auto">
             <EditableText id="home.cta.talk" as="span">
               {t.cta.talk}
             </EditableText>
