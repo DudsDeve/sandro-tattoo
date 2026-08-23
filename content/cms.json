@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-23T05:44:52.534Z",
+  "updatedAt": "2026-08-23T05:54:40.180Z",
   "categories": [
     {
       "id": "cat_o97ewtgn",
@@ -38,7 +38,7 @@
   "items": [
     {
       "id": "item_qhzphj2f",
-      "image": "/uploads/1787457834909-j8j8ng.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464286910-g2w0nk.jpg",
       "title": "Lion",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -46,7 +46,7 @@
     },
     {
       "id": "item_bjudmpr5",
-      "image": "/uploads/1787456530632-l75fs5.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464288479-m28viz.jpg",
       "title": "Tiger Eyes",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -54,7 +54,7 @@
     },
     {
       "id": "item_slx9lg1o",
-      "image": "/uploads/1787456502989-vsoxfc.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464289075-awxkor.jpg",
       "title": "Bulldog",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -62,7 +62,7 @@
     },
     {
       "id": "item_aumoasm2",
-      "image": "/uploads/1787456478595-0c9dym.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464290296-i7nhg5.jpg",
       "title": "Wolf",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -70,7 +70,7 @@
     },
     {
       "id": "item_g39c6od2",
-      "image": "/uploads/1787456454091-0fcbf6.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464291515-l6u7c1.jpg",
       "title": "Jesus",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -78,7 +78,7 @@
     },
     {
       "id": "item_0dzy5z6e",
-      "image": "/uploads/1787456390726-pnlu8e.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464292103-aelvg5.jpg",
       "title": "Ladybird",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -86,7 +86,7 @@
     },
     {
       "id": "item_u30p7f2h",
-      "image": "/uploads/1787456374635-qvzgrr.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464292701-jrwthj.jpg",
       "title": "Meduza",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -94,7 +94,7 @@
     },
     {
       "id": "item_rljjmc7g",
-      "image": "/uploads/1787456331397-25kkpy.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464293321-neaval.jpg",
       "title": "Poseidon",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -102,7 +102,7 @@
     },
     {
       "id": "item_4g7bcmf8",
-      "image": "/uploads/1787443147275-0zmabi.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/gallery/1787464294436-yzvajt.jpg",
       "title": "Spider Man",
       "video": "",
       "artistId": "art_14ss9dds",
@@ -116,7 +116,7 @@
       "name": "Sandro Martins",
       "role": "Artista",
       "slug": "sandro-martins",
-      "image": "/uploads/1787438785136-jhap7z.jpg",
+      "image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/artists/1787464295022-hww5vv.jpg",
       "works": [],
       "years": 8,
       "bioLong": "",
@@ -148,18 +148,62 @@
   ],
   "posts": [
     {
-      "id": "post_zefjernf",
-      "slug": "travel-tattoo-ideas-commemorate-your-adventures",
-      "title": "Travel Tattoo Ideas: Commemorate Your Adventures",
-      "excerpt": "Discover travel tattoo ideas to capture your wanderlust and commemorate your adventures.",
+      "id": "post_fcwyabt4",
+      "slug": "shoulder-tattoo-ideas-designs",
+      "title": "Shoulder Tattoo Ideas: Designs That Enhance Your Style",
+      "excerpt": "Explore versatile shoulder tattoo ideas that blend visibility and discretion for perfect personal expression.",
       "category": "tendencias",
       "date": "2026-08-23",
       "readTime": "6 min",
-      "cover": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/uploads/1787463869075-m43dfq.png",
-      "content": "## Introduction\n\nThinking about immortalizing your wanderlust with some ink? Travel tattoo ideas offer a unique way to carry your adventures with you, wherever you go. Whether you're a seasoned globetrotter or planning your first big trip, a travel tattoo can be the ultimate souvenir that captures the essence of your journey.\n\n## Popular Travel Tattoo Designs\n\nWhen it comes to travel tattoos, some designs have become favorites among adventure lovers. Consider a **compass tattoo**, symbolizing guidance and direction. It's a classic choice that resonates with the spirit of exploration.\n\nAnother popular design is the **map tattoo**, which can be as detailed or as minimal as you like. Some opt for a world map, while others choose specific continents or countries that hold special memories.\n\nFor those who prefer a more symbolic approach, **adventure-themed tattoos** like mountains, airplanes, or even a simple arrow can effectively capture your travel experiences. These designs not only look great but also tell a personal story of your travels.\n\n## Placement Ideas for Travel Tattoos\n\nWhere you place your travel tattoo can be just as meaningful as the design itself. Consider locations like your **wrist, ankle, or forearm**—these areas are perfect for keeping your travel memories close.\n\nA tattoo on the wrist or forearm can be a constant reminder of your journeys, visible every time you glance at your arm. Ankles and calves are great for those who prefer a more discreet placement, yet still want to carry a piece of their travels with them.\n\n## Current Trends: Minimalist and Watercolor Styles\n\nMinimalist tattoos are trending, offering a clean and simple aesthetic. A fine line drawing of an airplane or a tiny world map can be a subtle yet powerful tribute to your adventures.\n\n**Watercolor tattoos** add a splash of color and creativity, transforming simple designs into vibrant works of art. This style is perfect for those who want their tattoo to not just tell a story but do so with flair and personality.\n\n## Choosing a Design That Reflects Your Travels\n\nChoosing the right design is all about reflecting on your personal journey. Think about the places that have left a mark on you, the cultures that inspired you, and the moments that took your breath away.\n\nConsult with a tattoo artist to brainstorm ideas that capture these experiences. At VERSUS Tattoo Studio, we can help you translate your travel memories into a meaningful design. [INTERNAL LINK: How to Choose the Perfect Tattoo Design]\n\n## Caring for Your Travel Tattoo On the Go\n\nOnce you've got your travel tattoo, proper care is essential, especially if you're continuing your travels. Always keep the tattoo clean and moisturized. According to the **Mayo Clinic**, using unscented lotion can help with healing.\n\nIf you'll be in the sun, remember that sunscreen is your tattoo's best friend. Protect your ink to prevent fading and keep it looking fresh. [EXTERNAL LINK: NBC News on sunscreen for tattoos]\n\n## Frequently Asked Questions\n\n### Q: What are some popular travel tattoo designs?\nPopular designs include compasses, maps, mountains, and airplanes. These symbols capture the essence of travel and exploration.\n\n### Q: Where should I place my travel tattoo?\nConsider placing it on your wrist, ankle, or forearm. These areas are visible and meaningful, keeping your travel memories close.\n\n### Q: What style should I choose for my travel tattoo?\nMinimalist and watercolor styles are popular right now. Choose a style that resonates with you and complements your design.\n\n### Q: How do I care for my travel tattoo while traveling?\nKeep it clean and moisturized. Use sunscreen to protect it from the sun. Follow aftercare instructions from your tattoo artist.\n\n### Q: Why are tattoos considered the ultimate travel souvenir?\nTattoos are personal and permanent, capturing memories and experiences in a way that other souvenirs can't.\n\n## Conclusion\n\nReady to commemorate your adventures with a travel tattoo? At VERSUS Tattoo Studio in Dublin, we're here to help you bring your travel stories to life. Book a consultation with us today, or try out our virtual try-on tool to explore different designs. Your next adventure—and tattoo—awaits!\n",
-      "seoTitle": "Travel Tattoo Ideas: Commemorate Your Adventures",
-      "seoDescription": "Discover travel tattoo ideas to capture your wanderlust and commemorate your adventures.",
-      "seoKeyword": "travel tattoo ideas",
+      "cover": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/blog/1787464363140-922pc9.png",
+      "content": "## Introduction\nThinking about getting a tattoo that perfectly balances visibility and discretion? Shoulder tattoo ideas are gaining popularity for their versatile nature, allowing you to express yourself while having the option to showcase or conceal your ink. Let's dive into the exciting world of shoulder tattoos and discover how they can enhance your style.\n\n## Trending Shoulder Tattoo Designs for 2026\nShoulder tattoos are set to be a major trend in 2026, with designs that evoke nostalgia while embracing modern aesthetics. Think minimalist lines that create a chic, understated look or intricate, nostalgic designs reminiscent of classic art. According to [Allure](https://news.google.com/rss/articles/CBMiW0FVX3lxTE5yT2ZPQ25nY29IYmhXMjlJZlhkWlUwbzdDUDJVMVl3TmVGOEZlTGwtQnppQWd1aTl3OVptc1FsZW1fS2ZnS2pJQTZMTjJPeW5yajh0TDBIaFB5VjA?oc=5), these trends blend the past with the present, making them timeless yet contemporary.\n\n## The Versatility of Shoulder Tattoos\nOne of the key advantages of shoulder tattoos is their versatility. The shoulder cap and deltoid areas provide ample space for creativity, allowing for designs that flow beautifully with your natural body contours. You can easily reveal or hide your tattoo depending on your outfit or the occasion, making it perfect for both personal and professional settings.\n\n## Design Inspirations: From Floral to Geometric\nWhen choosing a shoulder tattoo, consider designs like floral patterns, which can range from delicate and feminine to bold and vibrant. Geometric shapes offer a modern twist, creating symmetry and balance. Meaningful symbols, such as a compass or an arrow, can reflect personal journeys or aspirations. Celebrities like Paris Jackson have embraced these styles, showcasing how versatile and meaningful shoulder tattoos can be ([Hello! Magazine](https://news.google.com/rss/articles/CBMitAFBVV95cUxPRGdYNVVVaEhoQVdNbDFHNk9KZnhDUmVkY0FIN0pHbkozRmw5SWZEbEEwOHNuS2dVZTFGeGVieTU1anBleHY1YUZzaXM4dEJnX3h3MUdRTnFyUmJaazY2VGdVd0kzWWNvd25oX0EtWW5zUl9fN2VJdWxwNGxhUG8tY09nX3ctMkcwbzNzcGlCYjNINkQ0Zl82bEZ1d1VUc3dzS1g0VUZ0OHNGa1hTQXV2WXJZMUE?oc=5)).\n\n## Choosing a Design That Complements Your Body\nTo enhance the natural flow of your shoulder, select a design that complements your body’s curvature. A good tattoo artist will help you visualize how the tattoo will look in various positions. This ensures that the artwork feels like an extension of your body, enhancing rather than disrupting your natural lines.\n\n## Consider Future Visibility\nWhile shoulder tattoos offer the flexibility to be hidden or shown, it's essential to consider future visibility. If you work in a professional setting where discretion is key, a shoulder tattoo is an excellent choice. Ensure that the design aligns with both your personal and professional life.\n\n## Aftercare Tips for Shoulder Tattoos\nProper aftercare is crucial for maintaining the vibrancy and longevity of your tattoo. Follow guidelines from reputable sources like the [Mayo Clinic](https://www.mayoclinic.org) to ensure your tattoo heals properly. Keep it clean, moisturized, and protected from excessive sun exposure. Remember, a well-cared-for tattoo will continue to look stunning for years to come.\n\n## Frequently Asked Questions\n### Q: What are some popular shoulder tattoo designs?\nPopular designs include floral patterns, geometric shapes, and meaningful symbols like compasses or arrows.\n\n### Q: Are shoulder tattoos easy to hide?\nYes, shoulder tattoos can be easily concealed with clothing, making them ideal for professional settings.\n\n### Q: How painful is getting a tattoo on the shoulder?\nPain levels vary, but the shoulder is generally considered less painful than areas with less muscle or fat.\n\n### Q: How do I care for a new shoulder tattoo?\nKeep it clean, moisturized, and protected from the sun. Follow your artist's aftercare instructions closely.\n\n### Q: Can shoulder tattoos be large?\nYes, the shoulder area provides ample space for larger, more detailed designs.\n\nReady to explore your perfect shoulder tattoo? Visit VERSUS Tattoo Studio in Dublin to book a consultation. Our experienced artists can help you create a design that resonates with your style. Don't forget to try our virtual try-on tool to see how your chosen design will look. Your tattoo journey awaits!\n",
+      "seoTitle": "Shoulder Tattoo Ideas: Designs That Enhance Your Style",
+      "seoDescription": "Explore versatile shoulder tattoo ideas that blend visibility and discretion for perfect personal expression.",
+      "seoKeyword": "shoulder tattoo ideas",
+      "tags": [
+        "shoulder tattoos",
+        "tattoo ideas",
+        "body art",
+        "Dublin tattoos",
+        "tattoo trends"
+      ],
+      "published": true,
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5yT2ZPQ25nY29IYmhXMjlJZlhkWlUwbzdDUDJVMVl3TmVGOEZlTGwtQnppQWd1aTl3OVptc1FsZW1fS2ZnS2pJQTZMTjJPeW5yajh0TDBIaFB5VjA?oc=5",
+        "https://news.google.com/rss/articles/CBMitAFBVV95cUxPRGdYNVVVaEhoQVdNbDFHNk9KZnhDUmVkY0FIN0pHbkozRmw5SWZEbEEwOHNuS2dVZTFGeGVieTU1anBleHY1YUZzaXM4dEJnX3h3MUdRTnFyUmJaazY2VGdVd0kzWWNvd25oX0EtWW5zUl9fN2VJdWxwNGxhUG8tY09nX3ctMkcwbzNzcGlCYjNINkQ0Zl82bEZ1d1VUc3dzS1g0VUZ0OHNGa1hTQXV2WXJZMUE?oc=5"
+      ]
+    },
+    {
+      "id": "post_5pg9lvft",
+      "slug": "wrist-tattoo-ideas-stylish-designs",
+      "title": "Wrist Tattoo Ideas: Stylish Designs for Every Personality",
+      "excerpt": "Explore unique wrist tattoo ideas that are stylish and personal, perfect for making a statement.",
+      "category": "tendencias",
+      "date": "2026-08-23",
+      "readTime": "6 min",
+      "cover": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/blog/1787464253527-49039p.png",
+      "content": "## Why Choose Wrist Tattoos?\n\nWrist tattoos are a fantastic option if you're looking for a design that's both visible and discreet. They offer a unique way to express yourself without overwhelming your look. Imagine having a piece of art that can be easily showcased or concealed with a sleeve—perfect for any occasion.\n\nThe wrist is a popular site for tattoos because of its versatility. Whether you want to flaunt your ink or keep it under wraps, wrist tattoos are an ideal choice. Plus, they're perfect for small, meaningful designs that can speak volumes.\n\n## Popular Wrist Tattoo Ideas\n\n### Nature Motifs\n\nNature-inspired tattoos are timeless and can evoke a sense of calm and connection to the earth. Consider delicate leaves, small flowers, or even tiny animal silhouettes that can wrap around your wrist. These designs can be as detailed or as minimal as you prefer, offering a touch of elegance and personal significance.\n\n### Minimalist Symbols\n\nMinimalism is trending, and wrist tattoos are no exception. Simple lines, geometric shapes, or even abstract designs can create a striking visual impact. These tattoos are perfect for those who appreciate subtlety and sophistication. A tiny triangle, a simple line, or even a minimalist wave can convey profound meaning.\n\n### Meaningful Quotes\n\nSometimes, a few words can say it all. Consider a short quote or a single word that holds personal significance. Whether it's a reminder to stay strong or a tribute to a loved one, these tattoos can serve as a daily source of inspiration. Choose a font that resonates with you for an added personal touch.\n\n## Inner Wrist Tattoos: Versatility and Style\n\nThe inner wrist is a favored spot for tattoos due to its discreet nature. It's a canvas that allows for creativity while being easy to hide if needed. Designs on the inner wrist can be intimate, making them feel like a secret piece of art.\n\n### Bracelet and Wristband Tattoos\n\nFor a unique twist, consider a bracelet or wristband tattoo. These designs mimic traditional jewelry, offering a stylish alternative that you won't need to remove. Whether it's a delicate chain, a string of beads, or a patterned band, these tattoos can be customized to suit your style perfectly.\n\n## Choosing the Right Design\n\nWhen selecting a design, consider what resonates with you personally. Reflect on themes that hold meaning or symbolism in your life. Think about your personal style—are you drawn to bold, intricate designs or do you prefer subtle simplicity?\n\n### Practical Tips\n\n- **Research**: Look through galleries or social media for inspiration. [INTERNAL LINK: tattoo inspiration]\n- **Personal Meaning**: Ensure the design has personal significance—it makes the tattoo more special.\n- **Consultation**: Discuss your ideas with a professional tattoo artist. They can provide valuable insights and suggest design tweaks that can enhance your vision.\n\n## Aftercare Tips for Wrist Tattoos\n\nProper aftercare is crucial to ensure your wrist tattoo heals beautifully. According to the Mayo Clinic, keeping the area clean and moisturized is key. Avoid direct sunlight and follow your artist's specific care instructions to prevent any complications.\n\n### Simple Aftercare Steps\n\n1. **Keep it clean**: Gently wash with mild soap and water.\n2. **Moisturize**: Apply a recommended tattoo aftercare lotion to keep the skin hydrated.\n3. **Protect**: Avoid soaking the tattoo and keep it covered from the sun.\n\n## Frequently Asked Questions\n\n### Q: How painful is getting a wrist tattoo?\nGetting a wrist tattoo can be slightly more painful due to the thin skin and proximity to bones. However, the pain is usually manageable and brief.\n\n### Q: Can wrist tattoos be easily removed?\nWrist tattoos can be removed, but the process may require multiple sessions and can be costly. It's best to choose a design you're committed to.\n\n### Q: How long does a wrist tattoo take to heal?\nTypically, a wrist tattoo takes about 2-3 weeks to heal on the surface. Complete healing can take a few months, depending on aftercare and personal healing rates.\n\n### Q: Is it easy to cover a wrist tattoo?\nYes, wrist tattoos can be easily covered with clothing or accessories like bracelets or watches when necessary.\n\n### Q: What should I consider before getting a wrist tattoo?\nConsider the visibility and permanence of the tattoo, the design's personal significance, and your pain tolerance.\n\nReady to transform your wrist into a canvas of expression? Book a consultation at VERSUS Tattoo Studio in Dublin. Our talented artists are here to help you explore personalized design options and bring your vision to life. Try our virtual try-on tool to visualize your new ink today!",
+      "seoTitle": "Wrist Tattoo Ideas: Stylish Designs for Every Personality",
+      "seoDescription": "Explore unique wrist tattoo ideas that are stylish and personal, perfect for making a statement.",
+      "seoKeyword": "wrist tattoo ideas",
+      "tags": [
+        "wrist tattoos",
+        "tattoo ideas",
+        "minimalist tattoos",
+        "Dublin tattoos",
+        "tattoo consultation"
+      ],
+      "published": true,
+      "sources": [
+        "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9wMWxScjRzd1F4NE9vTjIyaDJqWHhxWmtPQ2w2SU91djBkRzNOdGxYOThabW9ueTBnY0Mta1pxUHdGQkE4VW1CTXowcmFiSWlKQXI2Y0dvcUs3XzRZV3Bleg?oc=5",
+        "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5iMUZuYmxyOXNlU1E0djVLNVE0YjBlOHp5UDAzUmZ3YjNxNVNsN2ExQTVjN21Hbkd6dExFWGhvUUxSU0w1N2ZZeTlMODFYc2tIaTZRRDV5WFRvaGdLZjhN?oc=5",
+        "https://news.google.com/rss/articles/CBMilgFBVV95cUxNSTlSMkVUQ3Z1ZnJObzZpMk9xTlNKUjVZZFRVcmdZX0Z1clc2YXZXZzdGbWVSOFMtVDlkaG1pUkxiN1d4RzJ3bGtzTTkzNGVzejFLVkVIeDZDUjN6VTdDQllqb2RfZzNSeDFOeVV6SFV5V0RFaUhrbWRtYXdydGJzMEViM0JZWi1HOXJGMTFwdUtKNm9oeEE?oc=5"
+      ]
+    },
+    {
+      "id": "post_zefjernf",
+      "date": "2026-08-23",
+      "slug": "travel-tattoo-ideas-commemorate-your-adventures",
       "tags": [
         "travel tattoos",
         "wanderlust",
@@ -167,12 +211,21 @@
         "map tattoo",
         "adventure tattoo"
       ],
-      "published": true,
+      "cover": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/uploads/1787463869075-m43dfq.png",
+      "title": "Travel Tattoo Ideas: Commemorate Your Adventures",
+      "content": "## Introduction\n\nThinking about immortalizing your wanderlust with some ink? Travel tattoo ideas offer a unique way to carry your adventures with you, wherever you go. Whether you're a seasoned globetrotter or planning your first big trip, a travel tattoo can be the ultimate souvenir that captures the essence of your journey.\n\n## Popular Travel Tattoo Designs\n\nWhen it comes to travel tattoos, some designs have become favorites among adventure lovers. Consider a **compass tattoo**, symbolizing guidance and direction. It's a classic choice that resonates with the spirit of exploration.\n\nAnother popular design is the **map tattoo**, which can be as detailed or as minimal as you like. Some opt for a world map, while others choose specific continents or countries that hold special memories.\n\nFor those who prefer a more symbolic approach, **adventure-themed tattoos** like mountains, airplanes, or even a simple arrow can effectively capture your travel experiences. These designs not only look great but also tell a personal story of your travels.\n\n## Placement Ideas for Travel Tattoos\n\nWhere you place your travel tattoo can be just as meaningful as the design itself. Consider locations like your **wrist, ankle, or forearm**—these areas are perfect for keeping your travel memories close.\n\nA tattoo on the wrist or forearm can be a constant reminder of your journeys, visible every time you glance at your arm. Ankles and calves are great for those who prefer a more discreet placement, yet still want to carry a piece of their travels with them.\n\n## Current Trends: Minimalist and Watercolor Styles\n\nMinimalist tattoos are trending, offering a clean and simple aesthetic. A fine line drawing of an airplane or a tiny world map can be a subtle yet powerful tribute to your adventures.\n\n**Watercolor tattoos** add a splash of color and creativity, transforming simple designs into vibrant works of art. This style is perfect for those who want their tattoo to not just tell a story but do so with flair and personality.\n\n## Choosing a Design That Reflects Your Travels\n\nChoosing the right design is all about reflecting on your personal journey. Think about the places that have left a mark on you, the cultures that inspired you, and the moments that took your breath away.\n\nConsult with a tattoo artist to brainstorm ideas that capture these experiences. At VERSUS Tattoo Studio, we can help you translate your travel memories into a meaningful design. [INTERNAL LINK: How to Choose the Perfect Tattoo Design]\n\n## Caring for Your Travel Tattoo On the Go\n\nOnce you've got your travel tattoo, proper care is essential, especially if you're continuing your travels. Always keep the tattoo clean and moisturized. According to the **Mayo Clinic**, using unscented lotion can help with healing.\n\nIf you'll be in the sun, remember that sunscreen is your tattoo's best friend. Protect your ink to prevent fading and keep it looking fresh. [EXTERNAL LINK: NBC News on sunscreen for tattoos]\n\n## Frequently Asked Questions\n\n### Q: What are some popular travel tattoo designs?\nPopular designs include compasses, maps, mountains, and airplanes. These symbols capture the essence of travel and exploration.\n\n### Q: Where should I place my travel tattoo?\nConsider placing it on your wrist, ankle, or forearm. These areas are visible and meaningful, keeping your travel memories close.\n\n### Q: What style should I choose for my travel tattoo?\nMinimalist and watercolor styles are popular right now. Choose a style that resonates with you and complements your design.\n\n### Q: How do I care for my travel tattoo while traveling?\nKeep it clean and moisturized. Use sunscreen to protect it from the sun. Follow aftercare instructions from your tattoo artist.\n\n### Q: Why are tattoos considered the ultimate travel souvenir?\nTattoos are personal and permanent, capturing memories and experiences in a way that other souvenirs can't.\n\n## Conclusion\n\nReady to commemorate your adventures with a travel tattoo? At VERSUS Tattoo Studio in Dublin, we're here to help you bring your travel stories to life. Book a consultation with us today, or try out our virtual try-on tool to explore different designs. Your next adventure—and tattoo—awaits!\n",
+      "excerpt": "Discover travel tattoo ideas to capture your wanderlust and commemorate your adventures.",
       "sources": [
         "https://news.google.com/rss/articles/CBMibEFVX3lxTFBaTFA2anBmcHZvMnpJTkNVVVRIX1N0WDdhRFhUdl82UlZ4dzhRY2VSREw3Y3JHV0k2cHpVVllXbVRMTlhXWkd3NUJaV3ZrbjhMRFA3NVRfYkd0OWxhU09nVnVEX3ZzRVJES05PMA?oc=5",
         "https://news.google.com/rss/articles/CBMib0FVX3lxTE5QTXJSdjhzYkdJeW44R3REMXhjVElrZTdXRTNaUFYxWUJyNTBZZkRtNmNJRUE1X2Fma25UMWFjWEtCYUJ2X21wN3lRZ196TDZGYWhic1hYMkF3a1paQk0wS3JPV0dxaTZiVWpGSFZKNA?oc=5",
         "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5Td196ZXNmZFRHcDU1M1pNcUFQRHNmTS1QWGdsM0xpY1k3YkRZRGIyVmtwTEVfa0g5MzRTdmFHcVJHRUdMcmdmVmRhMldKRFdBMkNERHh5ZnBFd2s?oc=5"
-      ]
+      ],
+      "category": "tendencias",
+      "readTime": "6 min",
+      "seoTitle": "Travel Tattoo Ideas: Commemorate Your Adventures",
+      "published": true,
+      "seoKeyword": "travel tattoo ideas",
+      "seoDescription": "Discover travel tattoo ideas to capture your wanderlust and commemorate your adventures."
     }
   ],
   "testimonials": [
@@ -189,7 +242,7 @@
   ],
   "clients": [],
   "siteContent": {
-    "home.about.image": "/uploads/1787439341168-duxg8d.jpg",
+    "home.about.image": "https://nkrxobgobzivhmtlieyg.supabase.co/storage/v1/object/public/media/site/1787464295365-lidh5d.jpg",
     "home.hero.subtitle": "An authorial studio. Two artists. Pieces that age with you — from the first line to a beautiful heal."
   }
 }
