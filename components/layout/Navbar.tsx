@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LogoMark } from "@/components/ui/LogoMark";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { CtaLink, CursorLink } from "@/components/ui/CursorLink";
+import { AccountNav } from "@/components/auth/AccountNav";
 import { useT } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -21,8 +22,9 @@ export function Navbar() {
     { href: "/galeria", label: t.nav.gallery },
     { href: "/virtual-tryout", label: t.nav.tryOn },
     { href: "/processo", label: t.nav.process },
-    { href: "/blog", label: t.nav.blog },
+    { href: "/referencias", label: t.nav.references },
     { href: "/wishlist", label: t.nav.wishlist },
+    { href: "/blog", label: t.nav.blog },
   ];
 
   useEffect(() => {
@@ -73,6 +75,7 @@ export function Navbar() {
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
+            <AccountNav className="hidden sm:inline" />
             <div className="hidden md:block">
               <CtaLink href="/agendar" variant="outline">
                 {t.nav.book}
@@ -129,6 +132,9 @@ export function Navbar() {
                 className="mt-8 flex flex-col gap-4"
               >
                 <LanguageSwitcher className="w-fit" />
+                <span onClick={() => setOpen(false)}>
+                  <AccountNav className="font-display text-2xl text-ink" />
+                </span>
                 <span onClick={() => setOpen(false)}>
                   <CtaLink href="/agendar">{t.nav.book}</CtaLink>
                 </span>

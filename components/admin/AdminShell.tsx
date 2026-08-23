@@ -14,6 +14,7 @@ const LINKS = [
   { href: "/admin/depoimentos", label: "Depoimentos" },
   { href: "/admin/wishlist", label: "Wishlist" },
   { href: "/admin/clientes", label: "Clientes" },
+  { href: "/admin/usuarios", label: "Usuários" },
   { href: "/admin/configuracoes", label: "Configurações" },
   { href: "/admin/blog", label: "Blog + IA" },
 ];

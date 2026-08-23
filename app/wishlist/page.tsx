@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { WishlistGrid } from "@/components/wishlist/WishlistGrid";
 import { WishlistPageHeader } from "@/components/ui/PageHeaders";
-import { getWishlistItems } from "@/lib/content";
+import { getArtists, getWishlistItems } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Wishlist",
@@ -11,11 +11,11 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function WishlistPage() {
-  const items = await getWishlistItems();
+  const [items, artists] = await Promise.all([getWishlistItems(), getArtists()]);
   return (
     <div className="page-shell">
       <WishlistPageHeader />
-      <WishlistGrid items={items} />
+      <WishlistGrid items={items} artists={artists} />
     </div>
   );
 }

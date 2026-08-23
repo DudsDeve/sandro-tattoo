@@ -24,6 +24,7 @@ function normalizePayload(payload: unknown): CmsStore | null {
     blogCategories: Array.isArray(data.blogCategories) ? data.blogCategories : [],
     testimonials: Array.isArray(data.testimonials) ? data.testimonials : [],
     clients: Array.isArray(data.clients) ? data.clients : [],
+    wishlistItems: Array.isArray(data.wishlistItems) ? data.wishlistItems : [],
     siteContent: data.siteContent || {},
   };
 }

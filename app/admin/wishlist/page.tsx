@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MediaField } from "@/components/admin/MediaField";
 import { useAdminStore } from "@/components/admin/AdminStoreProvider";
 import { MediaImage } from "@/components/ui/MediaImage";
 import type { CmsWishlistItem } from "@/lib/cms/types";
 
-const blank = (): Partial<CmsWishlistItem> => ({
+const blank = (artistId = ""): Partial<CmsWishlistItem> => ({
   title: "",
   image: "",
   discountPercent: 20,
+  artistId,
   note: "",
   visible: true,
 });
@@ -20,8 +21,16 @@ export default function AdminWishlistPage() {
   const [editing, setEditing] = useState<CmsWishlistItem | null>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
+  const firstArtistId = store?.artists[0]?.id ?? "";
+
+  useEffect(() => {
+    if (!firstArtistId) return;
+    setDraft((d) => (d.artistId ? d : { ...d, artistId: firstArtistId }));
+  }, [firstArtistId]);
 
   if (loading || !store) return <p className="text-[#a09b95]">Carregando…</p>;
+
+  const artistId = draft.artistId || firstArtistId;
 
   async function save() {
     setBusy(true);
@@ -29,7 +38,7 @@ export default function AdminWishlistPage() {
     const res = await fetch("/api/admin/wishlist", {
       method: editing ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editing ? { ...editing, ...draft, id: editing.id } : draft),
+      body: JSON.stringify(editing ? { ...editing, ...draft, artistId, id: editing.id } : { ...draft, artistId }),
     });
     const data = await res.json();
     setBusy(false);
@@ -38,7 +47,7 @@ export default function AdminWishlistPage() {
       return;
     }
     setStore(data);
-    setDraft(blank());
+    setDraft(blank(firstArtistId));
     setEditing(null);
     setMsg("Salvo — aparece em /wishlist no site");
   }
@@ -54,7 +63,7 @@ export default function AdminWishlistPage() {
       <div>
         <h1 className="font-serif text-4xl">Wishlist</h1>
         <p className="mt-2 text-[#a09b95]">
-          Envie a imagem do projeto e a % de desconto. Itens visíveis aparecem na aba Wishlist do menu.
+          Envie a imagem, o artista e a % de desconto. No site dá para filtrar por artista do estúdio.
         </p>
       </div>
 
@@ -66,6 +75,22 @@ export default function AdminWishlistPage() {
             value={draft.title || ""}
             onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
           />
+          <select
+            className="w-full border border-[#1a1a1a] bg-black px-3 py-3"
+            value={artistId}
+            onChange={(e) => setDraft((d) => ({ ...d, artistId: e.target.value }))}
+            disabled={store.artists.length === 0}
+          >
+            {store.artists.length === 0 ? (
+              <option value="">Cadastre um artista primeiro</option>
+            ) : (
+              store.artists.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.name}
+                </option>
+              ))
+            )}
+          </select>
           <label className="block text-sm text-[#a09b95]">
             Desconto (%)
             <input
@@ -106,7 +131,7 @@ export default function AdminWishlistPage() {
               className="ml-2 text-sm text-[#a09b95]"
               onClick={() => {
                 setEditing(null);
-                setDraft(blank());
+                setDraft(blank(firstArtistId));
               }}
             >
               Cancelar
@@ -127,36 +152,42 @@ export default function AdminWishlistPage() {
         {(store.wishlistItems || [])
           .slice()
           .sort((a, b) => a.order - b.order)
-          .map((item) => (
-            <article key={item.id} className="border border-[#1a1a1a] bg-black p-4">
-              {item.image ? (
-                <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden">
-                  <MediaImage src={item.image} alt="" fill className="object-cover" sizes="33vw" />
+          .map((item) => {
+            const artist = store.artists.find((a) => a.id === item.artistId);
+            return (
+              <article key={item.id} className="border border-[#1a1a1a] bg-black p-4">
+                {item.image ? (
+                  <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden">
+                    <MediaImage src={item.image} alt="" fill className="object-cover" sizes="33vw" />
+                    <div className="absolute right-2 top-2 bg-[#4c5634] px-2.5 py-1.5">
+                      <p className="font-mono text-base font-semibold text-white">−{item.discountPercent}%</p>
+                    </div>
+                  </div>
+                ) : null}
+                <p className="font-serif text-2xl">{item.title}</p>
+                <p className="mt-1 text-sm text-[#8b9a6b]">{artist?.name ?? "Sem artista"}</p>
+                {item.note ? <p className="mt-2 line-clamp-2 text-sm text-[#a09b95]">{item.note}</p> : null}
+                <p className="mt-2 text-[10px] tracking-wider text-[#5c5955]">
+                  {item.visible === false ? "OCULTO" : "NO SITE"}
+                </p>
+                <div className="mt-4 flex gap-3 text-sm">
+                  <button
+                    type="button"
+                    className="text-[#8b9a6b]"
+                    onClick={() => {
+                      setEditing(item);
+                      setDraft(item);
+                    }}
+                  >
+                    Editar
+                  </button>
+                  <button type="button" className="text-[#8f4a4a]" onClick={() => void remove(item.id)}>
+                    Excluir
+                  </button>
                 </div>
-              ) : null}
-              <p className="font-serif text-2xl">{item.title}</p>
-              <p className="mt-1 text-sm text-[#8b9a6b]">−{item.discountPercent}%</p>
-              {item.note ? <p className="mt-2 line-clamp-2 text-sm text-[#a09b95]">{item.note}</p> : null}
-              <p className="mt-2 text-[10px] tracking-wider text-[#5c5955]">
-                {item.visible === false ? "OCULTO" : "NO SITE"}
-              </p>
-              <div className="mt-4 flex gap-3 text-sm">
-                <button
-                  type="button"
-                  className="text-[#8b9a6b]"
-                  onClick={() => {
-                    setEditing(item);
-                    setDraft(item);
-                  }}
-                >
-                  Editar
-                </button>
-                <button type="button" className="text-[#8f4a4a]" onClick={() => void remove(item.id)}>
-                  Excluir
-                </button>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
       </div>
     </div>
   );

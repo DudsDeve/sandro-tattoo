@@ -13,6 +13,7 @@ function parseBody(body: Partial<CmsWishlistItem>): Omit<CmsWishlistItem, "id" |
     title: body.title?.trim() || "",
     image: body.image?.trim() || "",
     discountPercent: clampDiscount(body.discountPercent),
+    artistId: body.artistId?.trim() || "",
     note: body.note?.trim() || "",
     visible: body.visible !== false,
   };
@@ -26,6 +27,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Título e imagem são obrigatórios" }, { status: 400 });
     }
     const store = await mutateCmsStore((s) => {
+      if (fields.artistId && !s.artists.some((a) => a.id === fields.artistId)) {
+        throw new Error("Artista não encontrado");
+      }
       const wishlistItems = Array.isArray(s.wishlistItems) ? s.wishlistItems : [];
       wishlistItems.push({
         id: newId("wish"),
@@ -49,6 +53,9 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Título e imagem são obrigatórios" }, { status: 400 });
     }
     const store = await mutateCmsStore((s) => {
+      if (fields.artistId && !s.artists.some((a) => a.id === fields.artistId)) {
+        throw new Error("Artista não encontrado");
+      }
       const list = Array.isArray(s.wishlistItems) ? s.wishlistItems : [];
       const i = list.findIndex((t) => t.id === body.id);
       if (i < 0) throw new Error("Não encontrado");

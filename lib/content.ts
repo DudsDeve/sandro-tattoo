@@ -69,12 +69,25 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     });
 }
 
-export async function getWishlistItems(): Promise<CmsWishlistItem[]> {
+export type PublicWishlistItem = CmsWishlistItem & {
+  artistSlug?: string;
+  artistName?: string;
+};
+
+export async function getWishlistItems(): Promise<PublicWishlistItem[]> {
   const cms = await fromCms();
   if (!cms?.wishlistItems?.length) return [];
   return [...cms.wishlistItems]
     .filter((item) => item.visible !== false && item.image)
-    .sort((a, b) => a.order - b.order);
+    .sort((a, b) => a.order - b.order)
+    .map((item) => {
+      const artist = cms.artists.find((a) => a.id === item.artistId);
+      return {
+        ...item,
+        artistSlug: artist?.slug,
+        artistName: artist?.name,
+      };
+    });
 }
 
 export async function getArtist(slug: string): Promise<Artist | undefined> {

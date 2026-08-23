@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     );
   }
   try {
-    const pins = await searchPinterestPins(q, 16);
+    const pins = await searchPinterestPins(q, 24);
     return NextResponse.json({ pins });
   } catch (e) {
     return NextResponse.json(

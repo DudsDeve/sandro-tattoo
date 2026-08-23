@@ -79,6 +79,7 @@ export type CmsWishlistItem = {
   title: string;
   image: string;
   discountPercent: number;
+  artistId?: string;
   note?: string;
   visible: boolean;
   order: number;

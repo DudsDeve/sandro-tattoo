@@ -68,6 +68,16 @@ export const SITE_PAGES: SitePageDef[] = [
     ],
   },
   {
+    path: "/referencias",
+    label: "Find your reference",
+    description: "Cabeçalho da busca de referências",
+    fields: [
+      { id: "page.ref.label", label: "Label", type: "text", defaultValue: "Find your reference", section: "Header" },
+      { id: "page.ref.title", label: "Title", type: "text", defaultValue: "Search the reference. Save it. Bring it to the session.", section: "Header" },
+      { id: "page.ref.lead", label: "Lead", type: "textarea", defaultValue: "We search Pinterest for tattoo ideas.", section: "Header" },
+    ],
+  },
+  {
     path: "/wishlist",
     label: "Wishlist",
     description: "Cabeçalho da wishlist",

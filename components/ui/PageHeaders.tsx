@@ -45,6 +45,23 @@ export function ShopPageHeader() {
   );
 }
 
+export function ReferencesPageHeader() {
+  const t = useT();
+  return (
+    <>
+      <EditableText id="page.ref.label" as="p" className="label-mono">
+        {t.pages.refLabel}
+      </EditableText>
+      <EditableText id="page.ref.title" as="h1" className="display-section mt-4">
+        {t.pages.refTitle}
+      </EditableText>
+      <EditableText id="page.ref.lead" as="p" className="mt-4 mb-12 max-w-2xl text-ink-secondary">
+        {t.pages.refLead}
+      </EditableText>
+    </>
+  );
+}
+
 export function WishlistPageHeader() {
   const t = useT();
   return (

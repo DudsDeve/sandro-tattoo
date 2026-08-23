@@ -63,6 +63,10 @@ async function main() {
     console.warn("004 (storage):", e instanceof Error ? e.message : e);
   }
 
+  console.log("Aplicando 005_site_accounts.sql…");
+  const sql005 = readFileSync(path.join(process.cwd(), "supabase/migrations/005_site_accounts.sql"), "utf8");
+  await client.query(sql005);
+
   const email = process.env.ADMIN_EMAIL || "admin@versus.studio";
   const password = process.env.ADMIN_PASSWORD || "sandroadmin";
 

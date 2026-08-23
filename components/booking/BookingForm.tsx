@@ -7,13 +7,14 @@ import { z } from "zod";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { getTryoutFromSession } from "@/lib/tryout/session-storage";
 import { buildQuizIdeaText, getQuizFromSession, type QuizSession } from "@/lib/quiz/session-storage";
+import { clearBookingReferences, getBookingReferences } from "@/lib/references/booking-session";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ImagePlus, Link2 } from "lucide-react";
+import { ImagePlus, Link2, Search } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CtaLink } from "@/components/ui/CursorLink";
 import { MediaImage } from "@/components/ui/MediaImage";
-import { PinterestSearch } from "@/components/pinterest/PinterestSearch";
+import { PinterestReferencesModal } from "@/components/pinterest/PinterestReferencesModal";
 import { cn } from "@/lib/utils";
 import { useT, useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Artist } from "@/lib/types";
@@ -49,7 +50,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
           .string()
           .trim()
           .refine((s) => !s || /^https?:\/\/.+/i.test(s), t.booking.errLink),
-        ideaImages: z.array(z.string()).max(5),
+        ideaImages: z.array(z.string()).max(8),
         bodyPart: z.string().min(2),
         size: z.string().min(1),
         firstTattoo: z.enum(["sim", "nao"]),
@@ -87,13 +88,14 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
   );
   const [uploadingRefs, setUploadingRefs] = useState(false);
   const [showLinkField, setShowLinkField] = useState(false);
+  const [showRefModal, setShowRefModal] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const refsInput = useRef<HTMLInputElement>(null);
 
   async function addReferenceFiles(files: FileList | null) {
     if (!files?.length) return;
     const current = form.getValues("ideaImages") || [];
-    const room = 5 - current.length;
+    const room = 8 - current.length;
     if (room <= 0) return;
     setUploadingRefs(true);
     setUploadError("");
@@ -146,6 +148,25 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
         designStyle: tryout.designStyle,
         modelUsed: tryout.modelUsed,
       });
+    }
+
+    const refs = getBookingReferences();
+    if (refs.length) {
+      form.setValue("ideaImages", refs.map((r) => r.imageUrl).slice(0, 5), { shouldDirty: true });
+      if (refs[0]?.url) {
+        form.setValue("ideaLink", refs[0].url, { shouldDirty: true });
+        setShowLinkField(true);
+      }
+      const titles = refs.map((r) => r.title).filter(Boolean).join(", ");
+      if (titles && !form.getValues("idea")) {
+        form.setValue(
+          "idea",
+          locale === "pt" ? `Referência Pinterest: ${titles}` : `Pinterest reference: ${titles}`,
+          { shouldDirty: true },
+        );
+      }
+      setStep(1);
+      clearBookingReferences();
     }
   }, [form, locale, params]);
 
@@ -285,7 +306,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
                 <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                   <button
                     type="button"
-                    disabled={uploadingRefs || (values.ideaImages || []).length >= 5}
+                    disabled={uploadingRefs || (values.ideaImages || []).length >= 8}
                     onClick={() => refsInput.current?.click()}
                     className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-line px-3 py-2 text-sm text-ink-secondary hover:border-line-accent hover:text-ink disabled:opacity-40 sm:w-auto"
                   >
@@ -302,6 +323,15 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
                   >
                     <Link2 size={16} />
                     {t.booking.attachLink}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={(values.ideaImages || []).length >= 8}
+                    onClick={() => setShowRefModal(true)}
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-line px-3 py-2 text-sm text-ink-secondary hover:border-line-accent hover:text-ink disabled:opacity-40 sm:w-auto"
+                  >
+                    <Search size={16} />
+                    {t.booking.searchReferences}
                   </button>
                 </div>
               </div>
@@ -341,8 +371,11 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
                 <p className="mt-2 text-sm text-error">{form.formState.errors.idea.message}</p>
               )}
 
-              <PinterestSearch
+              <PinterestReferencesModal
+                open={showRefModal}
                 selected={values.ideaImages || []}
+                max={8}
+                onClose={() => setShowRefModal(false)}
                 onToggle={(pin) => {
                   const current = form.getValues("ideaImages") || [];
                   if (current.includes(pin.imageUrl)) {
@@ -353,7 +386,7 @@ export function BookingForm({ artists = [] }: { artists?: Artist[] }) {
                     );
                     return;
                   }
-                  if (current.length >= 5) return;
+                  if (current.length >= 8) return;
                   form.setValue("ideaImages", [...current, pin.imageUrl], { shouldDirty: true });
                   if (!form.getValues("ideaLink")) {
                     form.setValue("ideaLink", pin.url, { shouldDirty: true, shouldValidate: true });
