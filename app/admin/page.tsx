@@ -35,6 +35,7 @@ export default function AdminHomePage() {
     { href: "/admin/wishlist", label: "Wishlist", count: store.wishlistItems?.length ?? 0, hint: "Projetos com % de desconto" },
     { href: "/admin/clientes", label: "Clientes", count: store.clients?.length ?? 0, hint: "Pedidos de Book a session" },
     { href: "/admin/usuarios", label: "Usuários", count: "∞", hint: "Contas de login do site" },
+    { href: "/admin/espera", label: "Modo de espera", count: store.waitingVideos?.length ?? 0, hint: "Tela cheia para TV — tattoos e YouTube" },
     { href: "/admin/configuracoes", label: "Configurações", count: "IA", hint: "Chaves OpenAI e Gemini" },
     { href: "/admin/blog", label: "Posts", count: store.posts.length, hint: "Blog com IA e SEO" },
   ];

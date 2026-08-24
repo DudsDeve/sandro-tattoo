@@ -34,6 +34,7 @@ export function seedFromLocal(): CmsStore {
     testimonials: [],
     clients: [],
     wishlistItems: [],
+    waitingVideos: [],
     siteContent: {},
   };
 }
@@ -90,6 +91,7 @@ function normalizeStore(store: CmsStore): CmsStore {
     testimonials: Array.isArray(store.testimonials) ? store.testimonials : [],
     clients: Array.isArray(store.clients) ? store.clients : [],
     wishlistItems: Array.isArray(store.wishlistItems) ? store.wishlistItems : [],
+    waitingVideos: Array.isArray(store.waitingVideos) ? store.waitingVideos : [],
     siteContent: store.siteContent && typeof store.siteContent === "object" ? store.siteContent : {},
   });
 }

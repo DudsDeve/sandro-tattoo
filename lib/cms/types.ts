@@ -105,6 +105,13 @@ export type CmsClient = {
   source?: string;
 };
 
+export type CmsWaitingVideo = {
+  id: string;
+  title: string;
+  youtubeUrl: string;
+  order: number;
+};
+
 export type CmsStore = {
   version: 1;
   updatedAt: string;
@@ -116,6 +123,7 @@ export type CmsStore = {
   testimonials: CmsTestimonial[];
   clients: CmsClient[];
   wishlistItems: CmsWishlistItem[];
+  waitingVideos: CmsWaitingVideo[];
   /** Visual site editor overrides: fieldId → value */
   siteContent?: Record<string, string>;
 };
@@ -132,6 +140,7 @@ export function emptyStore(): CmsStore {
     testimonials: [],
     clients: [],
     wishlistItems: [],
+    waitingVideos: [],
     siteContent: {},
   };
 }
