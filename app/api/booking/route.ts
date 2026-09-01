@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendBookingNotificationEmail } from "@/lib/booking/notify-email";
 import { mutateCmsStore, newId } from "@/lib/cms/store";
 import type { CmsClient } from "@/lib/cms/types";
 
@@ -37,6 +38,8 @@ export async function POST(req: Request) {
     const tryoutPreview = str(body.tryoutPreview, 2000);
     if (tryoutPreview && !ideaImages.includes(tryoutPreview)) ideaImages.unshift(tryoutPreview);
 
+    let savedClient: CmsClient | null = null;
+
     const store = await mutateCmsStore((s) => {
       const artist = s.artists.find((a) => a.slug === artistSlug);
       const client: CmsClient = {
@@ -56,9 +59,18 @@ export async function POST(req: Request) {
         firstTattoo,
         slot,
       };
+      savedClient = client;
       const clients = [client, ...(Array.isArray(s.clients) ? s.clients : [])];
       return { ...s, clients };
     });
+
+    if (savedClient) {
+      try {
+        await sendBookingNotificationEmail(savedClient);
+      } catch (e) {
+        console.error("[booking] notification email failed:", e);
+      }
+    }
 
     return NextResponse.json({ ok: true, id: store.clients[0]?.id });
   } catch (e) {
