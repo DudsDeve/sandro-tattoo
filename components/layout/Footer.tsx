@@ -21,7 +21,6 @@ export function Footer() {
     { href: "/galeria", label: t.nav.gallery },
     { href: "/virtual-tryout", label: t.nav.tryOn },
     { href: "/processo", label: t.nav.process },
-    { href: "/referencias", label: t.nav.references },
     { href: "/wishlist", label: t.nav.wishlist },
     { href: "/blog", label: t.nav.blog },
     { href: "/entrar", label: t.nav.login },

@@ -39,7 +39,6 @@ export const NAV_LINKS = [
   { href: "/artistas", label: "Artistas" },
   { href: "/galeria", label: "Galeria" },
   { href: "/processo", label: "Processo" },
-  { href: "/referencias", label: "Find your reference" },
   { href: "/wishlist", label: "Wishlist" },
   { href: "/blog", label: "Blog" },
 ] as const;
