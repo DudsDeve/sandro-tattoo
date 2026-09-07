@@ -39,7 +39,7 @@ export const WHATSAPP_INTRO =
   "Hi, I was looking at your website and would like to ask a few questions.";
 
 export function whatsappLink(extra?: string) {
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP ?? "5511988880000";
+  const phone = (process.env.NEXT_PUBLIC_WHATSAPP ?? "353838963870").replace(/\D/g, "");
   const extraText = extra?.trim();
   const body = extraText ? `${WHATSAPP_INTRO}\n\n${extraText}` : WHATSAPP_INTRO;
   return `https://wa.me/${phone}?text=${encodeURIComponent(body)}`;

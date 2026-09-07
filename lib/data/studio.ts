@@ -5,9 +5,9 @@ export const STUDIO = {
   description:
     "Estúdio de tatuagem autoral em Dublin. Realismo, blackwork, fine line e peças únicas — do conceito à cicatrização.",
   years: 14,
-  phone: "+55 11 98888-0000",
-  whatsapp: "5511988880000",
-  email: "studio@versus.tattoo",
+  phone: "+353 83 896 3870",
+  whatsapp: "353838963870",
+  email: "versustattooshop26@gmail.com",
   instagram: "versus",
   address: {
     street: "Região central",
