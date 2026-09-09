@@ -10,11 +10,14 @@ function esc(s: string) {
 }
 
 function bookingNotifyTo() {
-  return (
+  const raw =
     process.env.BOOKING_NOTIFY_EMAIL?.trim() ||
     process.env.ADMIN_EMAIL?.trim() ||
-    ""
-  );
+    "";
+  return raw
+    .split(/[,;]+/)
+    .map((e) => e.trim())
+    .filter((e) => e.includes("@"));
 }
 
 function buildBookingEmail(client: CmsClient) {
@@ -76,13 +79,13 @@ function buildBookingEmail(client: CmsClient) {
 
 export async function sendBookingNotificationEmail(client: CmsClient) {
   const to = bookingNotifyTo();
-  if (!to) {
+  if (!to.length) {
     console.warn("[booking] BOOKING_NOTIFY_EMAIL / ADMIN_EMAIL not set — notification skipped");
     return { ok: true, skipped: true as const };
   }
 
   return sendResendEmail({
-    to: [to],
+    to,
     replyTo: client.email,
     subject: `Novo agendamento — ${client.name} (${client.artistName || client.artistSlug})`,
     html: buildBookingEmail(client),
