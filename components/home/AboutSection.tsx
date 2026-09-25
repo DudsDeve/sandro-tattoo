@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
-import { ParallaxImage } from "@/components/ui/ParallaxImage";
+import { MediaImage } from "@/components/ui/MediaImage";
 import { EditableMedia, EditableText } from "@/components/site-editor/Editable";
 import { STUDIO } from "@/lib/data/studio";
 import { useT } from "@/lib/i18n/LanguageProvider";
@@ -35,11 +35,12 @@ export function AboutSection() {
         >
           {(src) => (
             <>
-              <ParallaxImage
+              <MediaImage
                 src={src}
                 alt="VERSUS studio interior"
-                className="absolute inset-0 h-full w-full"
-                speed={0.18}
+                fill
+                className="object-cover object-center"
+                sizes="(min-width: 1024px) 40vw, 100vw"
               />
               <div
                 className="pointer-events-none absolute inset-0 rounded-[2rem] bg-gradient-to-t from-black/45 via-transparent to-[#8b9a6b]/10 mix-blend-soft-light"
